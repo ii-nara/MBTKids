@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TestService {
-    private static final Logger logger = LoggerFactory.getLogger(TestService.class);
+  private static final Logger logger = LoggerFactory.getLogger(TestService.class);
 
-    public void setTicketInfo(String id) {
-        logger.info("id { " + id + " }");
-    }
+  public void setTicketInfo(String id) {
+    logger.info("id { " + id + " }");
+  }
 }

@@ -20,7 +20,7 @@ subprojects {
     spotless {
         java {
             // 구글 자바 포맷 적용
-            googleJavaFormat().aosp()
+            googleJavaFormat()
             // 사용하지 않는 import 제거
             removeUnusedImports()
             // 공백 제거

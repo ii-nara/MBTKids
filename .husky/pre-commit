@@ -4,8 +4,8 @@
 set -e
 # Run formatter to format code before commit
 before=$(git diff --name-only | wc -l)
-./gradlew spotlessCheck
 ./gradlew spotlessApply
+./gradlew spotlessCheck
 after=$(git diff --name-only | wc -l)
 if [ "$before" != "$after" ]; then
     echo "Commit aborted because unformatted files found. Please format and commit again"

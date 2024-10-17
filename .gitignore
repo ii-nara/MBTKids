@@ -43,3 +43,5 @@ bin/
 
 ### application.properties ##
 application.properties
+
+/node_modules/

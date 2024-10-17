@@ -45,3 +45,7 @@ bin/
 application.properties
 
 /node_modules/
+
+# Ignore git_toolbox files
+git_toolbox_prj.xml
+git_toolbox_blame.xml

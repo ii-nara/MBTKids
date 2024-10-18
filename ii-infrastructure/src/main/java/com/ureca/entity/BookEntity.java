@@ -24,8 +24,8 @@ public class BookEntity {
   // 도서 아이디
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "bookId")
-  private int bookId;
+  @Column(name = "bookId", nullable = false)
+  private Long bookId;
 
   // 도서명
   @Column(name = "bookName", length = 50)
@@ -59,7 +59,7 @@ public class BookEntity {
   @Column(name = "recommenedAge", length = 20)
   private String recommenedAge;
 
-  //앞 : -1, 뒤 : 1, 상태없음 : 0
+  // 앞 : -1, 뒤 : 1, 상태없음 : 0
   // I/E
   @Column(name = "typeIE")
   private int typeIE;
@@ -87,7 +87,7 @@ public class BookEntity {
 
   @Builder
   public BookEntity(
-      int bookId,
+      Long bookId,
       String bookName,
       String imgURL,
       String plot,

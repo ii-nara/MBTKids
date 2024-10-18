@@ -24,8 +24,8 @@ public class AdminUserEntity {
   // 관리자 아이디
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "adminId")
-  private int adminId;
+  @Column(name = "adminId", nullable = false)
+  private Long adminId;
 
   // 관리자 로그인 아이디
   @Column(name = "adminLoginId", length = 20)
@@ -41,11 +41,7 @@ public class AdminUserEntity {
   private Date createdAt;
 
   @Builder
-  public AdminUserEntity(
-      int adminId,
-      String adminLoginId,
-      String password,
-      Date createdAt) {
+  public AdminUserEntity(Long adminId, String adminLoginId, String password, Date createdAt) {
     this.adminId = adminId;
     this.adminLoginId = adminLoginId;
     this.password = password;

@@ -23,8 +23,8 @@ public class ParentEntity {
   @Column(name = "parentId")
   private Long parentId;
 
-//  @OneToMany(mappedBy = "parent")
-//  private List<ChildEntity> children = new ArrayList<>();
+  @OneToMany(mappedBy = "parent")
+  private List<ChildEntity> children = new ArrayList<>();
 
   @Column(name = "email", nullable = false)
   private String email;
@@ -50,13 +50,13 @@ public class ParentEntity {
   @Column(name = "isActive", nullable = false)
   private boolean isActive;
 
-  @Column(name = "infoAgree")
-  private String infoAgree;
+  @Column(name = "infoAgreeYn")
+  private String infoAgreeYn;
 
   @Builder
   public ParentEntity(Long parentId, String email, String parentLoginId, String password,
       String userName, String phoneNumber, String provider, LocalDateTime createdAt,
-      boolean isActive, String infoAgree) {
+      boolean isActive, String infoAgreeYn) {
     this.parentId = parentId;
     this.email = email;
     this.parentLoginId = parentLoginId;
@@ -66,6 +66,6 @@ public class ParentEntity {
     this.provider = provider;
     this.createdAt = createdAt;
     this.isActive = isActive;
-    this.infoAgree = infoAgree;
+    this.infoAgreeYn = infoAgreeYn;
   }
 }

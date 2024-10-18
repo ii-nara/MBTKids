@@ -32,13 +32,13 @@ public class FeedBackEntity {
   @Column(name = "bookId", nullable = false)
   private Long bookId;
 
-//  @ManyToOne
-//  @JoinColumn(name = "childid", nullable = false)
-//  private Child child;
+  //  @ManyToOne
+  //  @JoinColumn(name = "childid", nullable = false)
+  //  private Child child;
 
-//  @ManyToOne
-//  @JoinColumn(name = "bookId", nullable = false)
-//  private Book bookId;
+  //  @ManyToOne
+  //  @JoinColumn(name = "bookId", nullable = false)
+  //  private Book bookId;
 
   @Enumerated(EnumType.ORDINAL)
   @Column(name = "islike", nullable = false)
@@ -54,5 +54,4 @@ public class FeedBackEntity {
     this.bookId = bookId;
     this.isLike = isLike;
   }
-
 }

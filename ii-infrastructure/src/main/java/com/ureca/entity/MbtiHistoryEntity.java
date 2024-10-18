@@ -29,9 +29,9 @@ public class MbtiHistoryEntity {
   @Column(name = "childId", nullable = false)
   private Long childId;
 
-//  @ManyToOne
-//  @JoinColumn(name = "childid", nullable = false)
-//  private Child child;
+  //  @ManyToOne
+  //  @JoinColumn(name = "childid", nullable = false)
+  //  private Child child;
 
   @Column(name = "type", nullable = false)
   @Enumerated(EnumType.STRING)
@@ -46,6 +46,4 @@ public class MbtiHistoryEntity {
     this.childId = childId;
     this.mbtiType = mbtiType;
   }
-
-
 }

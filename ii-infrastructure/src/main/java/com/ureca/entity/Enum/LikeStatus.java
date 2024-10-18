@@ -23,5 +23,4 @@ public enum LikeStatus {
     }
     throw new IllegalArgumentException("유효하지 않는 숫자 : " + value);
   }
-
 }

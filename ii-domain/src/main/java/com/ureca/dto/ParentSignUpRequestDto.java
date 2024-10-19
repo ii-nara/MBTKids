@@ -28,8 +28,6 @@ public class ParentSignUpRequestDto {
     this.provider = provider;
     this.createAt = createAt;
     this.infoAgreeYn = infoAgreeYn;
-
-//    System.out.println("ParentSignUpRequestDto 생성 시 이메일 값: " + this.email);
   }
 
 }

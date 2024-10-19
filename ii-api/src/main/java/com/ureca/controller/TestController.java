@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/test")
 @Controller
 public class TestController {
+
   private static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
   private TestService testService;
@@ -19,8 +20,10 @@ public class TestController {
   }
 
   @GetMapping("/view")
-  public void view() {
+  public String view() {
     testService.setTicketInfo("야이거다");
     logger.info("호출 성공!!!!");
+    // UI 표준 - 임시 화면 테스트
+    return "home";
   }
 }

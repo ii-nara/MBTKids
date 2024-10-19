@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -26,7 +27,8 @@ public class ParentEntity {
   @Column(name = "parentId")
   private Long parentId;
 
-  @OneToMany(mappedBy = "parent")
+  @OneToMany
+  @JoinColumn(name = "parentId")
   private List<ChildEntity> children = new ArrayList<>();
 
   @Column(name = "email", nullable = false)

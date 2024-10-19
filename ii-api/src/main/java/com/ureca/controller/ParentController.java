@@ -1,6 +1,5 @@
 package com.ureca.controller;
 
-import com.ureca.dto.ParentLoginRequestDto;
 import com.ureca.dto.ParentSignUpRequestDto;
 import com.ureca.service.port.ParentService;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +17,6 @@ public class ParentController {
 
   private final ParentService parentService;
 
-  @GetMapping
-  public String home() {
-    return "home";
-  }
-
   @GetMapping("/register")
   public String signUpForm() {
     return "register";
@@ -31,29 +25,16 @@ public class ParentController {
   @PostMapping("/register")
   public String register(@ModelAttribute ParentSignUpRequestDto parentSignUpRequestDto,
       Model model) {
+//    System.out.println("DTO 값 확인: " + parentSignUpRequestDto.getEmail());
     try {
       parentService.create(parentSignUpRequestDto);
       model.addAttribute("message", "회원가입이 완료되었습니다.");
-
-      return "home";
-    } catch (IllegalArgumentException e) {
-      model.addAttribute("errorMessage", e.getMessage());
-
-      return "register";
-    }
-  }
-
-  @PostMapping("/login")
-  public String login(@ModelAttribute ParentLoginRequestDto parentLoginRequestDto, Model model) {
-    try {
-      parentService.login(parentLoginRequestDto);
-      model.addAttribute("message", "로그인이 완료되었습니다.");
 
       return "success";
     } catch (IllegalArgumentException e) {
       model.addAttribute("errorMessage", e.getMessage());
 
-      return "home";
+      return "register";
     }
   }
 }

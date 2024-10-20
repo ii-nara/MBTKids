@@ -2,7 +2,7 @@ package com.ureca.entity.Enum;
 
 public enum LikeStatus {
   DISLIKE(-1),
-  NONE(0),
+  CANCELED(0),
   LIKE(1);
 
   private int value;

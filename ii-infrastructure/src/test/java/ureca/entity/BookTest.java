@@ -51,7 +51,7 @@ class BookTest {
   void testReadBook() {
     BookEntity getBook =
         bookRepository
-            .findById(1)
+            .findById(1L)
             .orElseThrow(() -> new RuntimeException("data not found"));
     logger.info("데이터 조회 확인: { " + getBook + " }");
   }
@@ -61,10 +61,10 @@ class BookTest {
   void testDeleteBook() {
     int bookIdToDelete = 3;
 
-    bookRepository.deleteById(bookIdToDelete);
+    bookRepository.deleteById((long) bookIdToDelete);
     logger.info("삭제 ID: " + bookIdToDelete);
 
-    boolean exists = bookRepository.existsById(bookIdToDelete);
+    boolean exists = bookRepository.existsById((long) bookIdToDelete);
     logger.info("데이터 삭제 확인 " + bookIdToDelete + " exists: " + exists);
   }
 

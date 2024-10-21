@@ -32,6 +32,8 @@ public class ChildEntity {
   @Column(name = "childName", nullable = false)
   private String childName;
 
+  private Long parentId;
+
   @Column(name = "childAge", nullable = false)
   private int childAge;
 

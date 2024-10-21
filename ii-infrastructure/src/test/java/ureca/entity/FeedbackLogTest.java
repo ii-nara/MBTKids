@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @Transactional
-@SpringBootTest(classes = MainApplication.class)
+@SpringBootTest
 public class FeedbackLogTest {
 
   private static final Logger logger = LoggerFactory.getLogger(FeedbackLogTest.class);

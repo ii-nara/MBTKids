@@ -1,28 +1,36 @@
 package com.ureca.service;
 
-import com.ureca.domain.Parent;
 import com.ureca.dto.ParentSignUpRequestDto;
-import com.ureca.service.port.ParentRepository;
+import com.ureca.entity.ParentEntity;
+import com.ureca.repository.ParentJpaRepository;
 import com.ureca.service.port.ParentService;
+import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ParentServiceImpl implements ParentService {
 
-  private final ParentRepository parentRepository;
-
-  public ParentServiceImpl(ParentRepository parentRepository) {
-    this.parentRepository = parentRepository;
-  }
+  private final ParentJpaRepository parentJpaRepository;
 
   @Override
-  public Parent create(ParentSignUpRequestDto parentSignUpRequestDto) {
-    parentRepository.findByParentLoginId(parentSignUpRequestDto.getParentLoginId())
+  public ParentEntity create(ParentSignUpRequestDto parentSignUpRequestDto) {
+    parentJpaRepository.findByParentLoginId(parentSignUpRequestDto.getParentLoginId())
         .ifPresent(parent -> {
           throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         });
 
-    Parent parent = Parent.from(parentSignUpRequestDto);
-    return parentRepository.save(parent);
+    ParentEntity parent = ParentEntity.createParent(
+        parentSignUpRequestDto.getEmail(),
+        parentSignUpRequestDto.getParentLoginId(),
+        parentSignUpRequestDto.getPassword(),
+        parentSignUpRequestDto.getUserName(),
+        parentSignUpRequestDto.getPhoneNumber(),
+        parentSignUpRequestDto.getProvider(),
+        LocalDateTime.now(),
+        parentSignUpRequestDto.isInfoAgreeYn()
+    );
+    return parentJpaRepository.save(parent);
   }
 }

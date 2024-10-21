@@ -1,9 +1,9 @@
 package com.ureca.service.port;
 
-import com.ureca.domain.Parent;
 import com.ureca.dto.ParentSignUpRequestDto;
+import com.ureca.entity.ParentEntity;
 
 public interface ParentService {
 
-  Parent create(ParentSignUpRequestDto parentSignUpRequestDto);
+  ParentEntity create(ParentSignUpRequestDto parentSignUpRequestDto);
 }

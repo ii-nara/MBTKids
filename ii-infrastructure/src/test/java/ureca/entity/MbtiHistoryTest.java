@@ -1,6 +1,5 @@
 package ureca.entity;
 
-import com.ureca.MainApplication;
 import com.ureca.entity.MbtiHistoryEntity;
 import com.ureca.repository.MbtiHistoryRepository;
 import jakarta.transaction.Transactional;

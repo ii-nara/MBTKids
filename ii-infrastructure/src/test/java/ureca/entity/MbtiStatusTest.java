@@ -1,6 +1,5 @@
 package ureca.entity;
 
-import com.ureca.MainApplication;
 import com.ureca.entity.MbtiStatusEntity;
 import com.ureca.repository.MbtiStatusRepository;
 import jakarta.transaction.Transactional;

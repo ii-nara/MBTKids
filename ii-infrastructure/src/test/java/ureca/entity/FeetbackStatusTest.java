@@ -1,6 +1,5 @@
 package ureca.entity;
 
-import com.ureca.MainApplication;
 import com.ureca.entity.Enum.LikeStatus;
 import com.ureca.entity.FeedbackStatusEntity;
 import com.ureca.repository.FeedbackStatusRepository;

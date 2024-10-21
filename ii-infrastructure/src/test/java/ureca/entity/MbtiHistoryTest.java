@@ -3,12 +3,14 @@ package ureca.entity;
 import com.ureca.MainApplication;
 import com.ureca.entity.MbtiHistoryEntity;
 import com.ureca.repository.MbtiHistoryRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+@Transactional
 @SpringBootTest(classes = MainApplication.class)
 public class MbtiHistoryTest {
 

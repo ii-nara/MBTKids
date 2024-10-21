@@ -1,9 +1,9 @@
-package com.ureca.repository;
+package ureca.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.ureca.MainApplication;
 import com.ureca.entity.RecommendEntity;
+import com.ureca.repository.RecommendRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -12,8 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@SpringBootTest(classes = MainApplication.class)
-class RecommendRepositoryTest {
+@SpringBootTest
+class RecommendEntityTest {
 
   @Autowired
   private RecommendRepository recommendRepository;

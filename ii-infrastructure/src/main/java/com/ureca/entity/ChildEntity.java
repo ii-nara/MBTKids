@@ -29,11 +29,10 @@ public class ChildEntity {
   @Column(name = "childId", nullable = false)
   private Long childId;
 
-  @Column(name = "parentId", nullable = false)
-  private Long parentId;
-
   @Column(name = "childName", nullable = false)
   private String childName;
+
+  private Long parentId;
 
   @Column(name = "childAge", nullable = false)
   private int childAge;

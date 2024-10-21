@@ -1,14 +1,18 @@
 package com.ureca.entity;
 
+import com.ureca.domain.Parent;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,13 +27,14 @@ public class ParentEntity {
   @Column(name = "parentId")
   private Long parentId;
 
-  @OneToMany(mappedBy = "parent")
+  @OneToMany
+  @JoinColumn(name = "parentId")
   private List<ChildEntity> children = new ArrayList<>();
 
   @Column(name = "email", nullable = false)
   private String email;
 
-  @Column(name = "paretnLoginId", nullable = false)
+  @Column(name = "parentLoginId", nullable = false)
   private String parentLoginId;
 
   @Column(name = "password", nullable = false)
@@ -47,25 +52,38 @@ public class ParentEntity {
   @Column(name = "createdAt", nullable = false)
   private LocalDateTime createdAt;
 
-  @Column(name = "isActive", nullable = false)
+  @Column(name = "isActive")
   private boolean isActive;
 
   @Column(name = "infoAgreeYn")
-  private String infoAgreeYn;
+  private boolean infoAgreeYn;
 
-  @Builder
-  public ParentEntity(Long parentId, String email, String parentLoginId, String password,
-      String userName, String phoneNumber, String provider, LocalDateTime createdAt,
-      boolean isActive, String infoAgreeYn) {
-    this.parentId = parentId;
-    this.email = email;
-    this.parentLoginId = parentLoginId;
-    this.password = password;
-    this.userName = userName;
-    this.phoneNumber = phoneNumber;
-    this.provider = provider;
-    this.createdAt = createdAt;
-    this.isActive = isActive;
-    this.infoAgreeYn = infoAgreeYn;
+  public static ParentEntity from(Parent parent) {
+    ParentEntity parentEntity = new ParentEntity();
+    parentEntity.email = parent.getEmail();
+    parentEntity.parentLoginId = parent.getParentLoginId();
+    parentEntity.password = parent.getPassword();
+    parentEntity.userName = parent.getUserName();
+    parentEntity.phoneNumber = parent.getPhoneNumber();
+    parentEntity.provider = parent.getProvider();
+    parentEntity.createdAt = parent.getCreateAt();
+    parentEntity.isActive = parent.isActive();
+    parentEntity.infoAgreeYn = parent.isInfoAgreeYn();
+
+    return parentEntity;
+  }
+
+  public Parent toModel() {
+    return Parent.builder()
+        .email(email)
+        .parentLoginId(parentLoginId)
+        .password(password)
+        .userName(userName)
+        .phoneNumber(phoneNumber)
+        .provider(provider)
+        .createAt(createdAt)
+        .isActive(isActive)
+        .infoAgreeYn(infoAgreeYn)
+        .build();
   }
 }

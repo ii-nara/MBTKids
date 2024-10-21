@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Parent SignUp Form</title>
+</head>
+<body>
+<h2>Parent Sign Up</h2>
+<form th:action="@{/mbtkids/register}" method="post">
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required><br><br>
+
+  <label for="parentLoginId">Login ID:</label>
+  <input type="text" id="parentLoginId" name="parentLoginId" required><br><br>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required><br><br>
+
+  <label for="userName">User Name:</label>
+  <input type="text" id="userName" name="userName"><br><br>
+
+  <label for="phoneNumber">Phone Number:</label>
+  <input type="text" id="phoneNumber" name="phoneNumber"><br><br>
+
+  <label for="infoAgreeYn">Agree to Terms:</label>
+  <input type="hidden" name="infoAgreeYn" value="false">
+  <input type="checkbox" id="infoAgreeYn" name="infoAgreeYn" value="true"><br><br>
+
+  <button type="submit">Sign Up</button>
+</form>
+
+</body>
+</html>
+

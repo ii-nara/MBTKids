@@ -1,6 +1,5 @@
 package com.ureca.entity;
 
-import com.ureca.domain.Parent;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,13 +12,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "parent")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ParentEntity {
 
   @Id
@@ -58,32 +61,22 @@ public class ParentEntity {
   @Column(name = "infoAgreeYn")
   private boolean infoAgreeYn;
 
-  public static ParentEntity from(Parent parent) {
-    ParentEntity parentEntity = new ParentEntity();
-    parentEntity.email = parent.getEmail();
-    parentEntity.parentLoginId = parent.getParentLoginId();
-    parentEntity.password = parent.getPassword();
-    parentEntity.userName = parent.getUserName();
-    parentEntity.phoneNumber = parent.getPhoneNumber();
-    parentEntity.provider = parent.getProvider();
-    parentEntity.createdAt = parent.getCreateAt();
-    parentEntity.isActive = parent.isActive();
-    parentEntity.infoAgreeYn = parent.isInfoAgreeYn();
 
-    return parentEntity;
-  }
-
-  public Parent toModel() {
-    return Parent.builder()
+  public static ParentEntity createParent(String email, String parentLoginId, String password,
+      String userName,
+      String phoneNumber, String provider,
+      LocalDateTime createdAt, boolean infoAgreeYn) {
+    return ParentEntity.builder()
         .email(email)
         .parentLoginId(parentLoginId)
         .password(password)
         .userName(userName)
         .phoneNumber(phoneNumber)
         .provider(provider)
-        .createAt(createdAt)
-        .isActive(isActive)
+        .createdAt(createdAt)
+        .isActive(true)
         .infoAgreeYn(infoAgreeYn)
         .build();
+
   }
 }

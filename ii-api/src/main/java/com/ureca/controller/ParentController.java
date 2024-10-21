@@ -25,7 +25,6 @@ public class ParentController {
   @PostMapping("/register")
   public String register(@ModelAttribute ParentSignUpRequestDto parentSignUpRequestDto,
       Model model) {
-//    System.out.println("DTO 값 확인: " + parentSignUpRequestDto.getEmail());
     try {
       parentService.create(parentSignUpRequestDto);
       model.addAttribute("message", "회원가입이 완료되었습니다.");

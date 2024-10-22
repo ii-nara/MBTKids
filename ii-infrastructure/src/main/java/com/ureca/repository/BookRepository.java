@@ -46,14 +46,16 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
           WHERE 
             b.displayYn = 'Y'
           AND
-            (b.typeIE = 1 AND m.typeIE <= 5) OR
+            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = -1))  -- 싫어요 피드백 체크
+          AND
+            ((b.typeIE = 1 AND m.typeIE <= 5) OR
             (b.typeIE = -1 AND m.typeIE >= 6) OR
             (b.typeSN = 1 AND m.typeSN <= 5) OR
             (b.typeSN = -1 AND m.typeSN >= 6) OR
             (b.typeTF = 1 AND m.typeTF <= 5) OR
             (b.typeTF = -1 AND m.typeTF >= 6) OR
             (b.typePJ = 1 AND m.typePJ <= 5) OR
-            (b.typePJ = -1 AND m.typePJ >= 6)
+            (b.typePJ = -1 AND m.typePJ >= 6))
           GROUP BY b.bookId
           ORDER BY similarity DESC
           LIMIT :offset, :limit
@@ -91,14 +93,16 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
           WHERE 
             b.displayYn = 'Y'
           AND
-            (b.typeIE = -1 AND m.typeIE <= 5) OR  -- E 성향인 경우
+            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = -1))  -- 싫어요 피드백 체크
+          AND
+            ((b.typeIE = -1 AND m.typeIE <= 5) OR  -- E 성향인 경우
             (b.typeIE = 1 AND m.typeIE >= 6) OR   -- I 성향인 경우
             (b.typeSN = -1 AND m.typeSN <= 5) OR  -- N 성향인 경우
             (b.typeSN = 1 AND m.typeSN >= 6) OR   -- S 성향인 경우
             (b.typeTF = -1 AND m.typeTF <= 5) OR  -- F 성향인 경우
             (b.typeTF = 1 AND m.typeTF >= 6) OR   -- T 성향인 경우
             (b.typePJ = -1 AND m.typePJ <= 5) OR  -- P 성향인 경우
-            (b.typePJ = 1 AND m.typePJ >= 6)      -- J 성향인 경우
+            (b.typePJ = 1 AND m.typePJ >= 6))      -- J 성향인 경우
           GROUP BY b.bookId
           ORDER BY similarity DESC
           LIMIT :offset, :limit
@@ -114,6 +118,8 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
           JOIN mbti_status m2 ON m2.childId = :childId   -- 쿼리에 전달된 자녀의 MBTI
           WHERE 
             b.displayYn = 'Y'
+          AND
+            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = -1))  -- 싫어요 피드백 체크
           AND
             ((m1.typeIE BETWEEN 1 AND 5 AND m2.typeIE BETWEEN 1 AND 5) OR 
              (m1.typeIE BETWEEN 6 AND 10 AND m2.typeIE BETWEEN 6 AND 10) OR

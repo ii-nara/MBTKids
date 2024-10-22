@@ -28,10 +28,6 @@ public class MbtiStatusEntity {
   @Column(name = "typeId")
   private Long typeId;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "childId")
-  private ChildEntity childEntity;
-
   @Column(name = "typeIE", nullable = false)
   @Min(1)
   @Max(10)
@@ -57,9 +53,15 @@ public class MbtiStatusEntity {
   private LocalDateTime updateAt;
 
   @Builder
-  public MbtiStatusEntity(ChildEntity childEntity, Integer typeIE, Integer typeSN, Integer typeTF,
+  public MbtiStatusEntity(Integer typeIE, Integer typeSN, Integer typeTF,
       Integer typePJ) {
-    this.childEntity = childEntity;
+    this.typeIE = typeIE;
+    this.typeSN = typeSN;
+    this.typeTF = typeTF;
+    this.typePJ = typePJ;
+  }
+
+  public void updateMbtiType(Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ) {
     this.typeIE = typeIE;
     this.typeSN = typeSN;
     this.typeTF = typeTF;

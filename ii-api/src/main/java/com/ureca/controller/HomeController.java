@@ -21,6 +21,8 @@ public class HomeController {
     Long childId = 1L;  //TODO session
     List<BookInfo> similarBooks = recommendService.recommendSimilarity(childId);
     model.addAttribute("similarBooks", similarBooks);
+    List<BookInfo> oppositionBooks = recommendService.recommendOpposition(childId);
+    model.addAttribute("oppositionBooks", oppositionBooks);
     return "/home";
   }
 }

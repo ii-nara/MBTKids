@@ -6,6 +6,7 @@ import com.ureca.repository.ParentJpaRepository;
 import com.ureca.service.port.ParentService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class ParentServiceImpl implements ParentService {
 
   private final ParentJpaRepository parentJpaRepository;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Override
   public ParentEntity create(ParentSignUpRequestDto parentSignUpRequestDto) {
@@ -21,10 +23,11 @@ public class ParentServiceImpl implements ParentService {
           throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         });
 
+    String encodedPwd = bCryptPasswordEncoder.encode(parentSignUpRequestDto.getPassword());
     ParentEntity parent = ParentEntity.createParent(
         parentSignUpRequestDto.getEmail(),
         parentSignUpRequestDto.getParentLoginId(),
-        parentSignUpRequestDto.getPassword(),
+        encodedPwd,
         parentSignUpRequestDto.getUserName(),
         parentSignUpRequestDto.getPhoneNumber(),
         parentSignUpRequestDto.getProvider(),

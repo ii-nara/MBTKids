@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>아이둘나라</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link th:href="@{/css/parent/home.css}" rel="stylesheet"/>
+  <link th:href="@{/css/parent/navbar.css}" rel="stylesheet"/>
+</head>
+<body>
+<!-- (상단 레이아웃) 네비게이션 바 -->
+<th:block th:replace="navbar :: navbar"></th:block>
+
+<!-- 본문 내용 -->
+<div class="container mt-5">
+
+  <!-- @@ 여기에 본인 코드 내용 넣어주심 됩니다 -->
+  <h2>성공</h2>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:src="@{/js/home.js}"></script>
+</body>
+</html>

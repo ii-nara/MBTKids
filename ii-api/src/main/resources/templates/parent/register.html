@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>아이둘나라</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link th:href="@{/css/parent/home.css}" rel="stylesheet"/>
+  <link th:href="@{/css/parent/navbar.css}" rel="stylesheet"/>
+</head>
+<body>
+<!-- (상단 레이아웃) 네비게이션 바 -->
+<th:block th:replace="navbar :: navbar"></th:block>
+
+<!-- 본문 내용 -->
+<div class="container mt-5">
+
+  <form th:action="@{/mbtkids/register}" method="post">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="parentLoginId">Login ID:</label>
+    <input type="text" id="parentLoginId" name="parentLoginId" required><br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <label for="userName">User Name:</label>
+    <input type="text" id="userName" name="userName"><br><br>
+
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber" name="phoneNumber"><br><br>
+
+    <label for="infoAgreeYn">Agree to Terms:</label>
+    <input type="hidden" name="infoAgreeYn" value="false">
+    <input type="checkbox" id="infoAgreeYn" name="infoAgreeYn" value="true"><br><br>
+
+    <button type="submit">Sign Up</button>
+  </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:src="@{/js/home.js}"></script>
+</body>
+</html>

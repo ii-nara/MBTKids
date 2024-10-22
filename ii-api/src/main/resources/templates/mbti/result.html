@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>아이둘나라</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link th:href="@{/css/mbti/result.css}" rel="stylesheet"/>
+  <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
+</head>
+<body>
+<!-- (상단 레이아웃) 네비게이션 바 -->
+<th:block th:replace="navbar :: navbar"></th:block>
+
+<!-- 본문 내용 -->
+<div class="container mt-5">
+  <!-- TODO : 시간 남으면 결과 페이지 구현, 없으면 조회 페이지로 이동 -->
+  <h3>진단 결과</h3>
+  <p th:text="${mbtiType}"></p>
+  <p th:text="${scores}"></p>
+  <ul>
+    <li th:each="score, iterStat : ${scoreList}">
+      질문 <span th:text="${iterStat.index + 1}">1</span>: <span th:text="${score}"></span>
+    </li>
+  </ul>
+  <a href="/mbti/test">다시 시작하기</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

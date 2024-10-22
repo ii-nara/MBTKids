@@ -1,0 +1,48 @@
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard-Bold';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+}
+
+/* 색상 설정 */
+:root {
+  --main-color: #ffe552;
+  --dark-color: #404040;
+}
+
+/* 본문 */
+.container {
+  font-family: 'Pretendard-Regular';
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+/* TODO : 구현 */
+.question {
+  display: none;
+}
+
+.question.active {
+  display: block;
+}
+
+/* 버튼 */
+button {
+  display: block; /* 세로 배치 */
+  width: 50%; /* 버튼 가로 크기 2배로 증가 */
+  height: 15%;
+  margin: 10px auto; /* 중앙 정렬과 버튼 사이 간격 */
+  font-size: 20px;
+}
+
+h4 {
+  text-align: center; /* 질문 중앙 정렬 */
+}

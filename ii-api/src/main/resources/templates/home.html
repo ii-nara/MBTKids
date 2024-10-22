@@ -16,7 +16,7 @@
 <div class="container mt-5">
 
   <!-- @@ 여기에 본인 코드 내용 넣어주심 됩니다 -->
-  <h2>추천 도서</h2>
+  <h2>아이 성향 추천</h2>
   <table class="table">
     <thead>
     <tr>
@@ -44,7 +44,12 @@
     </tbody>
   </table>
 
-  <h2>반대 도서</h2>
+  <div class="text-center">
+    <a th:href="@{/mbtkids/books(type='SIMILAR', page=${currentPage}, size=${pageSize})}"
+       class="btn btn-primary">더보기</a>
+  </div>
+
+  <h2>반대 성향 추천</h2>
   <table class="table">
     <thead>
     <tr>
@@ -72,7 +77,12 @@
     </tbody>
   </table>
 
-  <h2>비슷한 성향의 다른 아이들이 좋아하는 도서</h2>
+  <div class="text-center">
+    <a th:href="@{/mbtkids/books(type='OPPOSITE', page=${currentPage}, size=${pageSize})}"
+       class="btn btn-primary">더보기</a>
+  </div>
+
+  <h2>유사 성향 아이들 추천</h2>
   <table class="table">
     <thead>
     <tr>
@@ -99,6 +109,11 @@
     </tr>
     </tbody>
   </table>
+
+  <div class="text-center">
+    <a th:href="@{/mbtkids/books(type='LIKE', page=${currentPage}, size=${pageSize})}"
+       class="btn btn-primary">더보기</a>
+  </div>
 
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -14,8 +14,8 @@ public class RecommendService {
 
   private final BookRepository bookRepository;
 
-  public List<BookInfo> recommendSimilarBooks(Long childId) {
-    List<BookEntity> books = bookRepository.findSimilarBooks(childId);
+  public List<BookInfo> recommendSimilarBooks(Long childId, int offset, int limit) {
+    List<BookEntity> books = bookRepository.findSimilarBooks(childId, offset, limit);
     return books.stream()
         .map(book -> new BookInfo(
             book.getBookId(),
@@ -28,8 +28,8 @@ public class RecommendService {
         .collect(Collectors.toList());
   }
 
-  public List<BookInfo> recommendOppositeBooks(Long childId) {
-    List<BookEntity> books = bookRepository.findOppositeBooks(childId);
+  public List<BookInfo> recommendOppositeBooks(Long childId, int offset, int limit) {
+    List<BookEntity> books = bookRepository.findOppositeBooks(childId, offset, limit);
     return books.stream()
         .map(book -> new BookInfo(
             book.getBookId(),
@@ -42,8 +42,8 @@ public class RecommendService {
         .collect(Collectors.toList());
   }
 
-  public List<BookInfo> findSimilarChildLikedBooks(Long childId) {
-    List<BookEntity> books = bookRepository.findSimilarChildLikedBooks(childId);
+  public List<BookInfo> recommendSimilarChildLikedBooks(Long childId, int offset, int limit) {
+    List<BookEntity> books = bookRepository.findSimilarChildLikedBooks(childId, offset, limit);
     return books.stream()
         .map(book -> new BookInfo(
             book.getBookId(),

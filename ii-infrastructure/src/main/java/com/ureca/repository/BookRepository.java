@@ -56,8 +56,9 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
             (b.typePJ = -1 AND m.typePJ >= 6)
           GROUP BY b.bookId
           ORDER BY similarity DESC
+          LIMIT :offset, :limit
       """, nativeQuery = true)
-  List<BookEntity> findSimilarBooks(@Param("childId") Long childId);
+  List<BookEntity> findSimilarBooks(Long childId, int offset, int limit);
 
   @Query(value = """
           SELECT b.*,
@@ -100,11 +101,13 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
             (b.typePJ = 1 AND m.typePJ >= 6)      -- J 성향인 경우
           GROUP BY b.bookId
           ORDER BY similarity DESC
+          LIMIT :offset, :limit
       """, nativeQuery = true)
-  List<BookEntity> findOppositeBooks(@Param("childId") Long childId);
+  List<BookEntity> findOppositeBooks(Long childId, int offset, int limit);
 
   @Query(value = """
-          SELECT b.*, COUNT(f.isLike) AS likeCount
+          SELECT b.*, 
+                 COUNT(f.isLike) AS likeCount
           FROM book b
           JOIN feedback_status f ON f.bookId = b.bookId
           JOIN mbti_status m1 ON f.childId = m1.childId  -- 좋아요를 남긴 유저의 MBTI
@@ -127,6 +130,7 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
             f.isLike = 1  -- 좋아요가 표시된 콘텐츠만
           GROUP BY b.bookId
           ORDER BY likeCount DESC
+          LIMIT :offset, :limit
       """, nativeQuery = true)
-  List<BookEntity> findSimilarChildLikedBooks(@Param("childId") Long childId);
+  List<BookEntity> findSimilarChildLikedBooks(Long childId, int offset, int limit);
 }

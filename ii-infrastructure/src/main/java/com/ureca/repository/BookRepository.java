@@ -44,6 +44,8 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
           FROM book b
           JOIN mbti_status m ON m.childId = :childId
           WHERE 
+            b.displayYn = 'Y'
+          AND
             (b.typeIE = 1 AND m.typeIE <= 5) OR
             (b.typeIE = -1 AND m.typeIE >= 6) OR
             (b.typeSN = 1 AND m.typeSN <= 5) OR
@@ -86,6 +88,8 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
           FROM book b
           JOIN mbti_status m ON m.childId = :childId
           WHERE 
+            b.displayYn = 'Y'
+          AND
             (b.typeIE = -1 AND m.typeIE <= 5) OR  -- E 성향인 경우
             (b.typeIE = 1 AND m.typeIE >= 6) OR   -- I 성향인 경우
             (b.typeSN = -1 AND m.typeSN <= 5) OR  -- N 성향인 경우

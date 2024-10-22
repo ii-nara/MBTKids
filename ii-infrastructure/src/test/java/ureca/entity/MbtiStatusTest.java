@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class MbtiStatusTest {
 
-  private static final Logger logger = LoggerFactory.getLogger(FeetbackStatusTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(MbtiStatusTest.class);
 
   @Autowired
   MbtiStatusRepository mbtiStatusRepository;
@@ -22,7 +22,6 @@ public class MbtiStatusTest {
   public void insertMbti() {
     for (int i = 0; i < 30; i++) {
       MbtiStatusEntity newMbtiStatus = MbtiStatusEntity.builder()
-          .childEntity(null)
           .typeIE(1)
           .typeSN(10)
           .typeTF(3)

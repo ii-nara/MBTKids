@@ -50,8 +50,7 @@ public class MbtiStatusEntity {
   private LocalDateTime updateAt;
 
   @Builder
-  public MbtiStatusEntity(Integer typeIE, Integer typeSN, Integer typeTF,
-      Integer typePJ) {
+  public MbtiStatusEntity(Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ) {
     this.typeIE = typeIE;
     this.typeSN = typeSN;
     this.typeTF = typeTF;

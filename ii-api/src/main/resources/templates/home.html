@@ -72,6 +72,34 @@
     </tbody>
   </table>
 
+  <h2>비슷한 성향의 다른 아이들이 좋아하는 도서</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>도서 아이디</th>
+      <th>도서명</th>
+      <th>영화 포스터 URL</th>
+      <th>작가명</th>
+      <th>작가 코드</th>
+      <th>출판사</th>
+      <th>출판사 코드</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${similarChildLikedBooks}">
+      <td th:text="${book.bookId}"></td>
+      <td th:text="${book.bookName}"></td>
+      <td>
+        <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
+      </td>
+      <td th:text="${book.writer}"></td>
+      <td th:text="${book.writerCd}"></td>
+      <td th:text="${book.publisher}"></td>
+      <td th:text="${book.publisherCd}"></td>
+    </tr>
+    </tbody>
+  </table>
+
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

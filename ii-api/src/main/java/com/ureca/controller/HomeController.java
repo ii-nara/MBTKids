@@ -23,6 +23,8 @@ public class HomeController {
     model.addAttribute("similarBooks", similarBooks);
     List<BookInfo> oppositeBooks = recommendService.recommendOppositeBooks(childId);
     model.addAttribute("oppositionBooks", oppositeBooks);
+    List<BookInfo> similarChildLikedBooks = recommendService.findSimilarChildLikedBooks(childId);
+    model.addAttribute("similarChildLikedBooks", similarChildLikedBooks);
     return "/home";
   }
 }

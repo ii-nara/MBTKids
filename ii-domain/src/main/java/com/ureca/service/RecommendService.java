@@ -41,4 +41,18 @@ public class RecommendService {
             book.getPublisherCd()))
         .collect(Collectors.toList());
   }
+
+  public List<BookInfo> findSimilarChildLikedBooks(Long childId) {
+    List<BookEntity> books = bookRepository.findSimilarChildLikedBooks(childId);
+    return books.stream()
+        .map(book -> new BookInfo(
+            book.getBookId(),
+            book.getBookName(),
+            book.getImgURL(),
+            book.getWriter(),
+            book.getWriterCd(),
+            book.getPublisher(),
+            book.getPublisherCd()))
+        .collect(Collectors.toList());
+  }
 }

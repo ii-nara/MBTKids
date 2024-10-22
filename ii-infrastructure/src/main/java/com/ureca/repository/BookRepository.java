@@ -102,4 +102,31 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
           ORDER BY similarity DESC
       """, nativeQuery = true)
   List<BookEntity> findOppositeBooks(@Param("childId") Long childId);
+
+  @Query(value = """
+          SELECT b.*, COUNT(f.isLike) AS likeCount
+          FROM book b
+          JOIN feedback_status f ON f.bookId = b.bookId
+          JOIN mbti_status m1 ON f.childId = m1.childId  -- 좋아요를 남긴 유저의 MBTI
+          JOIN mbti_status m2 ON m2.childId = :childId   -- 쿼리에 전달된 자녀의 MBTI
+          WHERE 
+            b.displayYn = 'Y'
+          AND
+            ((m1.typeIE BETWEEN 1 AND 5 AND m2.typeIE BETWEEN 1 AND 5) OR 
+             (m1.typeIE BETWEEN 6 AND 10 AND m2.typeIE BETWEEN 6 AND 10) OR
+             (ABS(m1.typeIE - m2.typeIE) <= 2)) AND  -- 유사한 IE 성향
+            ((m1.typeSN BETWEEN 1 AND 5 AND m2.typeSN BETWEEN 1 AND 5) OR 
+             (m1.typeSN BETWEEN 6 AND 10 AND m2.typeSN BETWEEN 6 AND 10) OR
+             (ABS(m1.typeSN - m2.typeSN) <= 2)) AND  -- 유사한 SN 성향
+            ((m1.typeTF BETWEEN 1 AND 5 AND m2.typeTF BETWEEN 1 AND 5) OR 
+             (m1.typeTF BETWEEN 6 AND 10 AND m2.typeTF BETWEEN 6 AND 10) OR
+             (ABS(m1.typeTF - m2.typeTF) <= 2)) AND  -- 유사한 TF 성향
+            ((m1.typePJ BETWEEN 1 AND 5 AND m2.typePJ BETWEEN 1 AND 5) OR 
+             (m1.typePJ BETWEEN 6 AND 10 AND m2.typePJ BETWEEN 6 AND 10) OR
+             (ABS(m1.typePJ - m2.typePJ) <= 2)) AND  -- 유사한 PJ 성향
+            f.isLike = 1  -- 좋아요가 표시된 콘텐츠만
+          GROUP BY b.bookId
+          ORDER BY likeCount DESC
+      """, nativeQuery = true)
+  List<BookEntity> findSimilarChildLikedBooks(@Param("childId") Long childId);
 }

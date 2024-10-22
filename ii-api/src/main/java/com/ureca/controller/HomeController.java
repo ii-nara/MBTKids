@@ -19,10 +19,10 @@ public class HomeController {
   @GetMapping("/home")
   public String home(Model model) {
     Long childId = 1L;  //TODO session
-    List<BookInfo> similarBooks = recommendService.recommendSimilarity(childId);
+    List<BookInfo> similarBooks = recommendService.recommendSimilarBooks(childId);
     model.addAttribute("similarBooks", similarBooks);
-    List<BookInfo> oppositionBooks = recommendService.recommendOpposition(childId);
-    model.addAttribute("oppositionBooks", oppositionBooks);
+    List<BookInfo> oppositeBooks = recommendService.recommendOppositeBooks(childId);
+    model.addAttribute("oppositionBooks", oppositeBooks);
     return "/home";
   }
 }

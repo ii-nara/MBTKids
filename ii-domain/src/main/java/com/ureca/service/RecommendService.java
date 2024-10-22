@@ -14,7 +14,7 @@ public class RecommendService {
 
   private final BookRepository bookRepository;
 
-  public List<BookInfo> recommendSimilarity(Long childId) {
+  public List<BookInfo> recommendSimilarBooks(Long childId) {
     List<BookEntity> books = bookRepository.findSimilarBooks(childId);
     return books.stream()
         .map(book -> new BookInfo(
@@ -28,7 +28,7 @@ public class RecommendService {
         .collect(Collectors.toList());
   }
 
-  public List<BookInfo> recommendOpposition(Long childId) {
+  public List<BookInfo> recommendOppositeBooks(Long childId) {
     List<BookEntity> books = bookRepository.findOppositeBooks(childId);
     return books.stream()
         .map(book -> new BookInfo(

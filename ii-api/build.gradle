@@ -15,6 +15,10 @@ dependencies {
     implementation project(':ii-infrastructure')
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    // 1. thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // 2. jackson (to json)
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 test {

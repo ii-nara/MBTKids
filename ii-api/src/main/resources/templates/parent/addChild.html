@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자식 추가</title>
+</head>
+<body>
+<h1>자식 추가</h1>
+
+<form action="/mbtkids/child/add" method="POST">
+  <label for="childName">자식 이름:</label>
+  <input type="text" id="childName" name="childName" required><br><br>
+
+  <label for="childAge">자식 나이:</label>
+  <input type="number" id="childAge" name="childAge" required><br><br>
+
+  <button type="submit">저장</button>
+</form>
+
+<!-- 필요하면 자식 추가 취소 버튼도 추가 가능 -->
+<a href="/mbtkids/success">
+  <button type="button">취소</button>
+</a>
+</body>
+</html>

@@ -23,10 +23,11 @@ public class SecurityConfig {
             .loginProcessingUrl("/mbtkids/login")
             .usernameParameter("loginIdOrEmail")
             .defaultSuccessUrl("/mbtkids/success", true)
-            .failureUrl("/mbtkids/login")
+            .failureUrl("/mbtkids")
             .permitAll())
         .logout(logout -> logout
-            .logoutSuccessUrl("/mbtkids/login")
+            .logoutUrl("/mbtkids/logout")
+            .logoutSuccessUrl("/mbtkids")
             .permitAll());
 
     return http.build();

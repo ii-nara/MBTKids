@@ -16,12 +16,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class ParentJoinTest {
 
   @Mock
   private ParentJpaRepository parentJpaRepository;
-
+  @Mock
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
   @InjectMocks
   private ParentServiceImpl parentService;
 
@@ -46,21 +48,22 @@ public class ParentJoinTest {
 
     when(parentJpaRepository.findByParentLoginId(dto.getParentLoginId())).thenReturn(
         Optional.empty());
+    when(bCryptPasswordEncoder.encode(dto.getPassword())).thenReturn("encodedPwd");
     when(parentJpaRepository.save(any(ParentEntity.class))).thenAnswer(
-        invocation -> invocation.getArgument(0));  // 저장된 엔티티 반환
+        invocation -> invocation.getArgument(0));
 
     ParentEntity parent = parentService.create(dto);
 
     assertNotNull(parent);
     assertEquals("test@naver.com", parent.getEmail());
     assertEquals("test", parent.getParentLoginId());
-    assertEquals("1234", parent.getPassword());
+    assertEquals("encodedPwd", parent.getPassword());
     verify(parentJpaRepository, times(1)).save(any(ParentEntity.class));
   }
 
   @Test
   void 중복아이디_회원가입_실패() {
-    // given
+
     ParentSignUpRequestDto dto = ParentSignUpRequestDto.builder()
         .email("test@naver.com")
         .parentLoginId("testId")
@@ -71,16 +74,15 @@ public class ParentJoinTest {
         .infoAgreeYn(true)
         .build();
 
-    ParentEntity existingParent = ParentEntity.builder()
+    ParentEntity parent = ParentEntity.builder()
         .email("test@naver.com")
         .parentLoginId("testId")
         .password("1234")
         .build();
 
     when(parentJpaRepository.findByParentLoginId(dto.getParentLoginId())).thenReturn(
-        Optional.of(existingParent));
+        Optional.of(parent));
 
-    // when & then
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
       parentService.create(dto);
     });

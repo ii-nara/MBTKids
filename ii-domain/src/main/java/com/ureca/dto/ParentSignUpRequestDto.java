@@ -14,6 +14,5 @@ public class ParentSignUpRequestDto {
   private final String phoneNumber;
   private final String provider;
   private final boolean infoAgreeYn;
-
-
+  
 }

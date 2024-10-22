@@ -17,9 +17,24 @@ public class ParentController {
 
   private final ParentService parentService;
 
+  @GetMapping()
+  public String home() {
+    return "parent/home";
+  }
+
+  @GetMapping("/login")
+  public String loginForm() {
+    return "parent/login";
+  }
+
+  @GetMapping("/success")
+  public String loginSuccess() {
+    return "parent/success";
+  }
+
   @GetMapping("/register")
   public String signUpForm() {
-    return "register";
+    return "parent/register";
   }
 
   @PostMapping("/register")
@@ -29,11 +44,11 @@ public class ParentController {
       parentService.create(parentSignUpRequestDto);
       model.addAttribute("message", "회원가입이 완료되었습니다.");
 
-      return "success";
+      return "parent/login";
     } catch (IllegalArgumentException e) {
       model.addAttribute("errorMessage", e.getMessage());
 
-      return "register";
+      return "parent/register";
     }
   }
 }

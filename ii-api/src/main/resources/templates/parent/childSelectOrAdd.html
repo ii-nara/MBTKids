@@ -5,8 +5,8 @@
   <title>아이둘나라</title>
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link th:href="@{/css/parent/home.css}" rel="stylesheet"/>
-  <link th:href="@{/css/parent/navbar.css}" rel="stylesheet"/>
+  <link th:href="@{/css/home.css}" rel="stylesheet"/>
+  <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
 </head>
 <body>
 <!-- (상단 레이아웃) 네비게이션 바 -->
@@ -14,9 +14,12 @@
 
 <!-- 본문 내용 -->
 <div class="container mt-5">
+  <h1>자식을 추가하거나 선택하세요</h1>
 
-  <!-- @@ 여기에 본인 코드 내용 넣어주심 됩니다 -->
-  <h2>성공</h2>
+  <!-- 자식 추가 페이지로 이동하는 버튼 -->
+  <a href="/mbtkids/child/add">
+    <button>자식 추가</button>
+  </a>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

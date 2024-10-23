@@ -24,7 +24,6 @@ public class PrincipalDetailsService implements UserDetailsService {
       parent = parentJpaRepository.findByParentLoginId(loginIdOrEmail)
           .orElseThrow(() -> new IllegalArgumentException("아이디 또는 이메일을 확인해주세요."));
     }
-
     return new PrincipalDetails(parent);
   }
 }

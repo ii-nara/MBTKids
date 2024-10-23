@@ -16,13 +16,13 @@
 <div class="container mt-5">
 
   <!-- @@ 여기에 본인 코드 내용 넣어주심 됩니다 -->
-  <h2 th:text="${title}">도서 목록</h2>
+  <h2 th:text="${title} + ' ('+ ${books.getCount()} + '개)'">도서 목록</h2>
   <table class="table">
     <thead>
     <tr>
       <th>도서 아이디</th>
       <th>도서명</th>
-      <th>영화 포스터 URL</th>
+      <th>도서 이미지</th>
       <th>작가명</th>
       <th>작가 코드</th>
       <th>출판사</th>
@@ -30,7 +30,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="book : ${books}">
+    <tr th:each="book : ${books.getItems()}">
       <td th:text="${book.bookId}"></td>
       <td th:text="${book.bookName}"></td>
       <td>
@@ -54,7 +54,8 @@
       </li>
 
       <!-- 다음 페이지 버튼 -->
-      <li class="page-item" th:classappend="${!hasNextPage} ? 'disabled'">
+      <li class="page-item"
+          th:classappend="${!books.isNextPage(currentPage, pageSize)} ? 'disabled'">
         <a class="page-link"
            th:href="@{/mbtkids/books(type=${type}, page=${currentPage + 1}, size=${pageSize})}">다음</a>
       </li>

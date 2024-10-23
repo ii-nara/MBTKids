@@ -1,9 +1,8 @@
 package com.ureca.controller;
 
 import com.ureca.dto.BookInfo;
+import com.ureca.dto.BookPage;
 import com.ureca.service.RecommendService;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -26,16 +25,18 @@ public class HomeController {
   public String home(Model model) {
     Long childId = 1L;  //TODO session
 
-    List<BookInfo> similarBooks = recommendService.recommendSimilarBooks(childId, DEFAULT_OFFSET,
+    BookPage<BookInfo> similarBooks = recommendService.recommendSimilarBooks(childId,
+        DEFAULT_OFFSET,
         DEFAULT_LIMIT);
-    model.addAttribute("similarBooks", similarBooks);
-    List<BookInfo> oppositeBooks = recommendService.recommendOppositeBooks(childId, DEFAULT_OFFSET,
+    BookPage<BookInfo> oppositeBooks = recommendService.recommendOppositeBooks(childId,
+        DEFAULT_OFFSET,
         DEFAULT_LIMIT);
-    model.addAttribute("oppositionBooks", oppositeBooks);
-    List<BookInfo> similarChildLikedBooks = recommendService.recommendSimilarChildLikedBooks(
+    BookPage<BookInfo> likedBooks = recommendService.recommendSimilarChildLikedBooks(
         childId, DEFAULT_OFFSET, DEFAULT_LIMIT);
-    model.addAttribute("similarChildLikedBooks", similarChildLikedBooks);
 
+    model.addAttribute("similarBooks", similarBooks);
+    model.addAttribute("oppositeBooks", oppositeBooks);
+    model.addAttribute("likedBooks", likedBooks);
     model.addAttribute("currentPage", DEFAULT_OFFSET);
     model.addAttribute("pageSize", DEFAULT_LIMIT);
 
@@ -45,11 +46,11 @@ public class HomeController {
   @GetMapping("/books")
   public String books(Model model,
       @RequestParam(value = "type") String type,
-      @RequestParam(value = "page", defaultValue = "0") int page,
-      @RequestParam(value = "size", defaultValue = "10") int size) {
+      @RequestParam(value = "page", defaultValue = "" + DEFAULT_OFFSET) int page,
+      @RequestParam(value = "size", defaultValue = "" + DEFAULT_LIMIT) int size) {
     Long childId = 1L;  //TODO session
 
-    List<BookInfo> books = new ArrayList<>();
+    BookPage<BookInfo> books = null;
     String title = "도서 목록";
     if (Objects.equals("SIMILAR", type)) {
       title = "아이 성향 추천";
@@ -61,17 +62,15 @@ public class HomeController {
     }
     if (Objects.equals("LIKE", type)) {
       title = "유사 성향 아이들 추천";
-      books = recommendService.recommendSimilarChildLikedBooks(childId, page * size, size);
+      books = recommendService.recommendSimilarChildLikedBooks(
+          childId, page * size, size);
     }
+
     model.addAttribute("books", books);
     model.addAttribute("title", title);
-
-    // 현재 페이지 번호와 다음 페이지가 있는지 여부를 추가
     model.addAttribute("type", type);
-    model.addAttribute("books", books);
     model.addAttribute("currentPage", page);
     model.addAttribute("pageSize", size);
-    model.addAttribute("hasNextPage", books.size() == size); // 다음 페이지가 있는지 판단
 
     return "/book/books";
   }

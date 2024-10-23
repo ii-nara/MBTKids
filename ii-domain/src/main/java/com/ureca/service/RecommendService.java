@@ -1,8 +1,10 @@
 package com.ureca.service;
 
 import com.ureca.dto.BookInfo;
+import com.ureca.dto.BookPage;
 import com.ureca.entity.BookEntity;
 import com.ureca.repository.BookRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -14,45 +16,66 @@ public class RecommendService {
 
   private final BookRepository bookRepository;
 
-  public List<BookInfo> recommendSimilarBooks(Long childId, int offset, int limit) {
-    List<BookEntity> books = bookRepository.findSimilarBooks(childId, offset, limit);
-    return books.stream()
-        .map(book -> new BookInfo(
-            book.getBookId(),
-            book.getBookName(),
-            book.getImgURL(),
-            book.getWriter(),
-            book.getWriterCd(),
-            book.getPublisher(),
-            book.getPublisherCd()))
-        .collect(Collectors.toList());
+  public BookPage<BookInfo> recommendSimilarBooks(Long childId, int offset, int limit) {
+    Long count = bookRepository.countSimilarBooks(childId);
+
+    List<BookInfo> bookInfos = new ArrayList<>();
+    if (count > 0) {
+      List<BookEntity> entities = bookRepository.findSimilarBooks(childId,
+          offset, limit);
+      bookInfos = entities.stream()
+          .map(entity -> new BookInfo(
+              entity.getBookId(),
+              entity.getBookName(),
+              entity.getImgURL(),
+              entity.getWriter(),
+              entity.getWriterCd(),
+              entity.getPublisher(),
+              entity.getPublisherCd()))
+          .collect(Collectors.toList());
+    }
+    return new BookPage<>(count, bookInfos);
   }
 
-  public List<BookInfo> recommendOppositeBooks(Long childId, int offset, int limit) {
-    List<BookEntity> books = bookRepository.findOppositeBooks(childId, offset, limit);
-    return books.stream()
-        .map(book -> new BookInfo(
-            book.getBookId(),
-            book.getBookName(),
-            book.getImgURL(),
-            book.getWriter(),
-            book.getWriterCd(),
-            book.getPublisher(),
-            book.getPublisherCd()))
-        .collect(Collectors.toList());
+  public BookPage<BookInfo> recommendOppositeBooks(Long childId, int offset, int limit) {
+    Long count = bookRepository.countOppositeBooks(childId);
+
+    List<BookInfo> bookInfos = new ArrayList<>();
+    if (count > 0) {
+      List<BookEntity> entities = bookRepository.findOppositeBooks(childId,
+          offset, limit);
+      bookInfos = entities.stream()
+          .map(entity -> new BookInfo(
+              entity.getBookId(),
+              entity.getBookName(),
+              entity.getImgURL(),
+              entity.getWriter(),
+              entity.getWriterCd(),
+              entity.getPublisher(),
+              entity.getPublisherCd()))
+          .collect(Collectors.toList());
+    }
+    return new BookPage<>(count, bookInfos);
   }
 
-  public List<BookInfo> recommendSimilarChildLikedBooks(Long childId, int offset, int limit) {
-    List<BookEntity> books = bookRepository.findSimilarChildLikedBooks(childId, offset, limit);
-    return books.stream()
-        .map(book -> new BookInfo(
-            book.getBookId(),
-            book.getBookName(),
-            book.getImgURL(),
-            book.getWriter(),
-            book.getWriterCd(),
-            book.getPublisher(),
-            book.getPublisherCd()))
-        .collect(Collectors.toList());
+  public BookPage<BookInfo> recommendSimilarChildLikedBooks(Long childId, int offset, int limit) {
+    Long count = bookRepository.countSimilarChildLikedBooks(childId);
+
+    List<BookInfo> bookInfos = new ArrayList<>();
+    if (count > 0) {
+      List<BookEntity> entities = bookRepository.findSimilarChildLikedBooks(childId,
+          offset, limit);
+      bookInfos = entities.stream()
+          .map(entity -> new BookInfo(
+              entity.getBookId(),
+              entity.getBookName(),
+              entity.getImgURL(),
+              entity.getWriter(),
+              entity.getWriterCd(),
+              entity.getPublisher(),
+              entity.getPublisherCd()))
+          .collect(Collectors.toList());
+    }
+    return new BookPage<>(count, bookInfos);
   }
 }

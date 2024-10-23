@@ -16,13 +16,14 @@ public class SecurityConfig {
     http.csrf(AbstractHttpConfigurer::disable);
     http.authorizeHttpRequests(auth -> auth
             .requestMatchers("/mbtkids", "/mbtkids/register", "/mbtkids/login").permitAll()
+            .requestMatchers("/mbtkids/child/**").authenticated()
             .anyRequest().permitAll()
         )
         .formLogin(login -> login
             .loginPage("/mbtkids/login")
             .loginProcessingUrl("/mbtkids/login")
             .usernameParameter("loginIdOrEmail")
-            .defaultSuccessUrl("/mbtkids/success", true)
+            .defaultSuccessUrl("/mbtkids/childSelectOrAdd", true)
             .failureUrl("/mbtkids")
             .permitAll())
         .logout(logout -> logout

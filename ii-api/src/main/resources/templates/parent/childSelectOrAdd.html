@@ -16,6 +16,16 @@
 <div class="container mt-5">
   <h1>자식을 추가하거나 선택하세요</h1>
 
+  <ul>
+    <th:block th:each="child : ${children}">
+      <li>
+        <a th:href="@{/mbtkids/child/select/{childId}(childId=${child.childId})}">
+          <span th:text="${child.childName}">자식 이름</span>
+        </a>
+      </li>
+    </th:block>
+  </ul>
+
   <!-- 자식 추가 페이지로 이동하는 버튼 -->
   <a href="/mbtkids/child/add">
     <button>자식 추가</button>

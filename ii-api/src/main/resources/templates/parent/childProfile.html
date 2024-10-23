@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자식 프로필</title>
+</head>
+<body>
+<h1 th:text="${child.childName} + '의 프로필'">자식 이름의 프로필</h1>
+
+<p>이름: <span th:text="${child.childName}">이름</span></p>
+<p>나이: <span th:text="${child.childAge}">나이</span></p>
+
+<a href="/mbtkids">메인으로 돌아가기</a>
+<a href="/mbtkids/logout">로그아웃</a>
+</body>
+</html>

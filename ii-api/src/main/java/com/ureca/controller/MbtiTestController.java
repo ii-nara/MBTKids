@@ -2,7 +2,9 @@ package com.ureca.controller;
 
 import com.ureca.domain.MbtiQuestion;
 import com.ureca.domain.MbtiQuestionProvider;
-import com.ureca.dto.MbtiResponseDTO;
+import com.ureca.dto.MbtiInfoResponseDto;
+import com.ureca.dto.MbtiTestResponseDTO;
+import com.ureca.service.MbtiInfoService;
 import com.ureca.service.MbtiTestService;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -19,11 +21,15 @@ public class MbtiTestController {
 
   private final MbtiQuestionProvider mbtiQuestionProvider;
   private final MbtiTestService mbtiService;
+  private final MbtiInfoService mbtiInfoService;
 
   public MbtiTestController(
-      MbtiTestService mbtiService, MbtiQuestionProvider mbtiQuestionProvider) {
+      MbtiTestService mbtiService,
+      MbtiQuestionProvider mbtiQuestionProvider,
+      MbtiInfoService mbtiInfoService) {
     this.mbtiService = mbtiService;
     this.mbtiQuestionProvider = mbtiQuestionProvider;
+    this.mbtiInfoService = mbtiInfoService;
   }
 
   // 1. 질문 조회
@@ -47,11 +53,13 @@ public class MbtiTestController {
       return "mbti/error";
     }
     // MBTI 성향, 강도 계산
-    MbtiResponseDTO mbtiResponseDTO = mbtiService.processMbtiAnswer(answerList);
+    MbtiTestResponseDTO mbtiResponseDTO = mbtiService.processMbtiAnswer(answerList);
     String mbtiType = mbtiResponseDTO.getMBTI();
     List<Integer> scores = mbtiResponseDTO.getScore();
     model.addAttribute("mbtiType", mbtiType);
     model.addAttribute("scores", scores);
+    MbtiInfoResponseDto mbtiInfoResponseDto = mbtiInfoService.getMbtiNmInfo(mbtiType);
+    model.addAttribute("mbtiInfo", mbtiInfoResponseDto);
     return "mbti/result";
   }
 }

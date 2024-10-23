@@ -14,17 +14,19 @@
 
 <!-- 본문 내용 -->
 <div class="container mt-5">
-  <!-- TODO : 시간 남으면 결과 페이지 구현, 없으면 조회 페이지로 이동 -->
-  <h3>진단 결과</h3>
+  <h1 id="title"> 자녀 진단 결과</h1>
+  <p style="color: darkgray"> ✨ 우리 아이의 성향 결과는 다음과 같아요!</p>
+  <hr>
+
+  <h3 th:text="${mbtiInfo.suffix}" class="result-title"></h3>
+  <h1 th:text="${mbtiInfo.emoji}" class="result-img"/>
+  <p class="description" th:text="${mbtiInfo.content}"></p>
+
+  <p th:text="${mbtiInfo.mbtiNm}"></p>
   <p th:text="${mbtiType}"></p>
   <p th:text="${scores}"></p>
-  <ul>
-    <li th:each="score, iterStat : ${scoreList}">
-      질문 <span th:text="${iterStat.index + 1}">1</span>: <span th:text="${score}"></span>
-    </li>
-  </ul>
-  <a href="/mbti/test">다시 시작하기</a>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

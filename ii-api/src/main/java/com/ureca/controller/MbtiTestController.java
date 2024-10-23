@@ -2,7 +2,9 @@ package com.ureca.controller;
 
 import com.ureca.domain.MbtiQuestion;
 import com.ureca.domain.MbtiQuestionProvider;
+import com.ureca.dto.MbtiInfoResponseDto;
 import com.ureca.dto.MbtiTestResponseDTO;
+import com.ureca.service.MbtiInfoService;
 import com.ureca.service.MbtiTestService;
 import java.util.List;
 import org.springframework.stereotype.Controller;

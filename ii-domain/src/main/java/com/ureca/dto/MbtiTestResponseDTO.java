@@ -7,7 +7,7 @@ import lombok.Getter;
 /* MBTI 결과 응답 */
 @Getter
 @Builder
-public class MbtiResponseDTO {
+public class MbtiTestResponseDTO {
 
   // 성향
   private final String MBTI;

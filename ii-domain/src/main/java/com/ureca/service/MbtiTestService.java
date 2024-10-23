@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ureca.domain.MbtiQuestion;
 import com.ureca.domain.MbtiQuestionProvider;
-import com.ureca.dto.MbtiResponseDTO;
+import com.ureca.dto.MbtiTestResponseDTO;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,7 +33,8 @@ public class MbtiTestService {
   // 1. JSON -> List<Integer> 변환
   public List<Integer> jsonStrToList(String answers) {
     try {
-      return objectMapper.readValue(answers, new TypeReference<List<Integer>>() {});
+      return objectMapper.readValue(answers, new TypeReference<List<Integer>>() {
+      });
     } catch (JsonProcessingException e) {
       logger.error("JSON parsing error: ", e.getMessage());
       return Collections.emptyList();
@@ -41,7 +42,7 @@ public class MbtiTestService {
   }
 
   // 2. 답변 처리
-  public MbtiResponseDTO processMbtiAnswer(List<Integer> answerList) {
+  public MbtiTestResponseDTO processMbtiAnswer(List<Integer> answerList) {
     // MBTI 성향별 강도 : <성향, 강도>
     Map<String, Integer> scoreMap =
         new HashMap<>(Map.of("I", 0, "E", 0, "S", 0, "N", 0, "T", 0, "F", 0, "P", 0, "J", 0));
@@ -81,7 +82,7 @@ public class MbtiTestService {
   }
 
   // 4. 답변 -> MBTI 계산 + 강도
-  private MbtiResponseDTO calculateMbti(
+  private MbtiTestResponseDTO calculateMbti(
       Map<String, Integer> scoreMap, Map<String, Integer> countMap) {
     // MBTI 각 유형 종류 : <성향, 반대성향>
     Map<String, String> typePairs = new LinkedHashMap<>();
@@ -104,7 +105,7 @@ public class MbtiTestService {
       scoreList = calculateScore(scoreMap, typeA, typeB, scoreList);
     }
     // MBTI, 점수
-    return MbtiResponseDTO.builder().MBTI(mbti.toString()).score(scoreList).build();
+    return MbtiTestResponseDTO.builder().MBTI(mbti.toString()).score(scoreList).build();
   }
 
   // 5. 답변 -> MBTI 강도 계산

@@ -16,7 +16,110 @@
 <div class="container mt-5">
 
   <!-- @@ 여기에 본인 코드 내용 넣어주심 됩니다 -->
-  <h1> 임시 </h1>
+  <div th:if="${similarBooks.getCount() > 0}">
+    <h2>아이 성향 추천</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>도서 아이디</th>
+        <th>도서명</th>
+        <th>도서 이미지</th>
+        <th>작가명</th>
+        <th>작가 코드</th>
+        <th>출판사</th>
+        <th>출판사 코드</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : ${similarBooks.getItems()}">
+        <td th:text="${book.bookId}"></td>
+        <td th:text="${book.bookName}"></td>
+        <td>
+          <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
+        </td>
+        <td th:text="${book.writer}"></td>
+        <td th:text="${book.writerCd}"></td>
+        <td th:text="${book.publisher}"></td>
+        <td th:text="${book.publisherCd}"></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="text-center" th:if="${similarBooks.isNextPage(currentPage, pageSize)}">
+      <a th:href="@{/mbtkids/books(type='SIMILAR', page=${currentPage}, size=${pageSize})}"
+         class="btn btn-primary">더보기</a>
+    </div>
+  </div>
+
+  <div th:if="${oppositeBooks.getCount() > 0}">
+    <h2>반대 성향 추천</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>도서 아이디</th>
+        <th>도서명</th>
+        <th>도서 이미지</th>
+        <th>작가명</th>
+        <th>작가 코드</th>
+        <th>출판사</th>
+        <th>출판사 코드</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : ${oppositeBooks.getItems()}">
+        <td th:text="${book.bookId}"></td>
+        <td th:text="${book.bookName}"></td>
+        <td>
+          <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
+        </td>
+        <td th:text="${book.writer}"></td>
+        <td th:text="${book.writerCd}"></td>
+        <td th:text="${book.publisher}"></td>
+        <td th:text="${book.publisherCd}"></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="text-center" th:if="${oppositeBooks.isNextPage(currentPage, pageSize)}">
+      <a th:href="@{/mbtkids/books(type='OPPOSITE', page=${currentPage}, size=${pageSize})}"
+         class="btn btn-primary">더보기</a>
+    </div>
+  </div>
+
+  <div th:if="${likedBooks.getCount() > 0}">
+    <h2>유사 성향 아이들 추천</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>도서 아이디</th>
+        <th>도서명</th>
+        <th>도서 이미지</th>
+        <th>작가명</th>
+        <th>작가 코드</th>
+        <th>출판사</th>
+        <th>출판사 코드</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : ${likedBooks.getItems()}">
+        <td th:text="${book.bookId}"></td>
+        <td th:text="${book.bookName}"></td>
+        <td>
+          <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
+        </td>
+        <td th:text="${book.writer}"></td>
+        <td th:text="${book.writerCd}"></td>
+        <td th:text="${book.publisher}"></td>
+        <td th:text="${book.publisherCd}"></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="text-center" th:if="${likedBooks.isNextPage(currentPage, pageSize)}">
+      <a th:href="@{/mbtkids/books(type='LIKE', page=${currentPage}, size=${pageSize})}"
+         class="btn btn-primary">더보기</a>
+    </div>
+  </div>
 
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>아이둘나라</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link th:href="@{/css/home.css}" rel="stylesheet"/>
+  <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
+</head>
+<body>
+<!-- (상단 레이아웃) 네비게이션 바 -->
+<th:block th:replace="navbar :: navbar"></th:block>
+
+<!-- 본문 내용 -->
+<div class="container mt-5">
+
+  <!-- @@ 여기에 본인 코드 내용 넣어주심 됩니다 -->
+  <h2 th:text="${title} + ' ('+ ${books.getCount()} + '개)'">도서 목록</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>도서 아이디</th>
+      <th>도서명</th>
+      <th>도서 이미지</th>
+      <th>작가명</th>
+      <th>작가 코드</th>
+      <th>출판사</th>
+      <th>출판사 코드</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books.getItems()}">
+      <td th:text="${book.bookId}"></td>
+      <td th:text="${book.bookName}"></td>
+      <td>
+        <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
+      </td>
+      <td th:text="${book.writer}"></td>
+      <td th:text="${book.writerCd}"></td>
+      <td th:text="${book.publisher}"></td>
+      <td th:text="${book.publisherCd}"></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- 페이징 버튼 -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <!-- 이전 페이지 버튼 -->
+      <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+        <a class="page-link"
+           th:href="@{/mbtkids/books(type=${type}, page=${currentPage - 1}, size=${pageSize})}">이전</a>
+      </li>
+
+      <!-- 다음 페이지 버튼 -->
+      <li class="page-item"
+          th:classappend="${!books.isNextPage(currentPage, pageSize)} ? 'disabled'">
+        <a class="page-link"
+           th:href="@{/mbtkids/books(type=${type}, page=${currentPage + 1}, size=${pageSize})}">다음</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:src="@{/js/home.js}"></script>
+</body>
+</html>

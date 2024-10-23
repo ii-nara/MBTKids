@@ -27,11 +27,9 @@ public class RecommendService {
           .map(entity -> new BookInfo(
               entity.getBookId(),
               entity.getBookName(),
-              entity.getImgURL(),
+              entity.getBookImgUrl(),
               entity.getWriter(),
-              entity.getWriterCd(),
-              entity.getPublisher(),
-              entity.getPublisherCd()))
+              entity.getPublisher()))
           .collect(Collectors.toList());
     }
     return new BookPage<>(count, bookInfos);
@@ -48,11 +46,9 @@ public class RecommendService {
           .map(entity -> new BookInfo(
               entity.getBookId(),
               entity.getBookName(),
-              entity.getImgURL(),
+              entity.getBookImgUrl(),
               entity.getWriter(),
-              entity.getWriterCd(),
-              entity.getPublisher(),
-              entity.getPublisherCd()))
+              entity.getPublisher()))
           .collect(Collectors.toList());
     }
     return new BookPage<>(count, bookInfos);
@@ -69,11 +65,9 @@ public class RecommendService {
           .map(entity -> new BookInfo(
               entity.getBookId(),
               entity.getBookName(),
-              entity.getImgURL(),
+              entity.getBookImgUrl(),
               entity.getWriter(),
-              entity.getWriterCd(),
-              entity.getPublisher(),
-              entity.getPublisherCd()))
+              entity.getPublisher()))
           .collect(Collectors.toList());
     }
     return new BookPage<>(count, bookInfos);

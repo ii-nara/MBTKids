@@ -16,103 +16,109 @@
 <div class="container mt-5">
 
   <!-- @@ 여기에 본인 코드 내용 넣어주심 됩니다 -->
-  <h2>아이 성향 추천</h2>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>도서 아이디</th>
-      <th>도서명</th>
-      <th>영화 포스터 URL</th>
-      <th>작가명</th>
-      <th>작가 코드</th>
-      <th>출판사</th>
-      <th>출판사 코드</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="book : ${similarBooks}">
-      <td th:text="${book.bookId}"></td>
-      <td th:text="${book.bookName}"></td>
-      <td>
-        <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
-      </td>
-      <td th:text="${book.writer}"></td>
-      <td th:text="${book.writerCd}"></td>
-      <td th:text="${book.publisher}"></td>
-      <td th:text="${book.publisherCd}"></td>
-    </tr>
-    </tbody>
-  </table>
+  <div th:if="${similarBooks.size() > 0}">
+    <h2>아이 성향 추천</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>도서 아이디</th>
+        <th>도서명</th>
+        <th>영화 포스터 URL</th>
+        <th>작가명</th>
+        <th>작가 코드</th>
+        <th>출판사</th>
+        <th>출판사 코드</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : ${similarBooks}">
+        <td th:text="${book.bookId}"></td>
+        <td th:text="${book.bookName}"></td>
+        <td>
+          <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
+        </td>
+        <td th:text="${book.writer}"></td>
+        <td th:text="${book.writerCd}"></td>
+        <td th:text="${book.publisher}"></td>
+        <td th:text="${book.publisherCd}"></td>
+      </tr>
+      </tbody>
+    </table>
 
-  <div class="text-center">
-    <a th:href="@{/mbtkids/books(type='SIMILAR', page=${currentPage}, size=${pageSize})}"
-       class="btn btn-primary">더보기</a>
+    <div class="text-center">
+      <a th:href="@{/mbtkids/books(type='SIMILAR', page=${currentPage}, size=${pageSize})}"
+         class="btn btn-primary">더보기</a>
+    </div>
   </div>
 
-  <h2>반대 성향 추천</h2>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>도서 아이디</th>
-      <th>도서명</th>
-      <th>영화 포스터 URL</th>
-      <th>작가명</th>
-      <th>작가 코드</th>
-      <th>출판사</th>
-      <th>출판사 코드</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="book : ${oppositionBooks}">
-      <td th:text="${book.bookId}"></td>
-      <td th:text="${book.bookName}"></td>
-      <td>
-        <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
-      </td>
-      <td th:text="${book.writer}"></td>
-      <td th:text="${book.writerCd}"></td>
-      <td th:text="${book.publisher}"></td>
-      <td th:text="${book.publisherCd}"></td>
-    </tr>
-    </tbody>
-  </table>
+  <div th:if="${oppositionBooks.size() > 0}">
+    <h2>반대 성향 추천</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>도서 아이디</th>
+        <th>도서명</th>
+        <th>영화 포스터 URL</th>
+        <th>작가명</th>
+        <th>작가 코드</th>
+        <th>출판사</th>
+        <th>출판사 코드</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : ${oppositionBooks}">
+        <td th:text="${book.bookId}"></td>
+        <td th:text="${book.bookName}"></td>
+        <td>
+          <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
+        </td>
+        <td th:text="${book.writer}"></td>
+        <td th:text="${book.writerCd}"></td>
+        <td th:text="${book.publisher}"></td>
+        <td th:text="${book.publisherCd}"></td>
+      </tr>
+      </tbody>
+    </table>
 
-  <div class="text-center">
-    <a th:href="@{/mbtkids/books(type='OPPOSITE', page=${currentPage}, size=${pageSize})}"
-       class="btn btn-primary">더보기</a>
+    <div class="text-center">
+      <a th:href="@{/mbtkids/books(type='OPPOSITE', page=${currentPage}, size=${pageSize})}"
+         class="btn btn-primary">더보기</a>
+    </div>
   </div>
 
-  <h2>유사 성향 아이들 추천</h2>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>도서 아이디</th>
-      <th>도서명</th>
-      <th>영화 포스터 URL</th>
-      <th>작가명</th>
-      <th>작가 코드</th>
-      <th>출판사</th>
-      <th>출판사 코드</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="book : ${similarChildLikedBooks}">
-      <td th:text="${book.bookId}"></td>
-      <td th:text="${book.bookName}"></td>
-      <td>
-        <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
-      </td>
-      <td th:text="${book.writer}"></td>
-      <td th:text="${book.writerCd}"></td>
-      <td th:text="${book.publisher}"></td>
-      <td th:text="${book.publisherCd}"></td>
-    </tr>
-    </tbody>
-  </table>
+  <div th:if="${similarChildLikedBooks.size() > 0}">
+    <h2>유사 성향 아이들 추천</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>도서 아이디</th>
+        <th>도서명</th>
+        <th>영화 포스터 URL</th>
+        <th>작가명</th>
+        <th>작가 코드</th>
+        <th>출판사</th>
+        <th>출판사 코드</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : ${similarChildLikedBooks}">
+        <td th:text="${book.bookId}"></td>
+        <td th:text="${book.bookName}"></td>
+        <td>
+          <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
+        </td>
+        <td th:text="${book.writer}"></td>
+        <td th:text="${book.writerCd}"></td>
+        <td th:text="${book.publisher}"></td>
+        <td th:text="${book.publisherCd}"></td>
+      </tr>
+      </tbody>
+    </table>
 
-  <div class="text-center">
-    <a th:href="@{/mbtkids/books(type='LIKE', page=${currentPage}, size=${pageSize})}"
-       class="btn btn-primary">더보기</a>
+    <div class="text-center">
+      <a th:href="@{/mbtkids/books(type='LIKE', page=${currentPage}, size=${pageSize})}"
+         class="btn btn-primary">더보기</a>
+    </div>
   </div>
 
 </div>

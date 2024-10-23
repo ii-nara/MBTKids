@@ -1,16 +1,21 @@
 package com.ureca.config.auth;
 
+import com.ureca.entity.ChildEntity;
 import com.ureca.entity.ParentEntity;
 import java.util.Collection;
 import java.util.Collections;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Getter
 @Data
 public class PrincipalDetails implements UserDetails {
 
-  private ParentEntity parent;
+  private final ParentEntity parent;
+
+  private ChildEntity child;
 
   public PrincipalDetails(ParentEntity parent) {
     this.parent = parent;

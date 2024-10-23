@@ -5,6 +5,7 @@ import com.ureca.entity.ChildEntity;
 import com.ureca.entity.ParentEntity;
 import com.ureca.repository.ChildRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,14 @@ public class ChildAddServiceImpl {
         .build();
 
     childRepository.save(child);
+  }
+
+  public List<ChildEntity> findChildrenByParentId(Long parentId) {
+    return childRepository.findByParentId(parentId);
+  }
+
+  public ChildEntity findChildById(Long childId) {
+    return childRepository.findById(childId)
+        .orElseThrow(() -> new IllegalArgumentException("해당 자식이 존재하지 않습니다."));
   }
 }

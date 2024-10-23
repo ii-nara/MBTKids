@@ -53,7 +53,7 @@ public class MbtiManagementService {
   }
 
   public MbtiStatusResponseDto getMbtiStatus(ChildEntity child) {
-    MbtiStatusEntity mbtiStatus = mbtiStatusRepository.findByChildEntity(child).get();
+    MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
 
     return createMbtiStatusResponseDto(mbtiStatus.getTypeIE(), mbtiStatus.getTypeSN(),
         mbtiStatus.getTypeTF(), mbtiStatus.getTypePJ());

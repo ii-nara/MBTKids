@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>아이둘나라</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link th:href="@{/css/admin/admin.css}" rel="stylesheet"/>
+    <link th:href="@{/css/admin/navbar.css}" rel="stylesheet"/>
+    <script>
+        function previewImage(event) {
+            const image = document.getElementById('imagePreview');
+            image.src = URL.createObjectURL(event.target.files[0]);
+            image.style.display = 'block';
+        }
+
+        function editBook() {
+            document.getElementById('detailView').style.display = 'none';
+            document.getElementById('editForm').style.display = 'block';
+
+            // Enable the buttons in the table
+            const buttons = document.querySelectorAll('.btn-outline-primary');
+            buttons.forEach(button => {
+                button.disabled = false; // Enable buttons
+            });
+        }
+
+        function cancelEdit() {
+            document.getElementById('detailView').style.display = 'block';
+            document.getElementById('editForm').style.display = 'none';
+
+            // Disable the buttons in the table
+            const buttons = document.querySelectorAll('.btn-outline-primary');
+            buttons.forEach(button => {
+                button.disabled = true; // Disable buttons
+            });
+        }
+
+        function toggleType(button, type1, type2, typeKey) {
+            const hiddenInput = document.getElementById(typeKey); // 해당 타입의 hidden input
+
+            // Toggle button text and data-type attribute
+            if (button.innerText.includes(type1)) {
+                button.innerText = type2 === 'I' ? '내향형 (I)' : type2 === 'E' ? '외향형 (E)' :
+                    type2 === 'S' ? '감각형 (S)' : type2 === 'N' ? '직관형 (N)' :
+                        type2 === 'T' ? '사고형 (T)' : type2 === 'F' ? '감정형 (F)' :
+                            type2 === 'P' ? '판단형 (P)' : '인식형 (J)';
+                button.setAttribute('data-type', type2);
+                button.setAttribute('data-value', type2 === 'I' || type2 === 'S' || type2 === 'T' || type2 === 'P' ? '-1' : '1');
+            } else {
+                button.innerText = type1 === 'I' ? '내향형 (I)' : type1 === 'E' ? '외향형 (E)' :
+                    type1 === 'S' ? '감각형 (S)' : type1 === 'N' ? '직관형 (N)' :
+                        type1 === 'T' ? '사고형 (T)' : type1 === 'F' ? '감정형 (F)' :
+                            type1 === 'P' ? '판단형 (P)' : '인식형 (J)';
+                button.setAttribute('data-type', type1);
+                button.setAttribute('data-value', type1 === 'I' || type1 === 'S' || type1 === 'T' || type1 === 'P' ? '-1' : '1');
+            }
+
+            // Update the hidden input based on the button's new value
+            hiddenInput.value = button.getAttribute('data-value');
+
+            // Update the personality display
+            updatePersonalityDisplay();
+        }
+
+        function updatePersonalityDisplay() {
+            const typeIE = document.getElementById('typeIE').value; // I/E type hidden input
+            const typeSN = document.getElementById('typeSN').value; // S/N type hidden input
+            const typeTF = document.getElementById('typeTF').value; // T/F type hidden input
+            const typePJ = document.getElementById('typePJ').value; // P/J type hidden input
+
+            const personality =
+                (typeIE == '-1' ? 'I' : (typeIE == '1' ? 'E' : '_')) +
+                (typeSN == '-1' ? 'S' : (typeSN == '1' ? 'N' : '_')) +
+                (typeTF == '-1' ? 'T' : (typeTF == '1' ? 'F' : '_')) +
+                (typePJ == '-1' ? 'P' : (typePJ == '1' ? 'J' : '_'));
+
+            document.getElementById('bookPersonalityEdit').innerText = personality;
+        }
+    </script>
+</head>
+<body>
+<!-- (상단 레이아웃) 네비게이션 바 -->
+<th:block th:replace="navbar :: navbar"></th:block>
+
+<!-- 본문 내용 -->
+<div class="container mt-5">
+    <h2>도서 상세 정보</h2>
+
+    <div id="detailView">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${ResBookInfo.bookName}">도서명</h5>
+                <img th:src="${ResBookInfo.bookImgUrl}" alt="도서 이미지" class="card-img-top" style="width: 200px; height: auto;"/>
+                <p class="card-text">
+                    <strong>작가명:</strong> <span th:text="${ResBookInfo.writer}"></span><br>
+                    <strong>출판사:</strong> <span th:text="${ResBookInfo.publisher}"></span><br>
+                    <strong>줄거리:</strong> <span th:text="${ResBookInfo.plot}"></span><br>
+                    <strong>권장연령:</strong> <span th:text="${ResBookInfo.recommenedAge}"></span><br>
+                    <strong>좋아요 개수:</strong> <span th:text="${ResBookInfo.likeCnt}"></span><br>
+                    <strong>싫어요 개수:</strong> <span th:text="${ResBookInfo.disLikeCnt}"></span><br>
+                    <strong>등록일자:</strong> <span th:text="${#dates.format(ResBookInfo.createdAt, 'yyyy-MM-dd')}"></span><br>
+                    <strong>등록자:</strong> <span th:text="${ResBookInfo.createId}"></span><br>
+                    <strong>수정일자:</strong> <span th:text="${#dates.format(ResBookInfo.updateAt, 'yyyy-MM-dd')}"></span><br>
+                    <strong>수정자:</strong> <span th:text="${ResBookInfo.updateId}"></span><br>
+                    <strong>노출 여부:</strong> <span th:text="${ResBookInfo.displayYn}"></span><br>
+                    <strong>도서 성향:</strong> <span id="bookPersonality" th:text="(${ResBookInfo.typeIE == -1} ? 'I' : (${ResBookInfo.typeIE == 1} ? 'E' : '_')) + (${ResBookInfo.typeSN == -1} ? 'S' : (${ResBookInfo.typeSN == 1} ? 'N' : '_')) + (${ResBookInfo.typeTF == -1} ? 'T' : (${ResBookInfo.typeTF == 1} ? 'F' : '_')) + (${ResBookInfo.typePJ == -1} ? 'P' : (${ResBookInfo.typePJ == 1} ? 'J' : '_'))"></span>
+                    <br>
+                <table class="table mt-3">
+                    <thead>
+                    <tr>
+                        <th scope="col">I/E</th>
+                        <th scope="col">S/N</th>
+                        <th scope="col">T/F</th>
+                        <th scope="col">P/J</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary" disabled
+                                    data-type="I"
+                                    onclick="toggleType(this, 'I', 'E')"
+                                    th:text="${ResBookInfo.typeIE == -1} ? '내향형 (I)' : (${ResBookInfo.typeIE == 1} ? '외향형 (E)' : '_')"></button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary" disabled
+                                    data-type="S"
+                                    onclick="toggleType(this, 'S', 'N')"
+                                    th:text="${ResBookInfo.typeSN == -1} ? '감각형 (S)' : (${ResBookInfo.typeSN == 1} ? '직관형 (N)' : '_')"></button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary" disabled
+                                    data-type="T"
+                                    onclick="toggleType(this, 'T', 'F')"
+                                    th:text="${ResBookInfo.typeTF == -1} ? '사고형 (T)' : (${ResBookInfo.typeTF == 1} ? '감정형 (F)' : '_')"></button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary" disabled
+                                    data-type="P"
+                                    onclick="toggleType(this, 'P', 'J')"
+                                    th:text="${ResBookInfo.typePJ == -1} ? '판단형 (P)' : (${ResBookInfo.typePJ == 1} ? '인식형 (J)' : '_')"></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </p>
+                <a th:href="@{/mbtkids/admin/home}" class="btn btn-secondary">목록으로 돌아가기</a>
+                <button class="btn btn-warning" onclick="editBook()">수정</button>
+                <a th:href="@{/mbtkids/admin/aiAnalysis(bookId=${ResBookInfo.bookId})}" class="btn btn-info">AI 성향 분석</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="editForm" style="display: none;">
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/mbtkids/admin/update}" method="post" enctype="multipart/form-data">
+                    <!-- 그대로 넘기는 값 -->
+                    <input type="hidden" name="bookId" th:value="${ResBookInfo.bookId}" />
+                    <input type="hidden" name="publisherCd" th:value="${ResBookInfo.publisherCd}" />
+                    <input type="hidden" name="writerCd" th:value="${ResBookInfo.writerCd}" />
+
+                    <img th:src="${ResBookInfo.bookImgUrl}" alt="도서 이미지" class="card-img-top" style="width: 200px; height: auto;"/>
+
+                    <div class="form-group">
+                        <label for="imageUpload">도서 이미지 업로드:</label>
+                        <input type="file" id="imageUpload" name="bookImgUrl" class="form-control" onchange="previewImage(event)">
+                        <img id="imagePreview" alt="이미지 미리보기" style="display:none; width: 200px; height: auto; margin-top: 10px;"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookName">도서명:</label>
+                        <input type="text" id="bookName" name="bookName" class="form-control"
+                               th:value="${ResBookInfo.bookName}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="writer">작가명:</label>
+                        <input type="text" id="writer" name="writer" class="form-control"
+                               th:value="${ResBookInfo.writer}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="publisher">출판사:</label>
+                        <input type="text" id="publisher" name="publisher" class="form-control"
+                               th:value="${ResBookInfo.publisher}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="plot">줄거리:</label>
+                        <textarea id="plot" name="plot" class="form-control" required
+                                  th:text="${ResBookInfo.plot}"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recommenedAge">권장연령:</label>
+                        <input type="text" id="recommenedAge" name="recommenedAge" class="form-control"
+                               th:value="${ResBookInfo.recommenedAge}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="displayYn">노출여부:</label>
+                        <select id="displayYn" name="displayYn" class="form-control" required>
+                            <option th:value="'Y'" th:text="'노출'" th:selected="${ResBookInfo.displayYn == 'Y'}"></option>
+                            <option th:value="'N'" th:text="'비노출'" th:selected="${ResBookInfo.displayYn == 'N'}"></option>
+                        </select>
+                    </div>
+
+                    <strong>도서 성향:</strong> <span id="bookPersonalityEdit" th:text="(${ResBookInfo.typeIE == -1} ? 'I' : (${ResBookInfo.typeIE == 1} ? 'E' : '_')) + (${ResBookInfo.typeSN == -1} ? 'S' : (${ResBookInfo.typeSN == 1} ? 'N' : '_')) + (${ResBookInfo.typeTF == -1} ? 'T' : (${ResBookInfo.typeTF == 1} ? 'F' : '_')) + (${ResBookInfo.typePJ == -1} ? 'P' : (${ResBookInfo.typePJ == 1} ? 'J' : '_'))"></span>
+                    <input type="hidden" id="typeIE" name="typeIE" value="${ResBookInfo.typeIE}" />
+                    <input type="hidden" id="typeSN" name="typeSN" value="${ResBookInfo.typeSN}" />
+                    <input type="hidden" id="typeTF" name="typeTF" value="${ResBookInfo.typeTF}" />
+                    <input type="hidden" id="typePJ" name="typePJ" value="${ResBookInfo.typePJ}" />
+                    <table class="table mt-3">
+                        <thead>
+                        <tr>
+                            <th scope="col">I/E</th>
+                            <th scope="col">S/N</th>
+                            <th scope="col">T/F</th>
+                            <th scope="col">P/J</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary"
+                                        data-type="I" data-value="-1"
+                                        onclick="toggleType(this, 'I', 'E', 'typeIE')"
+                                        th:text="${ResBookInfo.typeIE == -1} ? '내향형 (I)' : (${ResBookInfo.typeIE == 1} ? '외향형 (E)' : '_')"></button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary"
+                                        data-type="S" data-value="-1"
+                                        onclick="toggleType(this, 'S', 'N', 'typeSN')"
+                                        th:text="${ResBookInfo.typeSN == -1} ? '감각형 (S)' : (${ResBookInfo.typeSN == 1} ? '직관형 (N)' : '_')"></button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary"
+                                        data-type="T" data-value="-1"
+                                        onclick="toggleType(this, 'T', 'F', 'typeTF')"
+                                        th:text="${ResBookInfo.typeTF == -1} ? '사고형 (T)' : (${ResBookInfo.typeTF == 1} ? '감정형 (F)' : '_')"></button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary"
+                                        data-type="P" data-value="-1"
+                                        onclick="toggleType(this, 'P', 'J', 'typePJ')"
+                                        th:text="${ResBookInfo.typePJ == -1} ? '판단형 (P)' : (${ResBookInfo.typePJ == 1} ? '인식형 (J)' : '_')"></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <button type="submit" class="btn btn-success">저장</button>
+                    <button type="button" class="btn btn-secondary" onclick="cancelEdit()">취소</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:src="@{/js/home.js}"></script>
+
+</body>
+</html>

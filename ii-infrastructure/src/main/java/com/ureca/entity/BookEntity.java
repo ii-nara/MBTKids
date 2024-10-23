@@ -32,8 +32,8 @@ public class BookEntity {
   private String bookName;
 
   // 이미지 URL
-  @Column(name = "imgURL", length = 300)
-  private String imgURL;
+  @Column(name = "bookImgUrl", length = 300)
+  private String bookImgUrl;
 
   // 줄거리
   @Column(name = "plot", length = 300)
@@ -76,20 +76,33 @@ public class BookEntity {
   @Column(name = "typePJ")
   private int typePJ;
 
+  // 노출여부
+  @Column(name = "displayYn", length = 4)
+  private String displayYn;
+
+  // 등록자
+  @Column(name = "createId")
+  private Long createId;
+
   // 등록일자
   @Column(name = "createdAt")
   @Temporal(TemporalType.DATE)
   private Date createdAt;
 
-  // 노출여부
-  @Column(name = "displayYn", length = 4)
-  private String displayYn;
+  // 수정자
+  @Column(name = "updateId")
+  private Long updateId;
+
+  // 수정일자
+  @Column(name = "updateAt")
+  @Temporal(TemporalType.DATE)
+  private Date updateAt;
 
   @Builder
   public BookEntity(
       Long bookId,
       String bookName,
-      String imgURL,
+      String bookImgUrl,
       String plot,
       String writer,
       String writerCd,
@@ -101,10 +114,13 @@ public class BookEntity {
       int typeTF,
       int typePJ,
       Date createdAt,
+      Date updateAt,
+      Long updateId,
+      Long createId,
       String displayYn) {
     this.bookId = bookId;
     this.bookName = bookName;
-    this.imgURL = imgURL;
+    this.bookImgUrl = bookImgUrl;
     this.plot = plot;
     this.writer = writer;
     this.writerCd = writerCd;
@@ -116,6 +132,9 @@ public class BookEntity {
     this.typeTF = typeTF;
     this.typePJ = typePJ;
     this.createdAt = createdAt;
+    this.updateAt = updateAt;
+    this.updateId = updateId;
+    this.createId = createId;
     this.displayYn = displayYn;
   }
 }

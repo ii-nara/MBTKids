@@ -15,7 +15,9 @@
 /* 색상 설정 */
 :root {
   --main-color: #ffe552;
+  --highlight-color: #ff9900;
   --dark-color: #404040;
+  --text-color: #404040;
 }
 
 /* 본문 */
@@ -23,26 +25,32 @@
   font-family: 'Pretendard-Regular';
   margin-bottom: 50px;
   text-align: center;
+  color: var(--dark-color);
 }
 
-/* TODO : 구현 */
-.question {
-  display: none;
+/* 타이틀 */
+#title {
+  color: #ffc107;
+  font-weight: 600;
+  margin-bottom: 0.6em;
 }
 
-.question.active {
-  display: block;
+.result-title {
+  font-family: 'Pretendard-Bold';
+  color: var(--text-color);
+  margin-bottom: 1em;
 }
 
-/* 버튼 */
-button {
-  display: block; /* 세로 배치 */
-  width: 50%; /* 버튼 가로 크기 2배로 증가 */
-  height: 15%;
-  margin: 10px auto; /* 중앙 정렬과 버튼 사이 간격 */
-  font-size: 20px;
+.highlight {
+  color: var(--highlight-color);
 }
 
-h4 {
-  text-align: center; /* 질문 중앙 정렬 */
+.result-img {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.description {
+  font-size: 1.2em;
+  margin-top: 1em;
 }

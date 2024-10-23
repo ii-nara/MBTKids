@@ -19,11 +19,15 @@ public class MbtiTestController {
 
   private final MbtiQuestionProvider mbtiQuestionProvider;
   private final MbtiTestService mbtiService;
+  private final MbtiInfoService mbtiInfoService;
 
   public MbtiTestController(
-      MbtiTestService mbtiService, MbtiQuestionProvider mbtiQuestionProvider) {
+      MbtiTestService mbtiService,
+      MbtiQuestionProvider mbtiQuestionProvider,
+      MbtiInfoService mbtiInfoService) {
     this.mbtiService = mbtiService;
     this.mbtiQuestionProvider = mbtiQuestionProvider;
+    this.mbtiInfoService = mbtiInfoService;
   }
 
   // 1. 질문 조회
@@ -52,6 +56,8 @@ public class MbtiTestController {
     List<Integer> scores = mbtiTestResponseDTO.getScore();
     model.addAttribute("mbtiType", mbtiType);
     model.addAttribute("scores", scores);
+    MbtiInfoResponseDto mbtiInfoResponseDto = mbtiInfoService.getMbtiNmInfo(mbtiType);
+    model.addAttribute("mbtiInfo", mbtiInfoResponseDto);
     return "mbti/result";
   }
 }

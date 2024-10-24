@@ -22,41 +22,12 @@ public class MbtiManagementService {
   private final MbtiStatusRepository mbtiStatusRepository;
   private final ChildRepository childRepository;
 
-  /* private MbtiStatusResponseDto createMbtiStatusResponseDto(int typeE, int typeN, int typeF,
+  private MbtiStatusResponseDto createMbtiStatusResponseDto(int typeE, int typeN, int typeF,
       int typeJ) {
     int typeI = MAX_SCORE - typeE;
     int typeS = MAX_SCORE - typeN;
     int typeT = MAX_SCORE - typeF;
     int typeP = MAX_SCORE - typeJ;
-
-    String MbtiType = "";
-    MbtiType += (typeE > typeI) ? "E" : "I";
-    MbtiType += (typeN > typeS) ? "N" : "S";
-    MbtiType += (typeF > typeT) ? "F" : "T";
-    MbtiType += (typeJ > typeP) ? "J" : "P";
-
-    return MbtiStatusResponseDto.builder()
-        .typeE(typeE)
-        .typeI(typeI)
-        .typeN(typeN)
-        .typeS(typeS)
-        .typeF(typeF)
-        .typeT(typeT)
-        .typeJ(typeJ)
-        .typeP(typeP)
-        .MbtiType(MbtiType)
-        .build();
-  } */
-  private MbtiStatusResponseDto createMbtiStatusResponseDto(int typeIE, int typeSN, int typeTF,
-      int typePJ) {
-    int typeE = typeIE;
-    int typeI = 11 - typeIE;
-    int typeN = typeSN;
-    int typeS = 11 - typeSN;
-    int typeF = typeTF;
-    int typeT = 11 - typeTF;
-    int typeJ = typePJ;
-    int typeP = 11 - typePJ;
 
     String MbtiType = "";
     MbtiType += (typeE > typeI) ? "E" : "I";
@@ -128,8 +99,8 @@ public class MbtiManagementService {
     childRepository.save(child);
     // to Dto
     MbtiStatusResponseDto mbtiStatusResponseDto = createMbtiStatusResponseDto(
-        mbtiStatus.getTypeIE(), mbtiStatus.getTypePJ(),
-        mbtiStatus.getTypeSN(), mbtiStatus.getTypeTF());
+        mbtiStatus.getTypeIE(), mbtiStatus.getTypeSN(),
+        mbtiStatus.getTypeTF(), mbtiStatus.getTypePJ());
     return mbtiStatusResponseDto;
   }
 

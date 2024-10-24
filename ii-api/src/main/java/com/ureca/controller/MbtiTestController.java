@@ -48,7 +48,6 @@ public class MbtiTestController {
     Long childId = 1L;
     // 답변
     List<Integer> answerList = mbtiService.jsonStrToList(answers);
-    // 유효성 확인
     if (answerList.isEmpty()) {
       model.addAttribute("error", "[404] 다시 검사를 시도해주세요.");
       // TODO : 에러 페이지 구현

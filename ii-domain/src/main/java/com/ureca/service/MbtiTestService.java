@@ -58,7 +58,12 @@ public class MbtiTestService {
 
   // MBTI 유형별 요소 Map
   private Map<String, String> initPairMap() {
-    return new LinkedHashMap<>(Map.of("I", "E", "S", "N", "T", "F", "P", "J"));
+    Map<String, String> pairMap = new LinkedHashMap<>();
+    pairMap.put("I", "E");
+    pairMap.put("S", "N");
+    pairMap.put("T", "F");
+    pairMap.put("P", "J");
+    return pairMap;
   }
 
   // 3. 답변 -> 성향별 총 점수 및 개수
@@ -69,7 +74,6 @@ public class MbtiTestService {
     // 모든 응답에 대해
     for (int i = 0; i < questionList.size(); i++) {
       MbtiQuestion question = questionList.get(i);
-      System.out.println((i + 1) + "번째 질문: " + question.getContent());
       // 성향
       String[] types = question.getType().split("/");
       String negativeType = types[0]; // 부정 성향
@@ -80,10 +84,11 @@ public class MbtiTestService {
       int score = (answerValue <= POSITIVE_THRESHOLD) ?
           (NEGATIVE_THRESHOLD - answerValue) : (answerValue - POSITIVE_THRESHOLD); // 강도
       String type = (answerValue <= POSITIVE_THRESHOLD) ? positiveType : negativeType; // MBTI
-      System.out.println("answerValue: " + answerValue + ", type: " + type + ", score: " + score);
       // 결과
       scoreMap.put(type, scoreMap.get(type) + score);
       countMap.put(type, countMap.get(type) + 1);
+      System.out.println("scoreMap: "+scoreMap.toString());
+      System.out.println("countMap: "+countMap.toString());
     }
   }
 
@@ -138,10 +143,13 @@ public class MbtiTestService {
     calculateSum(answerList, scoreMap, countMap);
     // (4) MBTI 계산
     String mbti = calculateMbti(countMap);
+    System.out.println("mbti: "+mbti);
     // (5) 강도 계산
     List<Integer> scoreList = calculateScore(scoreMap);
+    System.out.println("score: "+scoreList.toString());
     // (6) 저장
-    MbtiStatusRequestDto requestDto = MbtiStatusRequestDto.builder().mbti(mbti.toString())
+    MbtiStatusRequestDto requestDto = MbtiStatusRequestDto.builder()
+        .mbti(mbti.toString())
         .scoreIE(scoreList.get(INDEX_IE))
         .scoreSN(scoreList.get(INDEX_SN))
         .scoreTF(scoreList.get(INDEX_TF))

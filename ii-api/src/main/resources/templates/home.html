@@ -2,44 +2,52 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>아이둘나라</title>
+  <title>아이들나라</title>
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link th:href="@{/css/home.css}" rel="stylesheet"/>
   <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
+  <style>
+    .horizontal-scroll {
+      display: flex;
+      overflow-x: scroll;
+      white-space: nowrap;
+    }
+
+    .horizontal-scroll .card {
+      min-width: 200px; /* 카드 크기 설정 */
+      margin-right: 10px; /* 카드 간 간격 설정 */
+    }
+
+    /* 세로로 10개 제한 */
+    .vertical-limit {
+      max-height: calc(200px * 10); /* 카드 높이 x 10 */
+      overflow-y: hidden;
+    }
+  </style>
 </head>
 <body>
 <!-- (상단 레이아웃) 네비게이션 바 -->
 <th:block th:replace="navbar :: navbar"></th:block>
 
 <!-- 본문 내용 -->
-<div class="container mt-5">
+<div class="container mt-5 vertical-limit">
 
-  <!-- @@ 여기에 본인 코드 내용 넣어주심 됩니다 -->
+  <!-- 아이 성향 추천 -->
   <div th:if="${similarBooks.getCount() > 0}">
     <h2>아이 성향 추천</h2>
-    <table class="table">
-      <thead>
-      <tr>
-        <th>도서 아이디</th>
-        <th>도서명</th>
-        <th>도서 이미지</th>
-        <th>작가명</th>
-        <th>출판사</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="book : ${similarBooks.getItems()}">
-        <td th:text="${book.bookId}"></td>
-        <td th:text="${book.bookName}"></td>
-        <td>
-          <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
-        </td>
-        <td th:text="${book.writer}"></td>
-        <td th:text="${book.publisher}"></td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="horizontal-scroll">
+      <div class="card" th:each="book : ${similarBooks.getItems()}">
+        <a th:href="@{/book/detail(bookId=${book.bookId})}">
+          <img th:src="${book.bookImgUrl}" class="card-img-top" alt="책 이미지" style="height: 200px;">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${book.bookName}">도서명</h5>
+            <p class="card-text">작가: <span th:text="${book.writer}">작가명</span></p>
+            <p class="card-text">출판사: <span th:text="${book.publisher}">출판사</span></p>
+          </div>
+        </a>
+      </div>
+    </div>
 
     <div class="text-center" th:if="${similarBooks.isNextPage(currentPage, pageSize)}">
       <a th:href="@{/mbtkids/books(type='SIMILAR', page=${currentPage}, size=${pageSize})}"
@@ -47,30 +55,21 @@
     </div>
   </div>
 
+  <!-- 반대 성향 추천 -->
   <div th:if="${oppositeBooks.getCount() > 0}">
     <h2>반대 성향 추천</h2>
-    <table class="table">
-      <thead>
-      <tr>
-        <th>도서 아이디</th>
-        <th>도서명</th>
-        <th>도서 이미지</th>
-        <th>작가명</th>
-        <th>출판사</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="book : ${oppositeBooks.getItems()}">
-        <td th:text="${book.bookId}"></td>
-        <td th:text="${book.bookName}"></td>
-        <td>
-          <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
-        </td>
-        <td th:text="${book.writer}"></td>
-        <td th:text="${book.publisher}"></td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="horizontal-scroll">
+      <div class="card" th:each="book : ${oppositeBooks.getItems()}">
+        <a th:href="@{/book/detail(bookId=${book.bookId})}">
+          <img th:src="${book.bookImgUrl}" class="card-img-top" alt="책 이미지" style="height: 200px;">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${book.bookName}">도서명</h5>
+            <p class="card-text">작가: <span th:text="${book.writer}">작가명</span></p>
+            <p class="card-text">출판사: <span th:text="${book.publisher}">출판사</span></p>
+          </div>
+        </a>
+      </div>
+    </div>
 
     <div class="text-center" th:if="${oppositeBooks.isNextPage(currentPage, pageSize)}">
       <a th:href="@{/mbtkids/books(type='OPPOSITE', page=${currentPage}, size=${pageSize})}"
@@ -78,30 +77,21 @@
     </div>
   </div>
 
+  <!-- 유사 성향 아이들 추천 -->
   <div th:if="${likedBooks.getCount() > 0}">
     <h2>유사 성향 아이들 추천</h2>
-    <table class="table">
-      <thead>
-      <tr>
-        <th>도서 아이디</th>
-        <th>도서명</th>
-        <th>도서 이미지</th>
-        <th>작가명</th>
-        <th>출판사</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="book : ${likedBooks.getItems()}">
-        <td th:text="${book.bookId}"></td>
-        <td th:text="${book.bookName}"></td>
-        <td>
-          <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
-        </td>
-        <td th:text="${book.writer}"></td>
-        <td th:text="${book.publisher}"></td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="horizontal-scroll">
+      <div class="card" th:each="book : ${likedBooks.getItems()}">
+        <a th:href="@{/book/detail(bookId=${book.bookId})}">
+          <img th:src="${book.bookImgUrl}" class="card-img-top" alt="책 이미지" style="height: 200px;">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${book.bookName}">도서명</h5>
+            <p class="card-text">작가: <span th:text="${book.writer}">작가명</span></p>
+            <p class="card-text">출판사: <span th:text="${book.publisher}">출판사</span></p>
+          </div>
+        </a>
+      </div>
+    </div>
 
     <div class="text-center" th:if="${likedBooks.isNextPage(currentPage, pageSize)}">
       <a th:href="@{/mbtkids/books(type='LIKE', page=${currentPage}, size=${pageSize})}"
@@ -110,6 +100,7 @@
   </div>
 
 </div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

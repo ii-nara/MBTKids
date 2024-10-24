@@ -14,9 +14,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
@@ -48,20 +46,18 @@ public class ChildEntity {
   @Column(name = "createdAt", nullable = false)
   private LocalDateTime createdAt;
 
-  @Column(name = "isTypeDeleted", nullable = false)
-  @ColumnDefault("false")
-  @Setter
-  private boolean isTypeDeleted;
-
   @Builder
-  public ChildEntity(String childName, Long parentId, int childAge, LocalDateTime createdAt
-      , boolean isTypeDeleted, MbtiStatusEntity mbtiStatusEntity) {
-    this.childName = childName;
+  public ChildEntity(Long parentId, MbtiStatusEntity mbtiStatusEntity, String childName,
+      int childAge,
+      LocalDateTime createdAt) {
     this.parentId = parentId;
+    this.mbtiStatusEntity = mbtiStatusEntity;
+    this.childName = childName;
     this.childAge = childAge;
     this.createdAt = createdAt;
-    this.isTypeDeleted = isTypeDeleted;
-    this.mbtiStatusEntity = mbtiStatusEntity;
   }
 
+  public void setMbtiStatusEntity(MbtiStatusEntity mbtiStatusEntity) {
+    this.mbtiStatusEntity = mbtiStatusEntity;
+  }
 }

@@ -21,9 +21,7 @@ public class ChildAddServiceImpl {
         .childAge(dto.getChildAge())
         .parentId(parent.getParentId())
         .createdAt(LocalDateTime.now())
-        .isTypeDeleted(false)
         .build();
-
     childRepository.save(child);
   }
 

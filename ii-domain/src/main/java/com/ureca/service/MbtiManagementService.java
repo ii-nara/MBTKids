@@ -2,12 +2,8 @@ package com.ureca.service;
 
 import com.ureca.dto.MbtiStatusResponseDto;
 import com.ureca.entity.ChildEntity;
-import com.ureca.entity.MbtiDeleteEntity;
 import com.ureca.entity.MbtiHistoryEntity;
 import com.ureca.entity.MbtiStatusEntity;
-import com.ureca.repository.MbtiDeleteRepository;
-import com.ureca.repository.MbtiHistoryRepository;
-import com.ureca.repository.MbtiStatusRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MbtiManagementService {
-
-  private MbtiStatusRepository mbtiStatusRepository;
-  private MbtiHistoryRepository mbtiHistoryRepository;
-  private MbtiDeleteRepository mbtiDeleteRepository;
 
   private MbtiStatusResponseDto createMbtiStatusResponseDto(int typeIE, int typeSN, int typeTF,
       int typePJ) {
@@ -60,10 +52,11 @@ public class MbtiManagementService {
   }
 
   public List<MbtiStatusResponseDto> getMbtiHistory(ChildEntity child) {
-    List<MbtiHistoryEntity> mbtiHistoryEntityList = mbtiHistoryRepository.findAllByChildEntityOrderByTimeStamp(
-        child);
+    MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
+    List<MbtiHistoryEntity> mbtiHistoryEntityList = mbtiStatus.getMbtiHistoryEntities();
 
     List<MbtiStatusResponseDto> mbtiHistoryDtoList = new ArrayList<>();
+
     for (MbtiHistoryEntity mbtiHistoryEntity : mbtiHistoryEntityList) {
       mbtiHistoryDtoList.add(
           createMbtiStatusResponseDto(mbtiHistoryEntity.getTypeIE(), mbtiHistoryEntity.getTypeSN(),
@@ -74,13 +67,8 @@ public class MbtiManagementService {
   }
 
   public void deleteMbtiLogical(ChildEntity child) {
-    MbtiDeleteEntity mbtiDeleteEntity = MbtiDeleteEntity.builder()
-        .child(child)
-        .deleteDate(LocalDateTime.now())
-        .build();
-
-    mbtiDeleteRepository.save(mbtiDeleteEntity);
-    child.setTypeDeleted(true);
+    MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
+    mbtiStatus.setDeleteAt(LocalDateTime.now());
+    child.setMbtiStatusEntity(null);
   }
-
 }

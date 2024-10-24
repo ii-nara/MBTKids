@@ -84,4 +84,7 @@ public class MbtiStatusEntity {
     this.MbtiHistoryEntities.add(mbtiHistoryEntity);
   }
 
+  public void setDeleteAt(LocalDateTime deleteAt) {
+    this.deleteAt = deleteAt;
+  }
 }

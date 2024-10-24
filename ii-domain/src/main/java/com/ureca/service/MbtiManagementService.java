@@ -2,6 +2,7 @@ package com.ureca.service;
 
 import com.ureca.dto.MbtiStatusRequestDto;
 import com.ureca.dto.MbtiStatusResponseDto;
+import com.ureca.dto.ResponseFeedbackDto;
 import com.ureca.entity.ChildEntity;
 import com.ureca.entity.MbtiHistoryEntity;
 import com.ureca.entity.MbtiStatusEntity;
@@ -109,5 +110,23 @@ public class MbtiManagementService {
     MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
     mbtiStatus.setDeleteAt(LocalDateTime.now());
     child.setMbtiStatusEntity(null);
+  }
+
+  public void updateMbtiStatus(ChildEntity child, ResponseFeedbackDto responseFeedbackDto) {
+    MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
+    mbtiStatus.updateMbtiType(
+        Math.max(1, Math.min(10, mbtiStatus.getTypeIE() + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookIE()))
+        ,  Math.max(1, Math.min(10, mbtiStatus.getTypeSN() + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookSN()))
+        ,  Math.max(1, Math.min(10, mbtiStatus.getTypeTF() + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookTF()))
+        ,  Math.max(1, Math.min(10, mbtiStatus.getTypePJ() + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookPJ()))
+    );
+
+    mbtiStatus.addHistory(MbtiHistoryEntity.builder()
+        .bookId(responseFeedbackDto.getBookId())
+        .isLike(responseFeedbackDto.getLikeStatus())
+        .typeIE(mbtiStatus.getTypeIE())
+        .typeSN(mbtiStatus.getTypeSN())
+        .typeTF(mbtiStatus.getTypeTF())
+        .typePJ(mbtiStatus.getTypePJ()).build());
   }
 }

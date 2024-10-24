@@ -2,14 +2,18 @@ package com.ureca.controller;
 
 import com.ureca.dto.BookInfo;
 import com.ureca.dto.BookPage;
+import com.ureca.dto.RequestFeedbackDto;
 import com.ureca.dto.ResBookInfo;
 import com.ureca.service.BookService;
+import com.ureca.service.FeedbackComponentService;
 import com.ureca.service.RecommendService;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,6 +27,7 @@ public class HomeController {
 
   private final RecommendService recommendService;
   private final BookService bookService;
+  private final FeedbackComponentService feedbackComponentService;
 
   @GetMapping("/home")
   public String home(Model model) {
@@ -90,5 +95,12 @@ public class HomeController {
     //logger.info("ResBookInfo 전달 !" + resBookInfo);
     return "/book/detail";
   } //bookDetail
+
+  //도서 좋아요
+  @PostMapping("/book/feedback")
+  public String pressTheButton(@RequestBody RequestFeedbackDto requestFeedbackDto) {
+    feedbackComponentService.addFeedback(requestFeedbackDto);
+    return "redirect:/mbtkids/book/detail?bookId=" + requestFeedbackDto.getBookId();
+  }
 
 }

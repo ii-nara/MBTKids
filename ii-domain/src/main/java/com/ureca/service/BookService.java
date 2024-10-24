@@ -20,9 +20,8 @@ public class BookService {
     this.bookRepository = bookRepository;
   }
 
+  // 도서 목록 조회
   public List<BookInfo> getBookList(String searchWord) {
-
-    // 도서 목록 조회
     List<BookInfo> bookList = bookRepository.findByBookNameOrWriterOrPublisher(searchWord);
     //logger.info("조회 결과 : "+bookList);
 
@@ -36,11 +35,11 @@ public class BookService {
 
 
     return bookList;
-  }
+  } //getBookList
 
+  // 도서 상세 조회
   public ResBookInfo getBookInfo(Long bookId) {
 
-    // 도서 목록 조회
     BookEntity getBook =
         bookRepository
             .findById(bookId)
@@ -52,7 +51,7 @@ public class BookService {
     resBookInfo.setDisLikeCnt(bookRepository.countDislikesByBookId(bookId));
 
     return resBookInfo;
-  }
+  } //getBookInfo
 
   // BookEntity → ResBookInfo 변환
   private ResBookInfo convertToResBookInfo(BookEntity bookEntity) {
@@ -80,5 +79,20 @@ public class BookService {
         0  // disLikeCnt 기본값 (필요에 따라 조정)
     );
   }
+
+  // 도서 삭제
+  public int deleteBookInfo(Long bookId) {
+    int result = 0;
+
+    // 존재하는지 확인하고 삭제
+    if (bookRepository.existsById(bookId)) {
+      bookRepository.deleteById(bookId);
+      result = 1;
+    } else {
+      throw new IllegalArgumentException("Book not found with id: " + bookId);
+    }
+
+    return result;
+  } //deleteBookInfo
 
 }

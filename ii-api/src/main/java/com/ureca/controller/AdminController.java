@@ -64,5 +64,15 @@ public class AdminController {
     return "redirect:/mbtkids/admin/home";
   }
 
+  //도서 삭제
+  @GetMapping("/admin/delete")
+  public String adminBookDelete(Model model, @RequestParam(defaultValue = "", required = true) Long bookId) {
+    // 서비스 호출 - 도서 삭제
+    int result = bookService.deleteBookInfo(bookId);
+    if (result > 0) logger.info("삭제 성공" + result);
+
+    return "redirect:/mbtkids/admin/home";
+  }
+
 
 }

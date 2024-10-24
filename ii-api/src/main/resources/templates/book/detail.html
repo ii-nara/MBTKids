@@ -12,6 +12,37 @@
         let likeCount = 0; // 좋아요 수
         let dislikeCount = 0; // 싫어요 수
 
+        // bookId는 URL에서 추출
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookId = urlParams.get('bookId');
+
+        // childId는 서버에서 전달된 값을 사용
+        const childId = 1; //[[${childId}]]
+
+        function sendFeedback(likeStatusValue) {
+            const data = {
+                childId: childId,
+                bookId: bookId,
+                LikeStatusValue: likeStatusValue
+            };
+
+            fetch('/mbtkids/book/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Feedback sent successfully');
+                } else {
+                    console.error('Error sending feedback');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
         function toggleLike() {
             const likeButton = document.getElementById('likeButton');
             const dislikeButton = document.getElementById('dislikeButton');
@@ -20,12 +51,14 @@
                 flag = ''; // 좋아요 해제
                 likeCount--;
                 likeButton.classList.remove('liked');
+                sendFeedback(1);
             } else {
                 flag = 'liked'; // 좋아요
                 likeCount++;
                 likeButton.classList.add('liked');
                 dislikeButton.classList.remove('disliked'); // 싫어요 해제
                 dislikeCount = 0; // 싫어요 수 초기화
+                sendFeedback(1);
             }
             updateButtonText();
         }
@@ -38,12 +71,14 @@
                 flag = ''; // 싫어요 해제
                 dislikeCount--;
                 dislikeButton.classList.remove('disliked');
+                sendFeedback(-1);
             } else {
                 flag = 'disliked'; // 싫어요
                 dislikeCount++;
                 dislikeButton.classList.add('disliked');
                 likeButton.classList.remove('liked'); // 좋아요 해제
-                likeCount = 0; // 좋아요 수 초기화
+                likeCount = 0; // 좋아요 수 초기화'
+                sendFeedback(-1);
             }
             updateButtonText();
         }

@@ -42,7 +42,7 @@ public class FeetbackStatusTest {
     FeedbackStatusEntity newFeetbackCanceled = FeedbackStatusEntity.builder()
         .childEntity(null)
         .bookEntity(null)
-        .isLike(LikeStatus.CANCELED) // 0 : 취소(반응 없음)
+        .isLike(LikeStatus.valueOf("CANCELED")) // 0 : 취소(반응 없음)
         .build();
 
     savedFeedback = feedbackStatusRepository.save(newFeetbackCanceled);
@@ -52,7 +52,7 @@ public class FeetbackStatusTest {
       FeedbackStatusEntity newFeetbackByNum = FeedbackStatusEntity.builder()
           .childEntity(null)
           .bookEntity(null)
-          .isLike(LikeStatus.fromValue(2)) // -1 ~ 1 외의 값
+          .isLike(LikeStatus.valueOf("ano")) // 외의 값
           .build();
 
       savedFeedback = feedbackStatusRepository.save(newFeetbackByNum);

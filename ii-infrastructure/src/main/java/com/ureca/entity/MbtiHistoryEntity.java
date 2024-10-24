@@ -1,14 +1,13 @@
 package com.ureca.entity;
 
+import com.ureca.entity.Enum.LikeStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -29,13 +28,12 @@ public class MbtiHistoryEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long historyId;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "childId")
-  private ChildEntity childEntity;
+  @Column(name = "bookId", nullable = false)
+  private Long bookId;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "logId")
-  private FeedbackLogEntity feedbackLogEntity;
+  @Column(name = "isLike", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private LikeStatus isLike;
 
   @Column(name = "typeIE", nullable = false)
   @Min(1)
@@ -58,17 +56,16 @@ public class MbtiHistoryEntity {
   private Integer typePJ;
 
   @UpdateTimestamp
-  @Column(name = "timeStamp", nullable = false)
+  @Column(name = "updateAt", nullable = false)
   private LocalDateTime timeStamp;
 
   @Builder
-  public MbtiHistoryEntity(ChildEntity childEntity, FeedbackLogEntity feedbackLogEntity
-        , Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ) {
-      this.childEntity = childEntity;
-      this.feedbackLogEntity = feedbackLogEntity;
-      this.typeIE = typeIE;
-      this.typeSN = typeSN;
-      this.typeTF = typeTF;
-      this.typePJ = typePJ;
+  public MbtiHistoryEntity(Long bookId, LikeStatus isLike, Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ) {
+    this.bookId = bookId;
+    this.isLike = isLike;
+    this.typeIE = typeIE;
+    this.typeSN = typeSN;
+    this.typeTF = typeTF;
+    this.typePJ = typePJ;
   }
 }

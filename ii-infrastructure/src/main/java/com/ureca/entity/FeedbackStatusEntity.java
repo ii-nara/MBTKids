@@ -1,10 +1,10 @@
 package com.ureca.entity;
 
 import com.ureca.entity.Enum.LikeStatus;
-import com.ureca.entity.Enum.LikeStatusConverter;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,7 +38,7 @@ public class FeedbackStatusEntity {
   private BookEntity bookEntity;
 
   @Column(name = "isLike", nullable = false)
-  @Convert(converter = LikeStatusConverter.class)
+  @Enumerated(EnumType.STRING)
   private LikeStatus isLike;
 
   @UpdateTimestamp

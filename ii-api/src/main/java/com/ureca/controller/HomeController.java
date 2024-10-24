@@ -1,10 +1,12 @@
 package com.ureca.controller;
 
+import com.ureca.config.auth.PrincipalDetails;
 import com.ureca.constant.RecommendationType;
 import com.ureca.dto.BookInfo;
 import com.ureca.dto.BookPage;
 import com.ureca.service.RecommendService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +24,9 @@ public class HomeController {
   private final RecommendService recommendService;
 
   @GetMapping("/home")
-  public String home(Model model) {
-    Long childId = 1L;  //TODO session
+  public String home(Model model,
+      @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    Long childId = principalDetails.getChild().getChildId();
 
     BookPage<BookInfo> similarBooks = recommendService.recommendSimilarBooks(childId,
         DEFAULT_OFFSET,
@@ -47,8 +50,9 @@ public class HomeController {
   public String books(Model model,
       @RequestParam(value = "type") String type,
       @RequestParam(value = "page", defaultValue = "" + DEFAULT_OFFSET) int page,
-      @RequestParam(value = "size", defaultValue = "" + DEFAULT_LIMIT) int size) {
-    Long childId = 1L;  //TODO session
+      @RequestParam(value = "size", defaultValue = "" + DEFAULT_LIMIT) int size,
+      @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    Long childId = principalDetails.getChild().getChildId();
 
     RecommendationType recommendationType;
     try {

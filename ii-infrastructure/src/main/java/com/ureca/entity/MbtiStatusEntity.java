@@ -1,14 +1,19 @@
 package com.ureca.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +28,7 @@ public class MbtiStatusEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "typeId")
-  private Long typeId;
+  private Long mbtiStausId;
 
   @Column(name = "typeIE", nullable = false)
   @Min(1)
@@ -49,6 +54,13 @@ public class MbtiStatusEntity {
   @Column(name = "updateAt", nullable = false)
   private LocalDateTime updateAt;
 
+  @Column(name = "deleteAt")
+  private LocalDateTime deleteAt;
+
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "mbti_statusId")
+  private List<MbtiHistoryEntity> MbtiHistoryEntities = new ArrayList<>();
+
   @Builder
   public MbtiStatusEntity(Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ) {
     this.typeIE = typeIE;
@@ -62,6 +74,14 @@ public class MbtiStatusEntity {
     this.typeSN = typeSN;
     this.typeTF = typeTF;
     this.typePJ = typePJ;
+  }
+
+  public void updateDeleteMbtiStauts() {
+    this.updateAt = LocalDateTime.now();
+  }
+
+  public void addHistory(MbtiHistoryEntity mbtiHistoryEntity) {
+    this.MbtiHistoryEntities.add(mbtiHistoryEntity);
   }
 
 }

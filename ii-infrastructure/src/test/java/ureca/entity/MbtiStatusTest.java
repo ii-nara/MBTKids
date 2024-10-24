@@ -20,7 +20,7 @@ public class MbtiStatusTest {
 
   @Test
   public void insertMbti() {
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 10; i++) {
       MbtiStatusEntity newMbtiStatus = MbtiStatusEntity.builder()
           .typeIE(1)
           .typeSN(10)

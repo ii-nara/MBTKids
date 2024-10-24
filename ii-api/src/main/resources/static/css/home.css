@@ -25,3 +25,18 @@
 }
 
 /* @@ 여기부터 본인 코드 넣어주심 됩니다 */
+/* 좋아요 싫어요 버튼 */
+.like-btn, .dislike-btn {
+  padding: 10px 20px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 5px;
+}
+.liked {
+  background-color: green;
+}
+.disliked {
+  background-color: red;
+}

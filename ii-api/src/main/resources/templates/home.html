@@ -10,7 +10,7 @@
 </head>
 <body>
 <!-- (상단 레이아웃) 네비게이션 바 -->
-<th:block th:replace="navbar :: navbar"></th:block>
+<div th:replace="~{navbar :: navbar}"></div>
 
 <!-- 본문 내용 -->
 <div class="container mt-5">
@@ -31,7 +31,9 @@
       <tbody>
       <tr th:each="book : ${similarBooks.getItems()}">
         <td th:text="${book.bookId}"></td>
-        <td th:text="${book.bookName}"></td>
+        <td>
+          <a th:href="@{/mbtkids/book/detail(bookId=${book.bookId})}" th:text="${book.bookName}"></a>
+        </td>
         <td>
           <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
         </td>
@@ -62,7 +64,9 @@
       <tbody>
       <tr th:each="book : ${oppositeBooks.getItems()}">
         <td th:text="${book.bookId}"></td>
-        <td th:text="${book.bookName}"></td>
+        <td>
+          <a th:href="@{/mbtkids/book/detail(bookId=${book.bookId})}" th:text="${book.bookName}"></a>
+        </td>
         <td>
           <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
         </td>
@@ -93,7 +97,9 @@
       <tbody>
       <tr th:each="book : ${likedBooks.getItems()}">
         <td th:text="${book.bookId}"></td>
-        <td th:text="${book.bookName}"></td>
+        <td>
+          <a th:href="@{/mbtkids/book/detail(bookId=${book.bookId})}" th:text="${book.bookName}"></a>
+        </td>
         <td>
           <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
         </td>

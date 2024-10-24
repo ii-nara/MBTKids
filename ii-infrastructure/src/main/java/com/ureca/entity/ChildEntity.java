@@ -32,8 +32,9 @@ public class ChildEntity {
   @Column(name = "parentId", nullable = false)
   private Long parentId;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "typeId")
+  //@OneToOne(fetch = FetchType.LAZY)
+  //@JoinColumn(name = "typeId")
+  @OneToOne(fetch = FetchType.LAZY, mappedBy = "childEntity")
   private MbtiStatusEntity mbtiStatusEntity;
 
   @Column(name = "childName", nullable = false)

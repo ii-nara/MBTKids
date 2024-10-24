@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -57,16 +58,23 @@ public class MbtiStatusEntity {
   @Column(name = "deleteAt")
   private LocalDateTime deleteAt;
 
+  @OneToOne
+  @JoinColumn(name="childId")
+  private ChildEntity childEntity;
+
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "mbti_statusId")
   private List<MbtiHistoryEntity> MbtiHistoryEntities = new ArrayList<>();
 
   @Builder
-  public MbtiStatusEntity(Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ) {
+  public MbtiStatusEntity(Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ, ChildEntity childEntity) {
     this.typeIE = typeIE;
     this.typeSN = typeSN;
     this.typeTF = typeTF;
     this.typePJ = typePJ;
+    this.updateAt = LocalDateTime.now();
+    this.deleteAt = null;
+    this.childEntity = childEntity;
   }
 
   public void updateMbtiType(Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ) {
@@ -74,6 +82,7 @@ public class MbtiStatusEntity {
     this.typeSN = typeSN;
     this.typeTF = typeTF;
     this.typePJ = typePJ;
+    this.updateAt = LocalDateTime.now();
   }
 
   public void updateDeleteMbtiStauts() {

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>아이둘나라</title>
-  <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link th:href="@{/css/mbti/result.css}" rel="stylesheet"/>
   <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
 </head>
@@ -14,26 +14,80 @@
 
 <!-- 본문 내용 -->
 <div class="container mt-5">
-  <h1 id="title"> 자녀 진단 결과</h1>
-  <p style="color: darkgray"> ✨ 우리 아이의 성향 결과는 다음과 같아요!</p>
-  <hr>
+  <p id="title" style="text-align: left" th:text="'▶진단 결과 ✨' + ${mbtiInfo.mbtiNm}"></p>
 
-  <h3 th:text="${mbtiInfo.suffix}" class="result-title"></h3>
-  <h1 th:text="${mbtiInfo.emoji}" class="result-img"/>
-  <p class="description" th:text="${mbtiInfo.content}"></p>
+  <!-- 좌측 -->
+  <div class="row">
+    <div class="col-md-6 text-center">
+      <h1 th:text="${mbtiInfo.suffix}" class="suffix"></h1>
+      <p th:text="${mbtiInfo.tag}" class="tag"></p>
+      <h1 th:text="${mbtiInfo.emoji}" class="emoji"></h1>
+      <div class="info-box p-4 mt-3">
+        <p class="description" th:utext="${mbtiInfo.content}"></p>
+      </div>
+    </div>
 
-  <p th:text="${mbtiInfo.mbtiNm}"></p>
-  <p th:text="${mbtiType}"></p>
-  <p th:text="${scoreI}">I</p>
-  <p th:text="${scoreE}">E</p>
-  <p th:text="${scoreS}">S</p>
-  <p th:text="${scoreN}">N</p>
-  <p th:text="${scoreT}">T</p>
-  <p th:text="${scoreF}">F</p>
-  <p th:text="${scoreP}">P</p>
-  <p th:text="${scoreJ}">J</p>
+    <!-- 우측 -->
+    <div class="col-md-6">
+      <div class="progress-bars">
+        <div class="bar">
+          <p class="bar-title">외향</p>
+          <div class="progress-bar-container">
+            <span class="progress-text-left" th:text="'I ' + ${scoreI} + '%'"></span>
+            <div class="progress">
+              <div class="progress-bar"
+                   th:style="'width:' + ${scoreI} + '%; background-color: #ffc56d;'"></div>
+              <div class="progress-bar"
+                   th:style="'width:' + ${scoreE} + '%; background-color: #339fff;'"></div>
+            </div>
+            <span class="progress-text-right" th:text="'E ' + ${scoreE} + '%'"></span>
+          </div>
+        </div>
+        <div class="bar">
+          <p class="bar-title">탐구</p>
+          <div class="progress-bar-container">
+            <span class="progress-text-left" th:text="'S ' + ${scoreS} + '%'"></span>
+            <div class="progress">
+              <div class="progress-bar"
+                   th:style="'width:' + ${scoreS} + '%; background-color: #ffc56d;'"></div>
+              <div class="progress-bar"
+                   th:style="'width:' + ${scoreN} + '%; background-color: #339fff;'"></div>
+            </div>
+            <span class="progress-text-right" th:text="'N ' + ${scoreN} + '%'"></span>
+          </div>
+        </div>
+        <div class="bar">
+          <p class="bar-title">공감</p>
+          <div class="progress-bar-container">
+            <span class="progress-text-left" th:text="'T ' + ${scoreT} + '%'"></span>
+            <div class="progress">
+              <div class="progress-bar"
+                   th:style="'width:' + ${scoreT} + '%; background-color: #ffc56d;'"></div>
+              <div class="progress-bar"
+                   th:style="'width:' + ${scoreF} + '%; background-color: #339fff;'"></div>
+            </div>
+            <span class="progress-text-right" th:text="'F ' + ${scoreF} + '%'"></span>
+          </div>
+        </div>
+        <div class="bar">
+          <p class="bar-title">계획</p>
+          <div class="progress-bar-container">
+            <span class="progress-text-left" th:text="'P ' + ${scoreP} + '%'"></span>
+            <div class="progress">
+              <div class="progress-bar"
+                   th:style="'width:' + ${scoreP} + '%; background-color: #ffc56d;'"></div>
+              <div class="progress-bar"
+                   th:style="'width:' + ${scoreJ} + '%; background-color: #339fff;'"></div>
+            </div>
+            <span class="progress-text-right" th:text="'J ' + ${scoreJ} + '%'"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr style="border-color: white;"/>
+    <a href="/mbtkids/home" class="btn btn-light" id="btn-main">메인으로 이동</a>
+  </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

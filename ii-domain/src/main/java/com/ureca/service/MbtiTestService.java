@@ -38,7 +38,7 @@ public class MbtiTestService {
     this.mbtiManagementService = mbtiManagementService;
   }
 
-  // 1. JSON to List<Integer>
+  // 1-1. JSON to List<Integer>
   public List<Integer> jsonStrToList(String answers) {
     try {
       return objectMapper.readValue(answers, new TypeReference<List<Integer>>() {
@@ -47,6 +47,12 @@ public class MbtiTestService {
       logger.error("JSON parsing error: ", e.getMessage());
       return Collections.emptyList();
     }
+  }
+
+  // 1-2. 백분율 변환
+  public int changeRatio(int scoreA, int scoreB) {
+    if(scoreA + scoreB == 0) return 0;
+    return (int) Math.floor((scoreA * 100.0) / (scoreA + scoreB));
   }
 
   // 2. 초기화

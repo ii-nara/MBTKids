@@ -22,6 +22,7 @@ public class MbtiManagementService {
   private final MbtiStatusRepository mbtiStatusRepository;
   private final ChildRepository childRepository;
 
+  // toDTO
   private MbtiStatusResponseDto createMbtiStatusResponseDto(int typeE, int typeN, int typeF,
       int typeJ) {
     int typeI = MAX_SCORE - typeE;
@@ -48,8 +49,17 @@ public class MbtiManagementService {
         .build();
   }
 
-  // 1. 조회 (성향)
-  public MbtiStatusResponseDto getMbtiStatus(ChildEntity child) {
+  // 0. 자녀 조회
+  public ChildEntity getChild(Long childId) {
+    ChildEntity childEntity = childRepository.findById(childId)
+        .orElseThrow(() -> new RuntimeException("ID: " + childId + "의 자녀를 찾을 수 없습니다."));
+    return childEntity;
+  }
+
+  // 1. 조회 (성향) -> 아이디로
+  // 아이디로 하는 이유 : 로그인할 때엔 성향이 Null인 상태 -> 조회를 해줘야 업데이트된 Status를 가져올 수 있음!
+  public MbtiStatusResponseDto getMbtiStatus(Long childId) {
+    ChildEntity child = getChild(childId);
     MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
     return createMbtiStatusResponseDto(mbtiStatus.getTypeIE(), mbtiStatus.getTypeSN(),
         mbtiStatus.getTypeTF(), mbtiStatus.getTypePJ());
@@ -67,17 +77,13 @@ public class MbtiManagementService {
           createMbtiStatusResponseDto(mbtiHistoryEntity.getTypeIE(), mbtiHistoryEntity.getTypeSN(),
               mbtiHistoryEntity.getTypeTF(), mbtiHistoryEntity.getTypePJ()));
     }
-
     return mbtiHistoryDtoList;
   }
 
   // 3. 등록 (성향)
-  @Transactional
   public MbtiStatusResponseDto insertMbtiStatus(Long childId,
       MbtiStatusRequestDto mbtiStatusReqDto) {
-    // 자녀 업데이트
-    ChildEntity child = childRepository.findById(childId)
-        .orElseThrow(() -> new RuntimeException("ID: " + childId + "의 자녀를 찾을 수 없습니다."));
+    ChildEntity child = getChild(childId);
     // 성향 등록
     MbtiStatusEntity mbtiStatus = MbtiStatusEntity.builder()
         .typeIE(mbtiStatusReqDto.getScoreIE())
@@ -86,16 +92,17 @@ public class MbtiManagementService {
         .typePJ(mbtiStatusReqDto.getScorePJ())
         .childEntity(child)
         .build();
-    // 히스토리 등록
     MbtiHistoryEntity mbtiHistoryEntity = MbtiHistoryEntity.builder()
         .typeIE(mbtiStatusReqDto.getScoreIE())
         .typeSN(mbtiStatusReqDto.getScoreSN())
         .typeTF(mbtiStatusReqDto.getScoreTF())
         .typePJ(mbtiStatusReqDto.getScorePJ())
         .build();
+    // 히스토리 등록
     mbtiStatus.addHistory(mbtiHistoryEntity);
-    child.setMbtiStatusEntity(mbtiStatus);
     mbtiStatusRepository.save(mbtiStatus);
+    // 자녀 업데이트
+    child.setMbtiStatusEntity(mbtiStatus);
     childRepository.save(child);
     // to Dto
     MbtiStatusResponseDto mbtiStatusResponseDto = createMbtiStatusResponseDto(

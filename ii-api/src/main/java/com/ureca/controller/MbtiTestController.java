@@ -1,9 +1,9 @@
 package com.ureca.controller;
 
-import com.ureca.domain.MbtiQuestion;
-import com.ureca.domain.MbtiQuestionProvider;
+import com.ureca.model.MbtiQuestion;
+import com.ureca.model.MbtiQuestionProvider;
 import com.ureca.dto.MbtiInfoResponseDto;
-import com.ureca.dto.MbtiTestResponseDTO;
+import com.ureca.dto.MbtiStatusResponseDto;
 import com.ureca.service.MbtiInfoService;
 import com.ureca.service.MbtiTestService;
 import java.util.List;
@@ -44,20 +44,27 @@ public class MbtiTestController {
   // 2. 응답 처리
   @PostMapping("/result")
   public String postMbtiResult(@RequestParam("answers") String answers, Model model) {
+    // TODO : 자녀 아이디 연결
+    Long childId = 1L;
     // 답변
     List<Integer> answerList = mbtiService.jsonStrToList(answers);
-    // 유효성 확인
     if (answerList.isEmpty()) {
       model.addAttribute("error", "[404] 다시 검사를 시도해주세요.");
       // TODO : 에러 페이지 구현
       return "mbti/error";
     }
     // MBTI 성향, 강도 계산
-    MbtiTestResponseDTO mbtiTestResponseDTO = mbtiService.processMbtiAnswer(answerList);
-    String mbtiType = mbtiTestResponseDTO.getMBTI();
-    List<Integer> scores = mbtiTestResponseDTO.getScore();
+    MbtiStatusResponseDto mbtiTestRequestDto = mbtiService.processMbtiAnswer(childId, answerList);
+    String mbtiType = mbtiTestRequestDto.getMbtiType();
     model.addAttribute("mbtiType", mbtiType);
-    model.addAttribute("scores", scores);
+    model.addAttribute("scoreI", mbtiTestRequestDto.getTypeI());
+    model.addAttribute("scoreE", mbtiTestRequestDto.getTypeE());
+    model.addAttribute("scoreS", mbtiTestRequestDto.getTypeS());
+    model.addAttribute("scoreN", mbtiTestRequestDto.getTypeN());
+    model.addAttribute("scoreT", mbtiTestRequestDto.getTypeT());
+    model.addAttribute("scoreF", mbtiTestRequestDto.getTypeF());
+    model.addAttribute("scoreP", mbtiTestRequestDto.getTypeP());
+    model.addAttribute("scoreJ", mbtiTestRequestDto.getTypeJ());
     MbtiInfoResponseDto mbtiInfoResponseDto = mbtiInfoService.getMbtiNmInfo(mbtiType);
     model.addAttribute("mbtiInfo", mbtiInfoResponseDto);
     return "mbti/result";

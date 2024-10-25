@@ -1,4 +1,4 @@
-package com.ureca.domain;
+package com.ureca.model;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -64,7 +64,7 @@ public class MbtiQuestionProvider {
             10,
             "선생님이 오셨다! 수업 시간에 나누는 대화를 보니,<br>"
                 + "우리 아이는 같은 상황이나 사물을 보아도<br><br><b>또래 아이보다 현실적이고 구체적인 묘사를 잘한다.</b>",
-            "S/N"),
+            "N/S"),
         createQ(
             11,
             "오랜만에 아이와 함께하는 주말 모임에 다녀왔다!<br>"

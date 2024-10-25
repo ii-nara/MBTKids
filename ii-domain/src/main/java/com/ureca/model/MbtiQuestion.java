@@ -1,4 +1,4 @@
-package com.ureca.domain;
+package com.ureca.model;
 
 import lombok.Builder;
 import lombok.Getter;

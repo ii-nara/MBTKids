@@ -28,7 +28,7 @@
 </head>
 <body>
 <!-- (상단 레이아웃) 네비게이션 바 -->
-<th:block th:replace="navbar :: navbar"></th:block>
+<div th:replace="~{navbar :: navbar}"></div>
 
 <!-- 본문 내용 -->
 <div class="container mt-5 vertical-limit">
@@ -41,7 +41,9 @@
         <a th:href="@{/book/detail(bookId=${book.bookId})}">
           <img th:src="${book.bookImgUrl}" class="card-img-top" alt="책 이미지" style="height: 200px;">
           <div class="card-body">
-            <h5 class="card-title" th:text="${book.bookName}">도서명</h5>
+            <h5 class="card-title">
+                <a th:href="@{/mbtkids/book/detail(bookId=${book.bookId})}" th:text="${book.bookName}"></a>
+            </h5>
             <p class="card-text">작가: <span th:text="${book.writer}">작가명</span></p>
             <p class="card-text">출판사: <span th:text="${book.publisher}">출판사</span></p>
           </div>
@@ -63,7 +65,9 @@
         <a th:href="@{/book/detail(bookId=${book.bookId})}">
           <img th:src="${book.bookImgUrl}" class="card-img-top" alt="책 이미지" style="height: 200px;">
           <div class="card-body">
-            <h5 class="card-title" th:text="${book.bookName}">도서명</h5>
+            <h5 class="card-title">
+                <a th:href="@{/mbtkids/book/detail(bookId=${book.bookId})}" th:text="${book.bookName}"></a>
+            </h5>
             <p class="card-text">작가: <span th:text="${book.writer}">작가명</span></p>
             <p class="card-text">출판사: <span th:text="${book.publisher}">출판사</span></p>
           </div>
@@ -85,7 +89,9 @@
         <a th:href="@{/book/detail(bookId=${book.bookId})}">
           <img th:src="${book.bookImgUrl}" class="card-img-top" alt="책 이미지" style="height: 200px;">
           <div class="card-body">
-            <h5 class="card-title" th:text="${book.bookName}">도서명</h5>
+            <h5 class="card-title">
+                <a th:href="@{/mbtkids/book/detail(bookId=${book.bookId})}" th:text="${book.bookName}"></a>
+            </h5>
             <p class="card-text">작가: <span th:text="${book.writer}">작가명</span></p>
             <p class="card-text">출판사: <span th:text="${book.publisher}">출판사</span></p>
           </div>

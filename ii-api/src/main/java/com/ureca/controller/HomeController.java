@@ -4,6 +4,8 @@ import com.ureca.config.auth.PrincipalDetails;
 import com.ureca.constant.RecommendationType;
 import com.ureca.dto.BookInfo;
 import com.ureca.dto.BookPage;
+import com.ureca.dto.ResBookInfo;
+import com.ureca.service.BookService;
 import com.ureca.service.RecommendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +24,7 @@ public class HomeController {
   public static final int DEFAULT_LIMIT = 10;
 
   private final RecommendService recommendService;
+  private final BookService bookService;
 
   @GetMapping("/home")
   public String home(Model model,
@@ -70,4 +73,18 @@ public class HomeController {
 
     return "/book/books";
   }
+
+  //도서 상세 조회
+  @GetMapping("/book/detail")
+  public String bookDetail(Model model, @RequestParam(defaultValue = "", required = true) Long bookId) {
+    // 서비스 호출 - 도서 상세 조회
+    ResBookInfo resBookInfo = bookService.getBookInfo(bookId);
+
+    if (resBookInfo != null) {
+      model.addAttribute("ResBookInfo", resBookInfo);
+    }
+    //logger.info("ResBookInfo 전달 !" + resBookInfo);
+    return "/book/detail";
+  } //bookDetail
+
 }

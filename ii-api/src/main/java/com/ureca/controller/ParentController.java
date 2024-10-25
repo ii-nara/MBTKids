@@ -58,7 +58,11 @@ public class ParentController {
     ChildEntity child = principalDetails.getChild();
     model.addAttribute("child", child);
 //    principalDetails.getChild()
-    return "parent/childProfile";
+
+    // null이면 성향검사, 아니면 홈화면 이동
+    if(child.getMbtiStatusEntity() == null) return "redirect:/mbtkids/mbti/test";
+    return "redirect:/mbtkids/home";
+    //기존 : return "parent/childProfile";
   }
 
   @GetMapping("/child/add")

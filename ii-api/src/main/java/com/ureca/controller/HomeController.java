@@ -1,5 +1,6 @@
 package com.ureca.controller;
 
+import com.ureca.config.auth.PrincipalDetails;
 import com.ureca.dto.BookInfo;
 import com.ureca.dto.BookPage;
 import com.ureca.dto.RequestFeedbackDto;
@@ -9,6 +10,7 @@ import com.ureca.service.FeedbackComponentService;
 import com.ureca.service.RecommendService;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,9 +87,11 @@ public class HomeController {
 
   //도서 상세 조회
   @GetMapping("/book/detail")
-  public String bookDetail(Model model, @RequestParam(defaultValue = "", required = true) Long bookId) {
+  public String bookDetail(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,
+      @RequestParam(defaultValue = "", required = true) Long bookId) {
     // 서비스 호출 - 도서 상세 조회
     ResBookInfo resBookInfo = bookService.getBookInfo(bookId);
+    resBookInfo.updateLikeStatus(feedbackComponentService.findFeedbackStatus(bookId, principalDetails.getChild().getChildId()));
 
     if (resBookInfo != null) {
       model.addAttribute("ResBookInfo", resBookInfo);
@@ -98,7 +102,8 @@ public class HomeController {
 
   //도서 좋아요
   @PostMapping("/book/feedback")
-  public String pressTheButton(@RequestBody RequestFeedbackDto requestFeedbackDto) {
+  public String pressTheButton(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody RequestFeedbackDto requestFeedbackDto) {
+    requestFeedbackDto.updateChildId(principalDetails.getChild().getChildId());
     feedbackComponentService.addFeedback(requestFeedbackDto);
     return "redirect:/mbtkids/book/detail?bookId=" + requestFeedbackDto.getBookId();
   }

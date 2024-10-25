@@ -8,7 +8,14 @@
     <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
     <script>
         //좋아요 싫어요 버튼
-        let flag = ''; // 좋아요/싫어요 플래그
+        let flag = ''; // 좋아요, 싫어요 플래그
+        if ([[${ResBookInfo.likeStatus == "LIKE"}]]) {
+            flag = 'liked';
+        } else if ([[${ResBookInfo.likeStatus == "DISLIKE"}]]) {
+            flag = 'disliked';
+        } else {
+            flag = '';
+        }
         let likeCount = 0; // 좋아요 수
         let dislikeCount = 0; // 싫어요 수
 
@@ -17,7 +24,7 @@
         const bookId = urlParams.get('bookId');
 
         // childId는 서버에서 전달된 값을 사용
-        const childId = 1; //[[${childId}]]
+        const childId = /*[[${childId}]]*/ 0;
 
         function sendFeedback(likeStatusValue) {
             const data = {
@@ -86,6 +93,19 @@
         function updateButtonText() {
             document.getElementById('likeButton').innerText = '좋아요';
             document.getElementById('dislikeButton').innerText = '싫어요';
+        }
+
+        window.onload = function() {
+            const likeButton = document.getElementById('likeButton');
+            const dislikeButton = document.getElementById('dislikeButton');
+
+            if (flag === 'liked') {
+                likeButton.classList.add('liked');
+            } else if (flag === 'disliked') {
+                dislikeButton.classList.add('disliked');
+            }
+
+            updateButtonText();
         }
 
     </script>

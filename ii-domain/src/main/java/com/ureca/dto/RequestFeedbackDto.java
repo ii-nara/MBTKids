@@ -21,4 +21,7 @@ public class RequestFeedbackDto {
         .build();
   }
 
+  public void updateChildId(Long childId) {
+    this.childId = childId;
+  }
 }

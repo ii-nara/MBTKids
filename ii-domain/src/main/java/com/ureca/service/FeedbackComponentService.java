@@ -23,4 +23,8 @@ public class FeedbackComponentService {
     mbtiManagementService.updateMbtiStatus(child, responseFeedbackDto);
   }
 
+  public String findFeedbackStatus(Long bookId, Long childId) {
+    return feedbackManagementService.findFeedbackStatus(bookId, childId);
+  }
+
 }

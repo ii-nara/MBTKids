@@ -9,6 +9,7 @@ import com.ureca.entity.FeedbackStatusEntity;
 import com.ureca.repository.BookRepository;
 import com.ureca.repository.ChildRepository;
 import com.ureca.repository.FeedbackStatusRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -66,4 +67,9 @@ public class FeedbackManagementService {
     return bookRepository.getReferenceById(bookId);
   }
 
+  public String findFeedbackStatus(Long bookId, Long childId) {
+    Optional<FeedbackStatusEntity> findFeedbackStatus = feedbackStatusRepository.findByBookEntity_BookIdAndChildEntity_ChildId(bookId, childId);
+    return findFeedbackStatus.map(feedbackStatusEntity -> feedbackStatusEntity.getIsLike().name())
+        .orElseGet(LikeStatus.CANCELED::name);
+  }
 }

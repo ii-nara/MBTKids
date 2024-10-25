@@ -17,15 +17,10 @@ public class ResBookInfo {
   private String plot;
   //작가명
   private String writer;
-  // 작가 코드
-  private String writerCd;
   //출판사
   private String publisher;
-  // 출판사 코드
-  private String publisherCd;
   // 권장연령
   private String recommenedAge;
-
   //성향
   private String mbtiType;
   // 앞 : -1, 뒤 : 1, 상태없음 : 0
@@ -51,6 +46,8 @@ public class ResBookInfo {
   private int likeCnt;
   // 싫어요 개수
   private int disLikeCnt;
+  // 사용자 : 좋아요 상태
+  private String likeStatus;
 
   // 생성자
   public ResBookInfo(
@@ -80,9 +77,7 @@ public class ResBookInfo {
     this.bookImgUrl = bookImgUrl;
     this.plot = plot;
     this.writer = writer;
-    this.writerCd = writerCd;
     this.publisher = publisher;
-    this.publisherCd = publisherCd;
     this.recommenedAge = recommenedAge;
     this.mbtiType = mbtiType;
     this.typeIE = typeIE;
@@ -96,6 +91,10 @@ public class ResBookInfo {
     this.displayYn = displayYn;
     this.likeCnt = likeCnt;
     this.disLikeCnt = disLikeCnt;
+  }
+
+  public void updateLikeStatus(String likeStatus) {
+    this.likeStatus = likeStatus;
   }
 
 }

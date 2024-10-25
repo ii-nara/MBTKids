@@ -15,9 +15,11 @@
 /* 색상 설정 */
 :root {
   --main-color: #ffe552;
-  --highlight-color: #ff9900;
   --dark-color: #404040;
-  --text-color: #404040;
+  --blue: #D1E9FF;
+  --yellow: #FFF2CC;
+  --orange: #FFE7E5;
+  --navy: #343F45;
 }
 
 /* 본문 */
@@ -28,29 +30,94 @@
   color: var(--dark-color);
 }
 
-/* 타이틀 */
+/* 타이틀 : 진단 결과  */
 #title {
   color: #ffc107;
   font-weight: 600;
   margin-bottom: 0.6em;
+  text-algin: left;
 }
 
-.result-title {
-  font-family: 'Pretendard-Bold';
-  color: var(--text-color);
-  margin-bottom: 1em;
+/* 검사 결과 */
+.row {
+  background-color: #343F45;
+  border-radius: 15px; /* 라운드 처리 */
+  padding: 2em; /* 패딩 추가 */
 }
 
-.highlight {
-  color: var(--highlight-color);
-}
-
-.result-img {
-  width: 50%;
+.tag {
+  padding: 0.4em 1.5em;
+  background-color: var(--blue);
+  width: fit-content;
+  border-radius: 20px;
+  color: #007bff;
   margin: 0 auto;
+  margin-top: 20px;
+  font-weight: 800;
 }
 
-.description {
-  font-size: 1.2em;
+/* 좌측 - 형용사 */
+.suffix {
+  font-family: 'Pretendard-Bold';
+  font-size: 3.3em !important;
+  color: white;
   margin-top: 1em;
+}
+
+/* 이모지 */
+.emoji {
+  font-size: 8.1em;
+  margin: 0.3em;
+}
+
+/* 설명 */
+.description {
+  background-color: #fff0c6;
+  padding: 1.8em;
+  border-radius: 20px;
+  font-size: 1.08em;
+  color: #613c22;
+  margin-bottom: 1.2em;
+  text-align: left;
+}
+
+/* 막대 그래프 */
+.bar {
+  color: white;
+  margin: 3em 2em;
+}
+
+.bar-title {
+  font-size: 1.3em;
+  font-family: 'Pretendard-Bold';
+}
+
+.progress-bars {
+  margin-top: 4em;
+}
+
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+}
+
+.progress {
+  width: 100%;
+  border-radius: 100px;
+  height: 1.8em;
+  background-color: #339fff;
+}
+
+.progress-text-left {
+  margin-right: 15px;
+}
+
+.progress-text-right {
+  margin-left: 15px;
+}
+
+#btn-main {
+  margin-top:5px;
+  margin: 0 auto;
+
 }

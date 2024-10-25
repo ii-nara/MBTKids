@@ -36,7 +36,7 @@ public class BookEntity {
   private String bookImgUrl;
 
   // 줄거리
-  @Column(name = "plot", length = 300)
+  @Column(name = "plot", length = 1000)
   private String plot;
 
   // 작가명

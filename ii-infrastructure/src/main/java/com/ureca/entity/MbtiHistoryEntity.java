@@ -28,10 +28,10 @@ public class MbtiHistoryEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long historyId;
 
-  @Column(name = "bookId", nullable = false)
+  @Column(name = "bookId")
   private Long bookId;
 
-  @Column(name = "isLike", nullable = false)
+  @Column(name = "isLike")
   @Enumerated(EnumType.STRING)
   private LikeStatus isLike;
 
@@ -61,11 +61,12 @@ public class MbtiHistoryEntity {
 
   @Builder
   public MbtiHistoryEntity(Long bookId, LikeStatus isLike, Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ) {
-    this.bookId = bookId;
-    this.isLike = isLike;
+    this.bookId = (bookId != null) ? bookId : null;
+    this.isLike = (isLike != null) ? isLike : null;
     this.typeIE = typeIE;
     this.typeSN = typeSN;
     this.typeTF = typeTF;
     this.typePJ = typePJ;
+    this.timeStamp = LocalDateTime.now();
   }
 }

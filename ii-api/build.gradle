@@ -19,6 +19,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     // 2. jackson (to json)
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+    // rabbit MQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 }
 
 test {

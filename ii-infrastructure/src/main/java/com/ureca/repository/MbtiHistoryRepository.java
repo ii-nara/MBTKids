@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MbtiHistoryRepository extends JpaRepository<MbtiHistoryEntity, Long> {
 
+  long count();
+
 }

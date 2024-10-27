@@ -1,8 +1,9 @@
-package ureca.FeedbackServiceTest;
+package com.ureca;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import com.ureca.controller.HomeController;
 import com.ureca.dto.RequestFeedbackDto;
 import com.ureca.entity.BookEntity;
 import com.ureca.entity.ChildEntity;
@@ -16,11 +17,11 @@ import com.ureca.repository.FeedbackStatusRepository;
 import com.ureca.repository.MbtiHistoryRepository;
 import com.ureca.repository.MbtiStatusRepository;
 import com.ureca.repository.ParentJpaRepository;
-import com.ureca.service.FeedbackComponentService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,16 +30,26 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @Transactional
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-public class addFeedbackSyncTest {
+public class FeedBackConcurrencyTest {
 
   @Autowired
-  private FeedbackComponentService feedbackComponentService;
+  private HomeController homeController;
+
+  @Autowired
+  private RabbitTemplate rabbitTemplate;
+
+  @Autowired
+  private RabbitAdmin rabbitAdmin;
 
   @Autowired
   private BookRepository bookRepository;
@@ -70,7 +81,7 @@ public class addFeedbackSyncTest {
 
   @BeforeAll
   void setUp() {
-    int testCount = 4500;
+    int testCount = 7500;
 
     testChildren = new ArrayList<>();
     testRequestFeedback = new ArrayList<>();
@@ -113,7 +124,7 @@ public class addFeedbackSyncTest {
   @Test
   void addFeedback() throws InterruptedException {
 
-    int numThreads = 3000;
+    int numThreads = 7500;
 
     CountDownLatch countDownLatch = new CountDownLatch(numThreads);
 //    ExecutorService executorService = Executors.newFixedThreadPool(numThreads); // 정적
@@ -121,25 +132,30 @@ public class addFeedbackSyncTest {
 
     for (int i = 0; i < numThreads; i++) {
       int finalI = i;
+
       executorService.execute(() -> {
         try {
-          feedbackComponentService.addFeedback(testRequestFeedback.get(finalI));
-//          if (finalI % 2 == 0) feedbackComponentService.addFeedback(testRequestFeedback.get(finalI)); // 좋아요 취소
+//          homeController.pressTheButton(testChildren.get(finalI).getChildId(), testRequestFeedback.get(finalI));
         } catch (Exception e) {
           e.printStackTrace();
-          System.out.println("충돌 발생");
         } finally {
           countDownLatch.countDown(); // 예외 발생해도 countDown 실행
         }
       });
     }
 
-    countDownLatch.await(10, TimeUnit.SECONDS);
+    countDownLatch.await(5, TimeUnit.SECONDS);
+//    countDownLatch.await();
     executorService.shutdown();
 
+    Thread.sleep(10000);
+
+
 //    long afterTest = feedbackStatusRepository.countByBookEntity_BookIdAndLikeStatus(testBook.getBookId(), LikeStatus.LIKE);
+
 //    System.out.println("좋아요 개수 : " + afterTest);
 //    assertThat(afterTest, is((long) numThreads));
   }
+
 
 }

@@ -3,10 +3,11 @@ package com.ureca.controller;
 import com.ureca.config.auth.PrincipalDetails;
 import com.ureca.dto.ChildCreateDto;
 import com.ureca.dto.ParentSignUpRequestDto;
+import com.ureca.dto.ReqParentAddInfoDto;
 import com.ureca.entity.ChildEntity;
 import com.ureca.entity.ParentEntity;
-import com.ureca.service.ChildAddServiceImpl;
-import com.ureca.service.port.ParentService;
+import com.ureca.service.ChildService;
+import com.ureca.service.ParentService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,11 +25,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ParentController {
 
   private final ParentService parentService;
-  private final ChildAddServiceImpl childAddService;
+  private final ChildService childAddService;
 
   @GetMapping()
   public String home() {
     return "parent/home";
+  }
+
+  @GetMapping("/oauth/additionalInfo")
+  public String addInfoForm(Model model) {
+    return "parent/additionalForm";
+  }
+
+  @PostMapping("/oauth/additionalInfo")
+  public String addInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,
+      @ModelAttribute ReqParentAddInfoDto parentAddInfoDto) {
+    ParentEntity parent = principalDetails.getParent();
+    parentService.saveAdditionalInfo(parentAddInfoDto, parent);
+
+    return "redirect:/mbtkids/childSelectOrAdd";
   }
 
   @GetMapping("/childSelectOrAdd")
@@ -57,10 +72,11 @@ public class ParentController {
       @AuthenticationPrincipal PrincipalDetails principalDetails) {
     ChildEntity child = principalDetails.getChild();
     model.addAttribute("child", child);
-//    principalDetails.getChild()
 
     // null이면 성향검사, 아니면 홈화면 이동
-    if(child.getMbtiStatusEntity() == null) return "redirect:/mbtkids/mbti/test";
+    if (child.getMbtiStatusEntity() == null) {
+      return "redirect:/mbtkids/mbti/test";
+    }
     return "redirect:/mbtkids/home";
     //기존 : return "parent/childProfile";
   }

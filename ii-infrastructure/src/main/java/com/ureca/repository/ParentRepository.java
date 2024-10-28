@@ -4,7 +4,7 @@ import com.ureca.entity.ParentEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ParentJpaRepository extends JpaRepository<ParentEntity, Long> {
+public interface ParentRepository extends JpaRepository<ParentEntity, Long> {
 
   Optional<ParentEntity> findByParentLoginId(String parentLoginId);
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ChildAddServiceImpl {
+public class ChildService {
 
   private final ChildRepository childRepository;
 

@@ -59,7 +59,7 @@ public class MbtiStatusEntity {
   private LocalDateTime deleteAt;
 
   @OneToOne
-  @JoinColumn(name="childId")
+  @JoinColumn(name = "childId")
   private ChildEntity childEntity;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,7 +67,8 @@ public class MbtiStatusEntity {
   private List<MbtiHistoryEntity> MbtiHistoryEntities = new ArrayList<>();
 
   @Builder
-  public MbtiStatusEntity(Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ, ChildEntity childEntity) {
+  public MbtiStatusEntity(Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ,
+      ChildEntity childEntity) {
     this.typeIE = typeIE;
     this.typeSN = typeSN;
     this.typeTF = typeTF;

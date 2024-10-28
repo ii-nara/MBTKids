@@ -34,28 +34,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 @TestInstance(Lifecycle.PER_CLASS)
 public class FeedBackConcurrencyTest {
 
-  @Autowired
-  private HomeController homeController;
+  @Autowired private HomeController homeController;
 
-  @Autowired
-  private RabbitTemplate rabbitTemplate;
+  @Autowired private RabbitTemplate rabbitTemplate;
 
-  //@Autowired private RabbitAdmin rabbitAdmin;
+  // @Autowired private RabbitAdmin rabbitAdmin;
 
-  @Autowired
-  private BookRepository bookRepository;
+  @Autowired private BookRepository bookRepository;
 
-  @Autowired
-  private ParentJpaRepository parentJpaRepository;
+  @Autowired private ParentJpaRepository parentJpaRepository;
 
-  @Autowired
-  private ChildRepository childRepository;
+  @Autowired private ChildRepository childRepository;
 
-  @Autowired
-  private MbtiStatusRepository mbtiStatusRepository;
+  @Autowired private MbtiStatusRepository mbtiStatusRepository;
 
-  @Autowired
-  private MbtiHistoryRepository mbtiHistoryRepository;
+  @Autowired private MbtiHistoryRepository mbtiHistoryRepository;
 
   private BookEntity testBook;
 
@@ -66,8 +59,7 @@ public class FeedBackConcurrencyTest {
   private List<RequestFeedbackDto> testRequestFeedback;
 
   private long historyCount;
-  @Autowired
-  private FeedbackStatusRepository feedbackStatusRepository;
+  @Autowired private FeedbackStatusRepository feedbackStatusRepository;
 
   @BeforeAll
   void setUp() {

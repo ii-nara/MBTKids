@@ -5,7 +5,7 @@
     <title>아이둘나라</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link th:href="@{/css/admin/admin.css}" rel="stylesheet"/>
+    <link th:href="@{/css/admin/home.css}" rel="stylesheet"/>
     <link th:href="@{/css/admin/navbar.css}" rel="stylesheet"/>
 </head>
 <body>
@@ -24,6 +24,10 @@
             </div>
         </div>
     </form>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a th:href="@{/mbtkids/admin/detail(bookId=-1)}" class="btn btn-primary">도서 등록</a>
+    </div>
 
     <!-- @@ 여기 div 태그 사이에 본인 코드 내용 넣어주심 됩니다 -->
     <h2>도서 목록</h2>

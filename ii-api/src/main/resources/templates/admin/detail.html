@@ -4,15 +4,39 @@
     <meta charset="UTF-8">
     <title>아이둘나라</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link th:href="@{/css/admin/admin.css}" rel="stylesheet"/>
+    <link th:href="@{/css/admin/home.css}" rel="stylesheet"/>
     <link th:href="@{/css/admin/navbar.css}" rel="stylesheet"/>
     <script>
+
+        //화면 진입 구분
+        function initializeView() {
+            if ([[${ResBookDetail.emptyFlags}]]) {
+                document.getElementById('registerForm').style.display = 'block';
+                document.getElementById('detailView').style.display = 'none';
+                document.getElementById('editForm').style.display = 'none';
+            } else {
+                document.getElementById('detailView').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('editForm').style.display = 'none';
+            }
+        }
+
+
+        //수정 이미지 미리보기
         function previewImage(event) {
             const image = document.getElementById('imagePreview');
             image.src = URL.createObjectURL(event.target.files[0]);
             image.style.display = 'block';
         }
 
+        //등록 이미지 미리보기
+        function previewNewImage(event) {
+            const image = document.getElementById('newImagePreview');
+            image.src = URL.createObjectURL(event.target.files[0]);
+            image.style.display = 'block';
+        }
+
+        //수정 버튼 클릭
         function editBook() {
             document.getElementById('detailView').style.display = 'none';
             document.getElementById('editForm').style.display = 'block';
@@ -24,6 +48,7 @@
             });
         }
 
+        //수정 - 취소 버튼
         function cancelEdit() {
             document.getElementById('detailView').style.display = 'block';
             document.getElementById('editForm').style.display = 'none';
@@ -33,6 +58,26 @@
             buttons.forEach(button => {
                 button.disabled = true; // Disable buttons
             });
+        }
+
+        //등록 - 토글버튼
+        function registerToggleType(button, type1, type2, hiddenInputId) {
+            const currentValue = parseInt(button.getAttribute('data-value'));
+            let newValue;
+
+            if (currentValue === 0) {
+                newValue = -1;
+                button.textContent = type1;
+            } else if (currentValue === -1) {
+                newValue = 1;
+                button.textContent = type2;
+            } else {
+                newValue = 0;
+                button.textContent = '해당없음';
+            }
+
+            button.setAttribute('data-value', newValue);
+            document.getElementById(hiddenInputId).value = newValue;
         }
 
         function toggleType(button, type1, type2, typeKey) {
@@ -90,26 +135,27 @@
 
 <!-- 본문 내용 -->
 <div class="container mt-5">
-    <h2>도서 상세 정보</h2>
 
-    <div id="detailView">
+    <!-- 도서 상세 조회인 경우 View -->
+    <div id="detailView" >
+        <h2>도서 상세 정보</h2>
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title" th:text="${ResBookInfo.bookName}">도서명</h5>
-                <img th:src="${ResBookInfo.bookImgUrl}" alt="도서 이미지" class="card-img-top" style="width: 200px; height: auto;"/>
+                <h5 class="card-title" th:text="${ResBookDetail.bookName}">도서명</h5>
+                <img th:src="${ResBookDetail.bookImgUrl}" alt="도서 이미지" class="card-img-top" style="width: 200px; height: auto;"/>
                 <p class="card-text">
-                    <strong>작가명:</strong> <span th:text="${ResBookInfo.writer}"></span><br>
-                    <strong>출판사:</strong> <span th:text="${ResBookInfo.publisher}"></span><br>
-                    <strong>줄거리:</strong> <span th:text="${ResBookInfo.plot}"></span><br>
-                    <strong>권장연령:</strong> <span th:text="${ResBookInfo.recommenedAge}"></span><br>
-                    <strong>좋아요 개수:</strong> <span th:text="${ResBookInfo.likeCnt}"></span><br>
-                    <strong>싫어요 개수:</strong> <span th:text="${ResBookInfo.disLikeCnt}"></span><br>
-                    <strong>등록일자:</strong> <span th:text="${#dates.format(ResBookInfo.createdAt, 'yyyy-MM-dd')}"></span><br>
-                    <strong>등록자:</strong> <span th:text="${ResBookInfo.createId}"></span><br>
-                    <strong>수정일자:</strong> <span th:text="${#dates.format(ResBookInfo.updateAt, 'yyyy-MM-dd')}"></span><br>
-                    <strong>수정자:</strong> <span th:text="${ResBookInfo.updateId}"></span><br>
-                    <strong>노출 여부:</strong> <span th:text="${ResBookInfo.displayYn}"></span><br>
-                    <strong>도서 성향:</strong> <span id="bookPersonality" th:text="(${ResBookInfo.typeIE == -1} ? 'I' : (${ResBookInfo.typeIE == 1} ? 'E' : '_')) + (${ResBookInfo.typeSN == -1} ? 'S' : (${ResBookInfo.typeSN == 1} ? 'N' : '_')) + (${ResBookInfo.typeTF == -1} ? 'T' : (${ResBookInfo.typeTF == 1} ? 'F' : '_')) + (${ResBookInfo.typePJ == -1} ? 'P' : (${ResBookInfo.typePJ == 1} ? 'J' : '_'))"></span>
+                    <strong>작가명:</strong> <span th:text="${ResBookDetail.writer}"></span><br>
+                    <strong>출판사:</strong> <span th:text="${ResBookDetail.publisher}"></span><br>
+                    <strong>줄거리:</strong> <span th:text="${ResBookDetail.plot}"></span><br>
+                    <strong>권장연령:</strong> <span th:text="${ResBookDetail.recommenedAge}"></span><br>
+                    <strong>좋아요 개수:</strong> <span th:text="${ResBookDetail.likeCnt}"></span><br>
+                    <strong>싫어요 개수:</strong> <span th:text="${ResBookDetail.disLikeCnt}"></span><br>
+                    <strong>등록일자:</strong> <span th:text="${#dates.format(ResBookDetail.createdAt, 'yyyy-MM-dd')}"></span><br>
+                    <strong>등록자:</strong> <span th:text="${ResBookDetail.createId}"></span><br>
+                    <strong>수정일자:</strong> <span th:text="${#dates.format(ResBookDetail.updateAt, 'yyyy-MM-dd')}"></span><br>
+                    <strong>수정자:</strong> <span th:text="${ResBookDetail.updateId}"></span><br>
+                    <strong>노출 여부:</strong> <span th:text="${ResBookDetail.displayYn}"></span><br>
+                    <strong>도서 성향:</strong> <span id="bookPersonality" th:text="(${ResBookDetail.typeIE == -1} ? 'I' : (${ResBookDetail.typeIE == 1} ? 'E' : '_')) + (${ResBookDetail.typeSN == -1} ? 'S' : (${ResBookDetail.typeSN == 1} ? 'N' : '_')) + (${ResBookDetail.typeTF == -1} ? 'T' : (${ResBookDetail.typeTF == 1} ? 'F' : '_')) + (${ResBookDetail.typePJ == -1} ? 'P' : (${ResBookDetail.typePJ == 1} ? 'J' : '_'))"></span>
                     <br>
                 <table class="table mt-3">
                     <thead>
@@ -126,25 +172,25 @@
                             <button type="button" class="btn btn-outline-primary" disabled
                                     data-type="I"
                                     onclick="toggleType(this, 'I', 'E')"
-                                    th:text="${ResBookInfo.typeIE == -1} ? '내향형 (I)' : (${ResBookInfo.typeIE == 1} ? '외향형 (E)' : '_')"></button>
+                                    th:text="${ResBookDetail.typeIE == -1} ? '내향형 (I)' : (${ResBookDetail.typeIE == 1} ? '외향형 (E)' : '_')"></button>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-primary" disabled
                                     data-type="S"
                                     onclick="toggleType(this, 'S', 'N')"
-                                    th:text="${ResBookInfo.typeSN == -1} ? '감각형 (S)' : (${ResBookInfo.typeSN == 1} ? '직관형 (N)' : '_')"></button>
+                                    th:text="${ResBookDetail.typeSN == -1} ? '감각형 (S)' : (${ResBookDetail.typeSN == 1} ? '직관형 (N)' : '_')"></button>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-primary" disabled
                                     data-type="T"
                                     onclick="toggleType(this, 'T', 'F')"
-                                    th:text="${ResBookInfo.typeTF == -1} ? '사고형 (T)' : (${ResBookInfo.typeTF == 1} ? '감정형 (F)' : '_')"></button>
+                                    th:text="${ResBookDetail.typeTF == -1} ? '사고형 (T)' : (${ResBookDetail.typeTF == 1} ? '감정형 (F)' : '_')"></button>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-primary" disabled
                                     data-type="P"
                                     onclick="toggleType(this, 'P', 'J')"
-                                    th:text="${ResBookInfo.typePJ == -1} ? '판단형 (P)' : (${ResBookInfo.typePJ == 1} ? '인식형 (J)' : '_')"></button>
+                                    th:text="${ResBookDetail.typePJ == -1} ? '판단형 (P)' : (${ResBookDetail.typePJ == 1} ? '인식형 (J)' : '_')"></button>
                         </td>
                     </tr>
                     </tbody>
@@ -152,23 +198,25 @@
                 </p>
                 <a th:href="@{/mbtkids/admin/home}" class="btn btn-secondary">목록으로 돌아가기</a>
                 <button class="btn btn-warning" onclick="editBook()">수정</button>
-                <a th:href="@{/mbtkids/admin/delete(bookId=${ResBookInfo.bookId})}">삭제</a>
-                <!-- <a href="#" onclick="confirmDelete(${ResBookInfo.bookId})">삭제</a> -->
-                <a th:href="@{/mbtkids/admin/aiAnalysis(bookId=${ResBookInfo.bookId})}" class="btn btn-info">AI 성향 분석</a>
+                <a th:href="@{/mbtkids/admin/delete(bookId=${ResBookDetail.bookId})}">삭제</a>
+                <!-- <a href="#" onclick="confirmDelete(${ResBookDetail.bookId})">삭제</a> -->
+                <a th:href="@{/mbtkids/admin/aiAnalysis(bookId=${ResBookDetail.bookId})}" class="btn btn-info">AI 성향 분석</a>
             </div>
         </div>
     </div>
 
+    <!-- 도서 수정인 경우 View -->
     <div id="editForm" style="display: none;">
+        <h2>도서 수정</h2>
         <div class="card">
             <div class="card-body">
                 <form th:action="@{/mbtkids/admin/update}" method="post" enctype="multipart/form-data">
-                    <!-- 그대로 넘기는 값 -->
-                    <input type="hidden" name="bookId" th:value="${ResBookInfo.bookId}" />
-                    <input type="hidden" name="publisherCd" th:value="${ResBookInfo.publisherCd}" />
-                    <input type="hidden" name="writerCd" th:value="${ResBookInfo.writerCd}" />
-
-                    <img th:src="${ResBookInfo.bookImgUrl}" alt="도서 이미지" class="card-img-top" style="width: 200px; height: auto;"/>
+                    <!-- 그대로 넘기는 값
+                    <input type="hidden" name="bookId" th:value="${ResBookDetail.bookId}" />
+                    <input type="hidden" name="publisherCd" th:value="${ResBookDetail.publisherCd}" />
+                    <input type="hidden" name="writerCd" th:value="${ResBookDetail.writerCd}" />
+                    -->
+                    <img th:src="${ResBookDetail.bookImgUrl}" alt="도서 이미지" class="card-img-top" style="width: 200px; height: auto;"/>
 
                     <div class="form-group">
                         <label for="imageUpload">도서 이미지 업로드:</label>
@@ -179,46 +227,52 @@
                     <div class="form-group">
                         <label for="bookName">도서명:</label>
                         <input type="text" id="bookName" name="bookName" class="form-control"
-                               th:value="${ResBookInfo.bookName}" required>
+                               th:value="${ResBookDetail.bookName}" required>
                     </div>
 
                     <div class="form-group">
                         <label for="writer">작가명:</label>
                         <input type="text" id="writer" name="writer" class="form-control"
-                               th:value="${ResBookInfo.writer}" required>
+                               th:value="${ResBookDetail.writer}" required>
                     </div>
 
                     <div class="form-group">
                         <label for="publisher">출판사:</label>
                         <input type="text" id="publisher" name="publisher" class="form-control"
-                               th:value="${ResBookInfo.publisher}" required>
+                               th:value="${ResBookDetail.publisher}" required>
                     </div>
 
                     <div class="form-group">
                         <label for="plot">줄거리:</label>
                         <textarea id="plot" name="plot" class="form-control" required
-                                  th:text="${ResBookInfo.plot}"></textarea>
+                                  th:text="${ResBookDetail.plot}"></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="recommenedAge">권장연령:</label>
                         <input type="text" id="recommenedAge" name="recommenedAge" class="form-control"
-                               th:value="${ResBookInfo.recommenedAge}" required>
+                               th:value="${ResBookDetail.recommenedAge}" required>
                     </div>
 
                     <div class="form-group">
                         <label for="displayYn">노출여부:</label>
                         <select id="displayYn" name="displayYn" class="form-control" required>
-                            <option th:value="'Y'" th:text="'노출'" th:selected="${ResBookInfo.displayYn == 'Y'}"></option>
-                            <option th:value="'N'" th:text="'비노출'" th:selected="${ResBookInfo.displayYn == 'N'}"></option>
+                            <option th:value="'Y'" th:text="'노출'" th:selected="${ResBookDetail.displayYn == 'Y'}"></option>
+                            <option th:value="'N'" th:text="'비노출'" th:selected="${ResBookDetail.displayYn == 'N'}"></option>
                         </select>
                     </div>
 
-                    <strong>도서 성향:</strong> <span id="bookPersonalityEdit" th:text="(${ResBookInfo.typeIE == -1} ? 'I' : (${ResBookInfo.typeIE == 1} ? 'E' : '_')) + (${ResBookInfo.typeSN == -1} ? 'S' : (${ResBookInfo.typeSN == 1} ? 'N' : '_')) + (${ResBookInfo.typeTF == -1} ? 'T' : (${ResBookInfo.typeTF == 1} ? 'F' : '_')) + (${ResBookInfo.typePJ == -1} ? 'P' : (${ResBookInfo.typePJ == 1} ? 'J' : '_'))"></span>
-                    <input type="hidden" id="typeIE" name="typeIE" value="${ResBookInfo.typeIE}" />
-                    <input type="hidden" id="typeSN" name="typeSN" value="${ResBookInfo.typeSN}" />
-                    <input type="hidden" id="typeTF" name="typeTF" value="${ResBookInfo.typeTF}" />
-                    <input type="hidden" id="typePJ" name="typePJ" value="${ResBookInfo.typePJ}" />
+                    <strong>도서 성향:</strong>
+                    <span id="bookPersonalityEdit"
+                          th:text="(${ResBookDetail.typeIE == -1} ? 'I' : (${ResBookDetail.typeIE == 1} ? 'E' : '해당없음')) + ' ' +
+                (${ResBookDetail.typeSN == -1} ? 'S' : (${ResBookDetail.typeSN == 1} ? 'N' : '해당없음')) + ' ' +
+                (${ResBookDetail.typeTF == -1} ? 'T' : (${ResBookDetail.typeTF == 1} ? 'F' : '해당없음')) + ' ' +
+                (${ResBookDetail.typePJ == -1} ? 'P' : (${ResBookDetail.typePJ == 1} ? 'J' : '해당없음'))"></span>
+                    <input type="hidden" id="typeIE" name="typeIE" value="${ResBookDetail.typeIE}" />
+                    <input type="hidden" id="typeSN" name="typeSN" value="${ResBookDetail.typeSN}" />
+                    <input type="hidden" id="typeTF" name="typeTF" value="${ResBookDetail.typeTF}" />
+                    <input type="hidden" id="typePJ" name="typePJ" value="${ResBookDetail.typePJ}" />
+
                     <table class="table mt-3">
                         <thead>
                         <tr>
@@ -234,25 +288,25 @@
                                 <button type="button" class="btn btn-outline-primary"
                                         data-type="I" data-value="-1"
                                         onclick="toggleType(this, 'I', 'E', 'typeIE')"
-                                        th:text="${ResBookInfo.typeIE == -1} ? '내향형 (I)' : (${ResBookInfo.typeIE == 1} ? '외향형 (E)' : '_')"></button>
+                                        th:text="${ResBookDetail.typeIE == -1} ? '내향형 (I)' : (${ResBookDetail.typeIE == 1} ? '외향형 (E)' : '해당없음')"></button>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-primary"
                                         data-type="S" data-value="-1"
                                         onclick="toggleType(this, 'S', 'N', 'typeSN')"
-                                        th:text="${ResBookInfo.typeSN == -1} ? '감각형 (S)' : (${ResBookInfo.typeSN == 1} ? '직관형 (N)' : '_')"></button>
+                                        th:text="${ResBookDetail.typeSN == -1} ? '감각형 (S)' : (${ResBookDetail.typeSN == 1} ? '직관형 (N)' : '해당없음')"></button>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-primary"
                                         data-type="T" data-value="-1"
                                         onclick="toggleType(this, 'T', 'F', 'typeTF')"
-                                        th:text="${ResBookInfo.typeTF == -1} ? '사고형 (T)' : (${ResBookInfo.typeTF == 1} ? '감정형 (F)' : '_')"></button>
+                                        th:text="${ResBookDetail.typeTF == -1} ? '사고형 (T)' : (${ResBookDetail.typeTF == 1} ? '감정형 (F)' : '해당없음')"></button>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-primary"
                                         data-type="P" data-value="-1"
                                         onclick="toggleType(this, 'P', 'J', 'typePJ')"
-                                        th:text="${ResBookInfo.typePJ == -1} ? '판단형 (P)' : (${ResBookInfo.typePJ == 1} ? '인식형 (J)' : '_')"></button>
+                                        th:text="${ResBookDetail.typePJ == -1} ? '판단형 (P)' : (${ResBookDetail.typePJ == 1} ? '인식형 (J)' : '해당없음')"></button>
                             </td>
                         </tr>
                         </tbody>
@@ -265,6 +319,103 @@
             </div>
         </div>
     </div>
+
+    <!-- 도서 등록인 경우 View -->
+    <div id="registerForm" style="display: none;">
+        <h2>도서 등록</h2>
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/mbtkids/admin/register}" method="post" enctype="multipart/form-data">
+
+                    <div class="form-group">
+                        <label for="newImageUpload">도서 이미지 업로드:</label>
+                        <input type="file" id="newImageUpload" name="bookImgUrl" class="form-control" onchange="previewNewImage(event)" required>
+                        <img id="newImagePreview" alt="이미지 미리보기" style="display:none; width: 200px; height: auto; margin-top: 10px;"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newBookName">도서명:</label>
+                        <input type="text" id="newBookName" name="bookName" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newWriter">작가명:</label>
+                        <input type="text" id="newWriter" name="writer" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPublisher">출판사:</label>
+                        <input type="text" id="newPublisher" name="publisher" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPlot">줄거리:</label>
+                        <textarea id="newPlot" name="plot" class="form-control" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newRecommenedAge">권장연령:</label>
+                        <input type="text" id="newRecommenedAge" name="recommenedAge" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newDisplayYn">노출여부:</label>
+                        <select id="newDisplayYn" name="displayYn" class="form-control" required>
+                            <option th:value="'Y'" th:text="'노출'"></option>
+                            <option th:value="'N'" th:text="'비노출'"></option>
+                        </select>
+                    </div>
+
+                    <strong>도서 성향:</strong> <span id="newBookPersonalityEdit">해당없음</span>
+                    <input type="hidden" id="newTypeIE" name="typeIE" value="0" />
+                    <input type="hidden" id="newTypeSN" name="typeSN" value="0" />
+                    <input type="hidden" id="newTypeTF" name="typeTF" value="0" />
+                    <input type="hidden" id="newTypePJ" name="typePJ" value="0" />
+
+                    <table class="table mt-3">
+                        <thead>
+                        <tr>
+                            <th scope="col">I/E</th>
+                            <th scope="col">S/N</th>
+                            <th scope="col">T/F</th>
+                            <th scope="col">P/J</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary"
+                                        data-type="I" data-value="0"
+                                        onclick="registerToggleType(this, 'I', 'E', 'newTypeIE')">해당없음</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary"
+                                        data-type="S" data-value="0"
+                                        onclick="registerToggleType(this, 'S', 'N', 'newTypeSN')">해당없음</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary"
+                                        data-type="T" data-value="0"
+                                        onclick="registerToggleType(this, 'T', 'F', 'newTypeTF')">해당없음</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary"
+                                        data-type="P" data-value="0"
+                                        onclick="registerToggleType(this, 'P', 'J', 'newTypePJ')">해당없음</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <button type="submit" class="btn btn-success">저장</button>
+                    <button type="button" class="btn btn-secondary" onclick="cancelEdit()">취소</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -273,4 +424,13 @@
 <script th:src="@{/js/home.js}"></script>
 
 </body>
+
+<script>
+    window.onload = function()
+    {
+        initializeView();
+    };
+</script>
+
+
 </html>

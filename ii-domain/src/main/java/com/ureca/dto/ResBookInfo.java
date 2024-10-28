@@ -3,29 +3,24 @@ package com.ureca.dto;
 import java.util.Date;
 import lombok.Data;
 
-// WBK0110 도서 상세 화면 응답 DTO
+// BOK0100-도서상세 화면 응답 DTO
 @Data
 public class ResBookInfo {
 
-  //도서 아이디
+  // 도서 아이디
   private Long bookId;
-  //도서명
+  // 도서명
   private String bookName;
-  //영화 포스터 URL
+  // 도서 이미지 URL
   private String bookImgUrl;
   // 줄거리
   private String plot;
-  //작가명
+  // 작가명
   private String writer;
-  // 작가 코드
-  private String writerCd;
-  //출판사
+  // 출판사
   private String publisher;
-  // 출판사 코드
-  private String publisherCd;
   // 권장연령
   private String recommenedAge;
-
   //성향
   private String mbtiType;
   // 앞 : -1, 뒤 : 1, 상태없음 : 0
@@ -51,6 +46,8 @@ public class ResBookInfo {
   private int likeCnt;
   // 싫어요 개수
   private int disLikeCnt;
+  // 사용자 : 좋아요 상태
+  private String likeStatus;
 
   // 생성자
   public ResBookInfo(
@@ -59,9 +56,7 @@ public class ResBookInfo {
       String bookImgUrl,
       String plot,
       String writer,
-      String writerCd,
       String publisher,
-      String publisherCd,
       String recommenedAge,
       String mbtiType,
       int typeIE,
@@ -80,9 +75,7 @@ public class ResBookInfo {
     this.bookImgUrl = bookImgUrl;
     this.plot = plot;
     this.writer = writer;
-    this.writerCd = writerCd;
     this.publisher = publisher;
-    this.publisherCd = publisherCd;
     this.recommenedAge = recommenedAge;
     this.mbtiType = mbtiType;
     this.typeIE = typeIE;
@@ -96,6 +89,10 @@ public class ResBookInfo {
     this.displayYn = displayYn;
     this.likeCnt = likeCnt;
     this.disLikeCnt = disLikeCnt;
+  }
+
+  public void updateLikeStatus(String likeStatus) {
+    this.likeStatus = likeStatus;
   }
 
 }

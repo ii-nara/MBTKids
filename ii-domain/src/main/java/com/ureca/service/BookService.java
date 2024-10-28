@@ -1,6 +1,7 @@
 package com.ureca.service;
 
 import com.ureca.dto.BookInfo;
+import com.ureca.dto.ResBookDetail;
 import com.ureca.dto.ResBookInfo;
 import com.ureca.entity.BookEntity;
 import com.ureca.repository.BookRepository;
@@ -37,7 +38,7 @@ public class BookService {
     return bookList;
   } //getBookList
 
-  // 도서 상세 조회
+  // 홈 - 도서 상세 조회
   public ResBookInfo getBookInfo(Long bookId) {
 
     BookEntity getBook =
@@ -53,17 +54,32 @@ public class BookService {
     return resBookInfo;
   } //getBookInfo
 
-  // BookEntity → ResBookInfo 변환
-  private ResBookInfo convertToResBookInfo(BookEntity bookEntity) {
-    return new ResBookInfo(
+  // 관리자웹 - 도서 상세 조회
+  public ResBookDetail getBookDetail(Long bookId) {
+
+    BookEntity getBook =
+        bookRepository
+            .findById(bookId)
+            .orElseThrow(() -> new RuntimeException("data not found"));
+    //logger.info("조회 결과 : "+getBook);
+
+    ResBookDetail resBookDetail = convertToResBookDetail(getBook);
+    resBookDetail.setLikeCnt(bookRepository.countLikesByBookId(bookId));
+    resBookDetail.setDisLikeCnt(bookRepository.countDislikesByBookId(bookId));
+
+    return resBookDetail;
+  } //getBookInfo
+
+  // BookEntity → ResBookDetail 변환
+  private ResBookDetail convertToResBookDetail(BookEntity bookEntity) {
+    return new ResBookDetail(
+        true,
         bookEntity.getBookId(),
         bookEntity.getBookName(),
         bookEntity.getBookImgUrl(),
         bookEntity.getPlot(),
         bookEntity.getWriter(),
-        bookEntity.getWriterCd(),
         bookEntity.getPublisher(),
-        bookEntity.getPublisherCd(),
         bookEntity.getRecommenedAge(),
         null, // mbtiType은 null 또는 기본값으로 설정
         bookEntity.getTypeIE(),
@@ -78,7 +94,32 @@ public class BookService {
         0, // likeCnt 기본값 (필요에 따라 조정)
         0  // disLikeCnt 기본값 (필요에 따라 조정)
     );
-  }
+  } //convertToResBookDetail
+
+  // BookEntity → ResBookInfo 변환
+  private ResBookInfo convertToResBookInfo(BookEntity bookEntity) {
+    return new ResBookInfo(
+        bookEntity.getBookId(),
+        bookEntity.getBookName(),
+        bookEntity.getBookImgUrl(),
+        bookEntity.getPlot(),
+        bookEntity.getWriter(),
+        bookEntity.getPublisher(),
+        bookEntity.getRecommenedAge(),
+        null, // mbtiType은 null 또는 기본값으로 설정
+        bookEntity.getTypeIE(),
+        bookEntity.getTypeSN(),
+        bookEntity.getTypeTF(),
+        bookEntity.getTypePJ(),
+        bookEntity.getCreatedAt(),
+        bookEntity.getCreateId(), // 등록자
+        bookEntity.getUpdateAt(),
+        bookEntity.getUpdateId(), // 수정자
+        bookEntity.getDisplayYn(),
+        0, // likeCnt 기본값 (필요에 따라 조정)
+        0  // disLikeCnt 기본값 (필요에 따라 조정)
+    );
+  } //convertToResBookInfo
 
   // 도서 삭제
   public int deleteBookInfo(Long bookId) {

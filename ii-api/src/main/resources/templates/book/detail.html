@@ -8,9 +8,47 @@
     <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
     <script>
         //좋아요 싫어요 버튼
-        let flag = ''; // 좋아요/싫어요 플래그
+        let flag = ''; // 좋아요, 싫어요 플래그
+        if ([[${ResBookInfo.likeStatus == "LIKE"}]]) {
+            flag = 'liked';
+        } else if ([[${ResBookInfo.likeStatus == "DISLIKE"}]]) {
+            flag = 'disliked';
+        } else {
+            flag = '';
+        }
         let likeCount = 0; // 좋아요 수
         let dislikeCount = 0; // 싫어요 수
+
+        // bookId는 URL에서 추출
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookId = urlParams.get('bookId');
+
+        // childId는 서버에서 전달된 값을 사용
+        const childId = /*[[${childId}]]*/ 0;
+
+        function sendFeedback(likeStatusValue) {
+            const data = {
+                childId: childId,
+                bookId: bookId,
+                LikeStatusValue: likeStatusValue
+            };
+
+            fetch('/mbtkids/book/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Feedback sent successfully');
+                } else {
+                    console.error('Error sending feedback');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
 
         function toggleLike() {
             const likeButton = document.getElementById('likeButton');
@@ -20,12 +58,14 @@
                 flag = ''; // 좋아요 해제
                 likeCount--;
                 likeButton.classList.remove('liked');
+                sendFeedback(1);
             } else {
                 flag = 'liked'; // 좋아요
                 likeCount++;
                 likeButton.classList.add('liked');
                 dislikeButton.classList.remove('disliked'); // 싫어요 해제
                 dislikeCount = 0; // 싫어요 수 초기화
+                sendFeedback(1);
             }
             updateButtonText();
         }
@@ -38,12 +78,14 @@
                 flag = ''; // 싫어요 해제
                 dislikeCount--;
                 dislikeButton.classList.remove('disliked');
+                sendFeedback(-1);
             } else {
                 flag = 'disliked'; // 싫어요
                 dislikeCount++;
                 dislikeButton.classList.add('disliked');
                 likeButton.classList.remove('liked'); // 좋아요 해제
-                likeCount = 0; // 좋아요 수 초기화
+                likeCount = 0; // 좋아요 수 초기화'
+                sendFeedback(-1);
             }
             updateButtonText();
         }
@@ -51,6 +93,19 @@
         function updateButtonText() {
             document.getElementById('likeButton').innerText = '좋아요';
             document.getElementById('dislikeButton').innerText = '싫어요';
+        }
+
+        window.onload = function() {
+            const likeButton = document.getElementById('likeButton');
+            const dislikeButton = document.getElementById('dislikeButton');
+
+            if (flag === 'liked') {
+                likeButton.classList.add('liked');
+            } else if (flag === 'disliked') {
+                dislikeButton.classList.add('disliked');
+            }
+
+            updateButtonText();
         }
 
     </script>

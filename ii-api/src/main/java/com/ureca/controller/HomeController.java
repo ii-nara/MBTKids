@@ -100,7 +100,8 @@ public class HomeController {
   @PostMapping("/book/feedback")
   public String pressTheButton(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody RequestFeedbackDto requestFeedbackDto) {
     requestFeedbackDto.updateChildId(principalDetails.getChild().getChildId());
-    rabbitTemplate.convertAndSend("feedbackExchange", "feedbackRoutingKey", requestFeedbackDto);
+    feedbackComponentService.addFeedback(requestFeedbackDto);
+//    rabbitTemplate.convertAndSend("feedbackExchange", "feedbackRoutingKey", requestFeedbackDto);
     return "redirect:/mbtkids/book/detail?bookId=" + requestFeedbackDto.getBookId();
   }
 

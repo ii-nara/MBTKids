@@ -1,0 +1,131 @@
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard-Bold';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+}
+
+:root {
+  --main-color: #ffe552;
+  --dark-color: #404040;
+  --blue: #D1E9FF;
+  --yellow: #FFF2CC;
+  --orange: #FFE7E5;
+}
+
+/* 본문 중앙 정렬 및 반응형 레이아웃 */
+.container {
+  font-family: 'Pretendard-Regular';
+  color: var(--dark-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  min-height: 85vh; /* 화면 높이 조정 */
+  padding: 1em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* 타이틀 스타일 */
+#title {
+  color: #ffc107;
+  font-weight: bold;
+  font-size: 2em; /* 타이틀 크기 조정 */
+  margin-bottom: 0.5em;
+}
+
+/* 반응형 레이더 차트 */
+#mbtiRadarChart {
+  width: 30vw; /* 화면 너비의 30% */
+  height: 30vw;
+  max-width: 400px;
+  max-height: 400px;
+  margin: 0 auto;
+}
+
+/* MBTI 유형 텍스트 */
+.mbti-type {
+  font-family: 'Pretendard-Bold';
+  font-size: 1.5em;
+  color: var(--dark-color);
+  margin: 0.8em 0;
+}
+
+/* 형용사 */
+.suffix {
+  font-family: 'Pretendard-Bold';
+  font-size: 2.5em;
+  color: white;
+  margin-top: 0.8em;
+}
+
+/* 이모지 */
+.emoji {
+  font-size: 6em;
+  margin: 0.5em;
+}
+
+/* 설명 */
+.description {
+  background-color: #fff0c6;
+  padding: 1.5em;
+  border-radius: 20px;
+  font-size: 1em;
+  color: #613c22;
+  margin-bottom: 1.2em;
+  text-align: left;
+}
+
+/* 설명 박스 */
+.description-box {
+  background-color: #fff0c6;
+  border-radius: 15px;
+  padding: 1em;
+  color: #613c22;
+  font-size: 1em;
+  width: 80%;
+  max-width: 500px;
+  margin: 1em auto;
+}
+
+.btn-history {
+  display: block;
+  width: 30em;
+  padding: 15px;
+  border-radius: 15px;
+  font-size: 19px;
+  font-family: 'Pretendard-Bold';
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-history:hover {
+  filter: brightness(75%);
+  color: var(--dark-color);
+}
+
+.btn-history:active {
+  filter: brightness(100%);
+  color: #000;
+}
+
+.btn-blue {
+  background-color: var(--blue);
+  color: #007bff;
+}
+
+/* 삭제 버튼 스타일 */
+.btn-danger {
+  font-family: 'Pretendard-Bold';
+  font-size: 1.1em;
+  padding: 0.6em 2em;
+  background-color: #dc3545;
+  color: white;
+}

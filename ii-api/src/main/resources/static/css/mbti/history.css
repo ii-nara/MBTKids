@@ -1,0 +1,69 @@
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard-Bold';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+}
+
+:root {
+  --main-color: #ffe552;
+  --dark-color: #404040;
+  --background-dark: #343F45;
+  --highlight-blue: #339fff;
+}
+
+/* 본문 스타일 */
+body {
+  font-family: 'Pretendard-Regular';
+  color: var(--dark-color);
+}
+
+.container {
+  text-align: center;
+  padding: 1.5em;
+  margin-top: 2em;
+}
+
+/* 타이틀 스타일 */
+.page-title {
+  font-family: 'Pretendard-Bold';
+  color: var(--main-color);
+  margin-bottom: 0.5em;
+  font-size: 2em;
+}
+
+/* 날짜 선택 폼 스타일 */
+.date-range-form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 2em;
+}
+
+.date-range-form label,
+.date-range-form input {
+  font-size: 1.1em;
+}
+
+/* 그래프 컨테이너 */
+.charts-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* 개별 그래프 크기 */
+.mbti-chart {
+  width: 100%;
+  height: 100%;
+  max-width: 400px;
+  max-height: 400px;
+  margin: 0 auto;
+}

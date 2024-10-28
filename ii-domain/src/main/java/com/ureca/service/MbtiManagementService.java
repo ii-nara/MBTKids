@@ -1,5 +1,6 @@
 package com.ureca.service;
 
+import com.ureca.dto.MbtiHistoryResponseDto;
 import com.ureca.dto.MbtiStatusRequestDto;
 import com.ureca.dto.MbtiStatusResponseDto;
 import com.ureca.dto.ResponseFeedbackDto;
@@ -8,8 +9,9 @@ import com.ureca.entity.MbtiHistoryEntity;
 import com.ureca.entity.MbtiStatusEntity;
 import com.ureca.repository.ChildRepository;
 import com.ureca.repository.MbtiStatusRepository;
-import jakarta.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -67,16 +69,43 @@ public class MbtiManagementService {
   }
 
   // 2. 조회 (히스토리)
-  public List<MbtiStatusResponseDto> getMbtiHistory(ChildEntity child) {
+  public List<MbtiHistoryResponseDto> getMbtiHistory(Long childId, LocalDate startDate,
+      LocalDate endDate) {
+    ChildEntity child = getChild(childId);
     MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
     List<MbtiHistoryEntity> mbtiHistoryEntityList = mbtiStatus.getMbtiHistoryEntities();
 
-    List<MbtiStatusResponseDto> mbtiHistoryDtoList = new ArrayList<>();
+    LocalDateTime startDateTime = startDate.atStartOfDay();
+    LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+
+    List<MbtiHistoryResponseDto> mbtiHistoryDtoList = new ArrayList<>();
 
     for (MbtiHistoryEntity mbtiHistoryEntity : mbtiHistoryEntityList) {
-      mbtiHistoryDtoList.add(
-          createMbtiStatusResponseDto(mbtiHistoryEntity.getTypeIE(), mbtiHistoryEntity.getTypeSN(),
-              mbtiHistoryEntity.getTypeTF(), mbtiHistoryEntity.getTypePJ()));
+      LocalDateTime updateAt = mbtiHistoryEntity.getTimeStamp();
+
+      if (updateAt.isBefore(startDateTime) || updateAt.isAfter(endDateTime)) {
+        continue;
+      }
+
+      MbtiStatusResponseDto mbtiStatusResponseDto = createMbtiStatusResponseDto(
+          mbtiHistoryEntity.getTypeIE(),
+          mbtiHistoryEntity.getTypeSN(), mbtiHistoryEntity.getTypeTF(),
+          mbtiHistoryEntity.getTypePJ());
+
+      MbtiHistoryResponseDto mbtiHistoryResponseDto = MbtiHistoryResponseDto.builder()
+          .typeI(mbtiStatusResponseDto.getTypeI())
+          .typeE(mbtiStatusResponseDto.getTypeE())
+          .typeS(mbtiStatusResponseDto.getTypeS())
+          .typeN(mbtiStatusResponseDto.getTypeN())
+          .typeF(mbtiStatusResponseDto.getTypeF())
+          .typeT(mbtiStatusResponseDto.getTypeT())
+          .typeJ(mbtiStatusResponseDto.getTypeJ())
+          .typeP(mbtiStatusResponseDto.getTypeP())
+          .MbtiType(mbtiStatusResponseDto.getMbtiType())
+          .updateAt(updateAt)
+          .build();
+
+      mbtiHistoryDtoList.add(mbtiHistoryResponseDto);
     }
     return mbtiHistoryDtoList;
   }
@@ -113,19 +142,26 @@ public class MbtiManagementService {
   }
 
   // 4. 삭제 (성향)
-  public void deleteMbtiLogical(ChildEntity child) {
+  public void deleteMbtiLogical(Long childId) {
+    ChildEntity child = getChild(childId);
     MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
     mbtiStatus.setDeleteAt(LocalDateTime.now());
-    child.setMbtiStatusEntity(null);
+    mbtiStatus.setChildEntity(null);
+    mbtiStatusRepository.save(mbtiStatus);
+    //childRepository.save(child);
   }
 
   public void updateMbtiStatus(ChildEntity child, ResponseFeedbackDto responseFeedbackDto) {
     MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
     mbtiStatus.updateMbtiType(
-        Math.max(1, Math.min(10, mbtiStatus.getTypeIE() + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookIE()))
-        ,  Math.max(1, Math.min(10, mbtiStatus.getTypeSN() + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookSN()))
-        ,  Math.max(1, Math.min(10, mbtiStatus.getTypeTF() + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookTF()))
-        ,  Math.max(1, Math.min(10, mbtiStatus.getTypePJ() + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookPJ()))
+        Math.max(1, Math.min(10, mbtiStatus.getTypeIE()
+            + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookIE()))
+        , Math.max(1, Math.min(10, mbtiStatus.getTypeSN()
+            + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookSN()))
+        , Math.max(1, Math.min(10, mbtiStatus.getTypeTF()
+            + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookTF()))
+        , Math.max(1, Math.min(10, mbtiStatus.getTypePJ()
+            + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookPJ()))
     );
 
     mbtiStatus.addHistory(MbtiHistoryEntity.builder()

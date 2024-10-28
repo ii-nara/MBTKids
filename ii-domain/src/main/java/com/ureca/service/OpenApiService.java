@@ -41,10 +41,10 @@ public class OpenApiService {
       }
 
       // AI 성향 분석 Service 실행
-      String textPJ ="", textTF="", textSN="",textIE="";
+      String textPJ = "", textTF = "", textSN = "", textIE = "";
       String mbti = aiService.setBookMbti(contents);
 
-      if(!mbti.isEmpty()){
+      if (!mbti.isEmpty()) {
         textIE = String.valueOf(mbti.charAt(0)); // I/E/0
         textSN = String.valueOf(mbti.charAt(1)); // S/N/0
         textTF = String.valueOf(mbti.charAt(2)); // T/F/0
@@ -54,28 +54,26 @@ public class OpenApiService {
       // 도서명 필수
       if (title != null && title.length() < 100) {
         // 데이터 추가
-        BookEntity newBook = BookEntity.builder()
-            .bookName(title)
-            .bookImgUrl(thumbnail)
-            .plot(contents)
-            .writer(authors)
-            .publisher(publisher)
-            .recommenedAge("7세 이상")
-            .typeIE(MbtiType.TYPE_IE.getValueForType(textIE))
-            .typeSN(MbtiType.TYPE_SN.getValueForType(textSN))
-            .typeTF(MbtiType.TYPE_TF.getValueForType(textTF))
-            .typePJ(MbtiType.TYPE_PJ.getValueForType(textPJ))
-            .createdAt(new Date())
-            .displayYn("Y")
-            .build();
+        BookEntity newBook =
+            BookEntity.builder()
+                .bookName(title)
+                .bookImgUrl(thumbnail)
+                .plot(contents)
+                .writer(authors)
+                .publisher(publisher)
+                .recommenedAge("7세 이상")
+                .typeIE(MbtiType.TYPE_IE.getValueForType(textIE))
+                .typeSN(MbtiType.TYPE_SN.getValueForType(textSN))
+                .typeTF(MbtiType.TYPE_TF.getValueForType(textTF))
+                .typePJ(MbtiType.TYPE_PJ.getValueForType(textPJ))
+                .createdAt(new Date())
+                .displayYn("Y")
+                .build();
         BookEntity savedBook = bookRepository.save(newBook);
         logger.info("데이터 등록 확인: {}", savedBook);
-      }else{
+      } else {
         logger.info("도서명 필수, 100자 이하 : ", title);
       }
-
     }
-
   }
-
 }

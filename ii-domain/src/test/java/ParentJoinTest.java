@@ -20,37 +20,33 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class ParentJoinTest {
 
-  @Mock
-  private ParentJpaRepository parentJpaRepository;
-  @Mock
-  private BCryptPasswordEncoder bCryptPasswordEncoder;
-  @InjectMocks
-  private ParentServiceImpl parentService;
-
+  @Mock private ParentJpaRepository parentJpaRepository;
+  @Mock private BCryptPasswordEncoder bCryptPasswordEncoder;
+  @InjectMocks private ParentServiceImpl parentService;
 
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
   }
 
-
   @Test
   void 회원가입_성공() {
-    ParentSignUpRequestDto dto = ParentSignUpRequestDto.builder()
-        .email("test@naver.com")
-        .parentLoginId("test")
-        .password("1234")
-        .userName("testUser")
-        .phoneNumber("01012345678")
-        .provider("google")
-        .infoAgreeYn(true)
-        .build();
+    ParentSignUpRequestDto dto =
+        ParentSignUpRequestDto.builder()
+            .email("test@naver.com")
+            .parentLoginId("test")
+            .password("1234")
+            .userName("testUser")
+            .phoneNumber("01012345678")
+            .provider("google")
+            .infoAgreeYn(true)
+            .build();
 
-    when(parentJpaRepository.findByParentLoginId(dto.getParentLoginId())).thenReturn(
-        Optional.empty());
+    when(parentJpaRepository.findByParentLoginId(dto.getParentLoginId()))
+        .thenReturn(Optional.empty());
     when(bCryptPasswordEncoder.encode(dto.getPassword())).thenReturn("encodedPwd");
-    when(parentJpaRepository.save(any(ParentEntity.class))).thenAnswer(
-        invocation -> invocation.getArgument(0));
+    when(parentJpaRepository.save(any(ParentEntity.class)))
+        .thenAnswer(invocation -> invocation.getArgument(0));
 
     ParentEntity parent = parentService.create(dto);
 
@@ -64,28 +60,33 @@ public class ParentJoinTest {
   @Test
   void 중복아이디_회원가입_실패() {
 
-    ParentSignUpRequestDto dto = ParentSignUpRequestDto.builder()
-        .email("test@naver.com")
-        .parentLoginId("testId")
-        .password("1234")
-        .userName("testUser")
-        .phoneNumber("01012345678")
-        .provider("Google")
-        .infoAgreeYn(true)
-        .build();
+    ParentSignUpRequestDto dto =
+        ParentSignUpRequestDto.builder()
+            .email("test@naver.com")
+            .parentLoginId("testId")
+            .password("1234")
+            .userName("testUser")
+            .phoneNumber("01012345678")
+            .provider("Google")
+            .infoAgreeYn(true)
+            .build();
 
-    ParentEntity parent = ParentEntity.builder()
-        .email("test@naver.com")
-        .parentLoginId("testId")
-        .password("1234")
-        .build();
+    ParentEntity parent =
+        ParentEntity.builder()
+            .email("test@naver.com")
+            .parentLoginId("testId")
+            .password("1234")
+            .build();
 
-    when(parentJpaRepository.findByParentLoginId(dto.getParentLoginId())).thenReturn(
-        Optional.of(parent));
+    when(parentJpaRepository.findByParentLoginId(dto.getParentLoginId()))
+        .thenReturn(Optional.of(parent));
 
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-      parentService.create(dto);
-    });
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              parentService.create(dto);
+            });
 
     assertEquals("이미 사용 중인 아이디입니다.", exception.getMessage());
     verify(parentJpaRepository, times(0)).save(any(ParentEntity.class));

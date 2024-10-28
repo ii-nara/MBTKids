@@ -18,22 +18,24 @@ public class ParentServiceImpl implements ParentService {
 
   @Override
   public ParentEntity create(ParentSignUpRequestDto parentSignUpRequestDto) {
-    parentJpaRepository.findByParentLoginId(parentSignUpRequestDto.getParentLoginId())
-        .ifPresent(parent -> {
-          throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
-        });
+    parentJpaRepository
+        .findByParentLoginId(parentSignUpRequestDto.getParentLoginId())
+        .ifPresent(
+            parent -> {
+              throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
+            });
 
     String encodedPwd = bCryptPasswordEncoder.encode(parentSignUpRequestDto.getPassword());
-    ParentEntity parent = ParentEntity.createParent(
-        parentSignUpRequestDto.getEmail(),
-        parentSignUpRequestDto.getParentLoginId(),
-        encodedPwd,
-        parentSignUpRequestDto.getUserName(),
-        parentSignUpRequestDto.getPhoneNumber(),
-        parentSignUpRequestDto.getProvider(),
-        LocalDateTime.now(),
-        parentSignUpRequestDto.isInfoAgreeYn()
-    );
+    ParentEntity parent =
+        ParentEntity.createParent(
+            parentSignUpRequestDto.getEmail(),
+            parentSignUpRequestDto.getParentLoginId(),
+            encodedPwd,
+            parentSignUpRequestDto.getUserName(),
+            parentSignUpRequestDto.getPhoneNumber(),
+            parentSignUpRequestDto.getProvider(),
+            LocalDateTime.now(),
+            parentSignUpRequestDto.isInfoAgreeYn());
     return parentJpaRepository.save(parent);
   }
 }

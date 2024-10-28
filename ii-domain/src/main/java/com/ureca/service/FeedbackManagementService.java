@@ -27,23 +27,37 @@ public class FeedbackManagementService {
     ChildEntity child = getChildById(requestFeedbackDto.getChildId());
     BookEntity book = getBookById(requestFeedbackDto.getBookId());
 
-    FeedbackStatusEntity FeedbackStatus = feedbackStatusRepository
-        .findByBookEntity_BookIdAndChildEntity_ChildId(requestFeedbackDto.getBookId(), requestFeedbackDto.getChildId())
-        .orElseGet(
-            () -> feedbackStatusRepository.save(FeedbackStatusEntity.builder()
-            .childEntity(child)
-            .bookEntity(book)
-            .isLike(LikeStatus.CANCELED)
-            .build()));
+    FeedbackStatusEntity FeedbackStatus =
+        feedbackStatusRepository
+            .findByBookEntity_BookIdAndChildEntity_ChildId(
+                requestFeedbackDto.getBookId(), requestFeedbackDto.getChildId())
+            .orElseGet(
+                () ->
+                    feedbackStatusRepository.save(
+                        FeedbackStatusEntity.builder()
+                            .childEntity(child)
+                            .bookEntity(book)
+                            .isLike(LikeStatus.CANCELED)
+                            .build()));
 
-    int feedbackValue = updateFeedbackStatus(FeedbackStatus, requestFeedbackDto.getLikeStatusValue());
+    int feedbackValue =
+        updateFeedbackStatus(FeedbackStatus, requestFeedbackDto.getLikeStatusValue());
 
-    return ResponseFeedbackDto.of(book.getBookId(), feedbackValue, book.getTypeIE(),
-        book.getTypeSN(), book.getTypeTF(), book.getTypePJ(), FeedbackStatus.getIsLike());
+    return ResponseFeedbackDto.of(
+        book.getBookId(),
+        feedbackValue,
+        book.getTypeIE(),
+        book.getTypeSN(),
+        book.getTypeTF(),
+        book.getTypePJ(),
+        FeedbackStatus.getIsLike());
   }
 
   public int updateFeedbackStatus(FeedbackStatusEntity feedbackStatus, Integer likeStatusValue) {
-    int preFeedbackValue = feedbackStatus.getIsLike().equals(LikeStatus.CANCELED) ? 0 : feedbackStatus.getIsLike().equals(LikeStatus.LIKE) ? 1 : -1;
+    int preFeedbackValue =
+        feedbackStatus.getIsLike().equals(LikeStatus.CANCELED)
+            ? 0
+            : feedbackStatus.getIsLike().equals(LikeStatus.LIKE) ? 1 : -1;
 
     if (preFeedbackValue == likeStatusValue) {
       feedbackStatus.updateLikeStatus(LikeStatus.CANCELED);
@@ -68,8 +82,10 @@ public class FeedbackManagementService {
   }
 
   public String findFeedbackStatus(Long bookId, Long childId) {
-    Optional<FeedbackStatusEntity> findFeedbackStatus = feedbackStatusRepository.findByBookEntity_BookIdAndChildEntity_ChildId(bookId, childId);
-    return findFeedbackStatus.map(feedbackStatusEntity -> feedbackStatusEntity.getIsLike().name())
+    Optional<FeedbackStatusEntity> findFeedbackStatus =
+        feedbackStatusRepository.findByBookEntity_BookIdAndChildEntity_ChildId(bookId, childId);
+    return findFeedbackStatus
+        .map(feedbackStatusEntity -> feedbackStatusEntity.getIsLike().name())
         .orElseGet(LikeStatus.CANCELED::name);
   }
 }

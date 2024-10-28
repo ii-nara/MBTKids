@@ -45,6 +45,10 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     }
 
+    bootJar {
+        mainClassName = 'com.ureca.MainApplication.java'
+    }
+
     test {
         useJUnitPlatform()
     }

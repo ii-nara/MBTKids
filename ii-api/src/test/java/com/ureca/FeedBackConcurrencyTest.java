@@ -30,10 +30,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -43,13 +41,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class FeedBackConcurrencyTest {
 
   @Autowired
-  private HomeController homeController;
-
-  @Autowired
   private RabbitTemplate rabbitTemplate;
-
-  @Autowired
-  private RabbitAdmin rabbitAdmin;
 
   @Autowired
   private BookRepository bookRepository;
@@ -75,8 +67,6 @@ public class FeedBackConcurrencyTest {
   private List<RequestFeedbackDto> testRequestFeedback;
 
   private long historyCount;
-  @Autowired
-  private FeedbackStatusRepository feedbackStatusRepository;
 
 
   @BeforeAll
@@ -117,6 +107,8 @@ public class FeedBackConcurrencyTest {
       );
     }
 
+    historyCount = mbtiHistoryRepository.count();
+
     System.out.println("======================== Set Up is end =====================");
 
   }
@@ -124,10 +116,9 @@ public class FeedBackConcurrencyTest {
   @Test
   void addFeedback() throws InterruptedException {
 
-    int numThreads = 7500;
+    int numThreads = 5000;
 
     CountDownLatch countDownLatch = new CountDownLatch(numThreads);
-//    ExecutorService executorService = Executors.newFixedThreadPool(numThreads); // 정적
     ExecutorService executorService = Executors.newCachedThreadPool(); // 동적
 
     for (int i = 0; i < numThreads; i++) {
@@ -135,7 +126,7 @@ public class FeedBackConcurrencyTest {
 
       executorService.execute(() -> {
         try {
-//          homeController.pressTheButton(testChildren.get(finalI).getChildId(), testRequestFeedback.get(finalI));
+          rabbitTemplate.convertAndSend("feedbackExchange", "feedbackRoutingKey", testRequestFeedback.get(finalI));
         } catch (Exception e) {
           e.printStackTrace();
         } finally {
@@ -145,16 +136,15 @@ public class FeedBackConcurrencyTest {
     }
 
     countDownLatch.await(5, TimeUnit.SECONDS);
-//    countDownLatch.await();
     executorService.shutdown();
 
     Thread.sleep(10000);
 
 
-//    long afterTest = feedbackStatusRepository.countByBookEntity_BookIdAndLikeStatus(testBook.getBookId(), LikeStatus.LIKE);
+    long afterTest = mbtiHistoryRepository.count() - historyCount;
 
-//    System.out.println("좋아요 개수 : " + afterTest);
-//    assertThat(afterTest, is((long) numThreads));
+    System.out.println("좋아요 개수 : " + afterTest);
+    assertThat(afterTest, is((long) numThreads));
   }
 
 

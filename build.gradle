@@ -49,6 +49,6 @@ subprojects {
     }
 
     bootJar {
-         bootJar.enabled = false
+        enabled = false
     }
 }

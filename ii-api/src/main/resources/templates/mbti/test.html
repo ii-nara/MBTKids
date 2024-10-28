@@ -18,7 +18,7 @@
 <div class="container mt-5">
   <h1 id="title"> 자녀 성향 진단</h1>
   <p style="color: darkgray"> 🗝️ 우리 아이를 떠올리며 다음 질문에 답해주세요.</p>
-  <form th:action="@{/mbtkids/mbti/result}" method="post" id="questionForm">
+  <form th:action="@{/mbtkids/mbti/save}" method="post" id="questionForm">
     <input type="hidden" id="currentQuestion" value="0"/>
     <input type="hidden" name="answers" id="answers" value=""/>
     <!-- 뒤로 가기, 진행바 -->

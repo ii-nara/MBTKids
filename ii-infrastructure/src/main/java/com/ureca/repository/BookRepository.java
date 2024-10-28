@@ -11,7 +11,8 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
   // 도서 목록 조회
   @Query(
-      "SELECT new com.ureca.dto.BookInfo(b.bookId, b.bookName, b.bookImgUrl, b.writer, b.publisher) " +
+      "SELECT new com.ureca.dto.BookInfo(b.bookId, b.bookName, b.bookImgUrl, b.writer, b.publisher) "
+          +
           "FROM BookEntity b " +
           "WHERE b.bookName LIKE CONCAT('%', :searchWord, '%') " +
           "OR b.writer LIKE CONCAT('%', :searchWord, '%') " +
@@ -32,11 +33,11 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
   @Query(value = """
           SELECT COUNT(DISTINCT b.bookId)
           FROM book b
-          JOIN mbti_status m ON m.childId = :childId
+          JOIN mbti_status m ON m.childId = :childId AND m.deleteAt IS NULL
           WHERE 
             b.displayYn = 'Y'
           AND
-            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = -1))  -- 싫어요 피드백 체크
+            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = 'DISLIKE'))  -- 싫어요 피드백 체크
           AND
             ((b.typeIE = 1 AND m.typeIE <= 5) OR
             (b.typeIE = -1 AND m.typeIE >= 6) OR
@@ -76,11 +77,11 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
                      ELSE -1
                  END) AS similarity
           FROM book b
-          JOIN mbti_status m ON m.childId = :childId
+          JOIN mbti_status m ON m.childId = :childId AND m.deleteAt IS NULL
           WHERE 
             b.displayYn = 'Y'
           AND
-            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = -1))  -- 싫어요 피드백 체크
+            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = 'DISLIKE'))  -- 싫어요 피드백 체크
           AND
             ((b.typeIE = 1 AND m.typeIE <= 5) OR
             (b.typeIE = -1 AND m.typeIE >= 6) OR
@@ -99,11 +100,11 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
   @Query(value = """
           SELECT COUNT(DISTINCT b.bookId)
           FROM book b
-          JOIN mbti_status m ON m.childId = :childId
+          JOIN mbti_status m ON m.childId = :childId AND m.deleteAt IS NULL
           WHERE 
             b.displayYn = 'Y'
           AND
-            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = -1))  -- 싫어요 피드백 체크
+            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = 'DISLIKE'))  -- 싫어요 피드백 체크
           AND
             ((b.typeIE = -1 AND m.typeIE <= 5) OR  -- E 성향인 경우
             (b.typeIE = 1 AND m.typeIE >= 6) OR   -- I 성향인 경우
@@ -143,11 +144,11 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
                      ELSE -1
                  END) AS similarity
           FROM book b
-          JOIN mbti_status m ON m.childId = :childId
+          JOIN mbti_status m ON m.childId = :childId AND m.deleteAt IS NULL
           WHERE 
             b.displayYn = 'Y'
           AND
-            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = -1))  -- 싫어요 피드백 체크
+            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = 'DISLIKE'))  -- 싫어요 피드백 체크
           AND
             ((b.typeIE = -1 AND m.typeIE <= 5) OR  -- E 성향인 경우
             (b.typeIE = 1 AND m.typeIE >= 6) OR   -- I 성향인 경우
@@ -167,12 +168,12 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
           SELECT COUNT(DISTINCT b.bookId)
           FROM book b
           JOIN feedback_status f ON f.bookId = b.bookId
-          JOIN mbti_status m1 ON f.childId = m1.childId  -- 좋아요를 남긴 유저의 MBTI
-          JOIN mbti_status m2 ON m2.childId = :childId   -- 쿼리에 전달된 자녀의 MBTI
+          JOIN mbti_status m1 ON f.childId = m1.childId AND m1.deleteAt IS NULL  -- 좋아요를 남긴 유저의 MBTI
+          JOIN mbti_status m2 ON m2.childId = :childId AND m2.deleteAt IS NULL   -- 쿼리에 전달된 자녀의 MBTI
           WHERE 
             b.displayYn = 'Y'
           AND
-            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = -1))  -- 싫어요 피드백 체크
+            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = 'DISLIKE'))  -- 싫어요 피드백 체크
           AND
             ((m1.typeIE BETWEEN 1 AND 5 AND m2.typeIE BETWEEN 1 AND 5) OR 
              (m1.typeIE BETWEEN 6 AND 10 AND m2.typeIE BETWEEN 6 AND 10) OR
@@ -186,7 +187,7 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
             ((m1.typePJ BETWEEN 1 AND 5 AND m2.typePJ BETWEEN 1 AND 5) OR 
              (m1.typePJ BETWEEN 6 AND 10 AND m2.typePJ BETWEEN 6 AND 10) OR
              (ABS(m1.typePJ - m2.typePJ) <= 2)) AND  -- 유사한 PJ 성향
-            f.isLike = 1  -- 좋아요가 표시된 콘텐츠만
+            f.isLike = 'LIKE'  -- 좋아요가 표시된 콘텐츠만
       """, nativeQuery = true)
   Long countSimilarChildLikedBooks(Long childId);
 
@@ -195,12 +196,12 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
                  COUNT(f.isLike) AS likeCount
           FROM book b
           JOIN feedback_status f ON f.bookId = b.bookId
-          JOIN mbti_status m1 ON f.childId = m1.childId  -- 좋아요를 남긴 유저의 MBTI
-          JOIN mbti_status m2 ON m2.childId = :childId   -- 쿼리에 전달된 자녀의 MBTI
+          JOIN mbti_status m1 ON f.childId = m1.childId AND m1.deleteAt IS NULL  -- 좋아요를 남긴 유저의 MBTI
+          JOIN mbti_status m2 ON m2.childId = :childId AND m2.deleteAt IS NULL   -- 쿼리에 전달된 자녀의 MBTI
           WHERE 
             b.displayYn = 'Y'
           AND
-            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = -1))  -- 싫어요 피드백 체크
+            (b.bookId NOT IN (SELECT f.bookId FROM feedback_status f WHERE f.childId = :childId AND f.isLike = 'DISLIKE'))  -- 싫어요 피드백 체크
           AND
             ((m1.typeIE BETWEEN 1 AND 5 AND m2.typeIE BETWEEN 1 AND 5) OR 
              (m1.typeIE BETWEEN 6 AND 10 AND m2.typeIE BETWEEN 6 AND 10) OR
@@ -214,7 +215,7 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
             ((m1.typePJ BETWEEN 1 AND 5 AND m2.typePJ BETWEEN 1 AND 5) OR 
              (m1.typePJ BETWEEN 6 AND 10 AND m2.typePJ BETWEEN 6 AND 10) OR
              (ABS(m1.typePJ - m2.typePJ) <= 2)) AND  -- 유사한 PJ 성향
-            f.isLike = 1  -- 좋아요가 표시된 콘텐츠만
+            f.isLike = 'LIKE'  -- 좋아요가 표시된 콘텐츠만
           GROUP BY b.bookId
           ORDER BY likeCount DESC
           LIMIT :offset, :limit

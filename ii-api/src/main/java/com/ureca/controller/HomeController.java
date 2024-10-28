@@ -1,6 +1,7 @@
 package com.ureca.controller;
 
 import com.ureca.config.auth.PrincipalDetails;
+import com.ureca.constant.RecommendationType;
 import com.ureca.dto.BookInfo;
 import com.ureca.dto.BookPage;
 import com.ureca.dto.RequestFeedbackDto;
@@ -8,7 +9,6 @@ import com.ureca.dto.ResBookInfo;
 import com.ureca.service.BookService;
 import com.ureca.service.FeedbackComponentService;
 import com.ureca.service.RecommendService;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,8 +34,9 @@ public class HomeController {
   private final RabbitTemplate rabbitTemplate;
 
   @GetMapping("/home")
-  public String home(Model model) {
-    Long childId = 1L;  //TODO session
+  public String home(Model model,
+      @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    Long childId = principalDetails.getChild().getChildId();
 
     BookPage<BookInfo> similarBooks = recommendService.recommendSimilarBooks(childId,
         DEFAULT_OFFSET,
@@ -59,27 +60,20 @@ public class HomeController {
   public String books(Model model,
       @RequestParam(value = "type") String type,
       @RequestParam(value = "page", defaultValue = "" + DEFAULT_OFFSET) int page,
-      @RequestParam(value = "size", defaultValue = "" + DEFAULT_LIMIT) int size) {
-    Long childId = 1L;  //TODO session
+      @RequestParam(value = "size", defaultValue = "" + DEFAULT_LIMIT) int size,
+      @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    Long childId = principalDetails.getChild().getChildId();
 
-    BookPage<BookInfo> books = null;
-    String title = "도서 목록";
-    if (Objects.equals("SIMILAR", type)) {
-      title = "아이 성향 추천";
-      books = recommendService.recommendSimilarBooks(childId, page * size, size);
-    }
-    if (Objects.equals("OPPOSITE", type)) {
-      title = "반대 성향 추천";
-      books = recommendService.recommendOppositeBooks(childId, page * size, size);
-    }
-    if (Objects.equals("LIKE", type)) {
-      title = "유사 성향 아이들 추천";
-      books = recommendService.recommendSimilarChildLikedBooks(
-          childId, page * size, size);
+    RecommendationType recommendationType;
+    try {
+      recommendationType = RecommendationType.valueOf(type.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      return "redirect:/mbtkids/home";
     }
 
-    model.addAttribute("books", books);
-    model.addAttribute("title", title);
+    model.addAttribute("books",
+        recommendationType.recommend(recommendService, childId, page, size));
+    model.addAttribute("title", recommendationType.getTitle());
     model.addAttribute("type", type);
     model.addAttribute("currentPage", page);
     model.addAttribute("pageSize", size);

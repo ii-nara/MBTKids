@@ -10,7 +10,7 @@ import com.ureca.service.BookService;
 import com.ureca.service.FeedbackComponentService;
 import com.ureca.service.RecommendService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+//import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +31,7 @@ public class HomeController {
   private final RecommendService recommendService;
   private final BookService bookService;
   private final FeedbackComponentService feedbackComponentService;
-  private final RabbitTemplate rabbitTemplate;
+//  private final RabbitTemplate rabbitTemplate;
 
   @GetMapping("/home")
   public String home(Model model,

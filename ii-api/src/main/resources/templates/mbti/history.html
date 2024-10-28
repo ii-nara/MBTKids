@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>아이둘나라</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link th:href="@{/css/mbti/status.css}" rel="stylesheet"/>
+  <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
+</head>
+<body>
+<!-- (상단 레이아웃) 네비게이션 바 -->
+<th:block th:replace="navbar :: navbar"></th:block>
+
+<div class="container mt-5 text-center">
+  <h2 id="title">MBTI History</h2>
+
+  <script th:if="${noDataAlert}">
+    alert("선택한 기간에 데이터가 존재하지 않습니다. 기본 히스토리를 보여줍니다.");
+  </script>
+
+  <!-- 달력 폼 -->
+  <form th:action="@{/mbtkids/mbti/history}" method="get" class="mb-4">
+    <label for="startDate">시작 날짜:</label>
+    <input type="date" id="startDate" name="startDate"
+           th:value="${startDate}"
+           required>
+
+    <label for="endDate">종료 날짜:</label>
+    <input type="date" id="endDate" name="endDate"
+           th:value="${endDate}"
+           required>
+
+    <button type="submit" class="btn btn-primary">조회</button>
+  </form>
+
+  <!-- 그래프 캔버스 (2x2 배열) -->
+  <div class="row">
+    <div class="col-md-6">
+      <canvas id="chartEI"></canvas>
+    </div>
+    <div class="col-md-6">
+      <canvas id="chartSN"></canvas>
+    </div>
+    <div class="col-md-6">
+      <canvas id="chartTF"></canvas>
+    </div>
+    <div class="col-md-6">
+      <canvas id="chartJP"></canvas>
+    </div>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  // Thymeleaf에서 historyList를 자바스크립트 변수로 변환
+  const historyData = /*[[${historyList}]]*/ [];
+  const dates = historyData.map(item => item.updateAt.split('T')[0]);
+  const typeE = historyData.map(item => item.typeE);
+  const typeI = historyData.map(item => item.typeI);
+  const typeS = historyData.map(item => item.typeS);
+  const typeN = historyData.map(item => item.typeN);
+  const typeT = historyData.map(item => item.typeT);
+  const typeF = historyData.map(item => item.typeF);
+  const typeJ = historyData.map(item => item.typeJ);
+  const typeP = historyData.map(item => item.typeP);
+
+  // E vs I 차트
+  const ctxEI = document.getElementById('chartEI').getContext('2d');
+  new Chart(ctxEI, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [
+        {label: 'E', data: typeE, borderColor: 'rgba(54, 162, 235, 1)', fill: false},
+        {label: 'I', data: typeI, borderColor: 'rgba(255, 99, 132, 1)', fill: false}
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {y: {beginAtZero: true, max: 10}}
+    }
+  });
+
+  // S vs N 차트
+  const ctxSN = document.getElementById('chartSN').getContext('2d');
+  new Chart(ctxSN, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [
+        {label: 'S', data: typeS, borderColor: 'rgba(54, 162, 235, 1)', fill: false},
+        {label: 'N', data: typeN, borderColor: 'rgba(255, 99, 132, 1)', fill: false}
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {y: {beginAtZero: true, max: 10}}
+    }
+  });
+
+  // T vs F 차트
+  const ctxTF = document.getElementById('chartTF').getContext('2d');
+  new Chart(ctxTF, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [
+        {label: 'T', data: typeT, borderColor: 'rgba(54, 162, 235, 1)', fill: false},
+        {label: 'F', data: typeF, borderColor: 'rgba(255, 99, 132, 1)', fill: false}
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {y: {beginAtZero: true, max: 10}}
+    }
+  });
+
+  // J vs P 차트
+  const ctxJP = document.getElementById('chartJP').getContext('2d');
+  new Chart(ctxJP, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [
+        {label: 'J', data: typeJ, borderColor: 'rgba(54, 162, 235, 1)', fill: false},
+        {label: 'P', data: typeP, borderColor: 'rgba(255, 99, 132, 1)', fill: false}
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {y: {beginAtZero: true, max: 10}}
+    }
+  });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

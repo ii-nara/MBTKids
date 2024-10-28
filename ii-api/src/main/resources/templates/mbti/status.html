@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>아이둘나라</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link th:href="@{/css/mbti/status.css}" rel="stylesheet"/>
+  <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
+</head>
+<body>
+<!-- (상단 레이아웃) 네비게이션 바 -->
+<th:block th:replace="navbar :: navbar"></th:block>
+
+<div class="container mt-5 text-center">
+  <p id="title" th:text="${childEntity.childName} + '의 MBTI 성향'"></p>
+
+  <canvas id="mbtiRadarChart"></canvas>
+
+  <div class="mt-4 mbti-type" th:text="${mbtiStatusResponseDto.mbtiType}"></div>
+
+  <div class="col-md-6 text-center">
+    <h1 th:text="${mbtiInfoResponseDto.suffix}" class="suffix"></h1>
+    <p th:text="${mbtiInfoResponseDto.tag}" class="tag"></p>
+    <h1 th:text="${mbtiInfoResponseDto.emoji}" class="emoji"></h1>
+    <div class="info-box p-4 mt-3">
+      <p class="description" th:utext="${mbtiInfoResponseDto.content}"></p>
+    </div>
+  </div>
+
+  <form th:action="@{/mbtkids/mbti/history}" method="get" class="mt-4">
+    <button type="submit" class="btn btn-history btn-blue">MBTI 히스토리 보기</button>
+  </form>
+
+  <form th:action="@{/mbtkids/mbti/status}" method="post" class="mt-4">
+    <button type="submit" class="btn btn-danger">MBTI 삭제</button>
+  </form>
+</div>
+
+<script th:inline="javascript">
+  var canvasElement = document.getElementById('mbtiRadarChart');
+
+  // 각 타입의 값을 자바스크립트 변수에 저장
+  var typeE = /*[[${mbtiStatusResponseDto.typeE}]]*/ 0;
+  var typeI = /*[[${mbtiStatusResponseDto.typeI}]]*/ 0;
+  var typeS = /*[[${mbtiStatusResponseDto.typeS}]]*/ 0;
+  var typeN = /*[[${mbtiStatusResponseDto.typeN}]]*/ 0;
+  var typeT = /*[[${mbtiStatusResponseDto.typeT}]]*/ 0;
+  var typeF = /*[[${mbtiStatusResponseDto.typeF}]]*/ 0;
+  var typeP = /*[[${mbtiStatusResponseDto.typeP}]]*/ 0;
+  var typeJ = /*[[${mbtiStatusResponseDto.typeJ}]]*/ 0;
+
+  // 데이터 배열 생성 및 숫자로 변환
+  var dataValues = [typeE, typeS, typeF, typeJ, typeI, typeN, typeT, typeP];
+  dataValues = dataValues.map(Number);
+
+  // 차트 생성
+  var ctx = canvasElement.getContext('2d');
+  var radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['E', 'S', 'F', 'J', 'I', 'N', 'T', 'P'],
+      datasets: [{
+        label: 'MBTI 그래프',
+        data: dataValues,  // 배열로 전달된 데이터 사용
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+      }]
+    },
+    options: {
+      scales: {
+        r: {
+          min: 0,
+          max: 10,
+          ticks: {
+            stepSize: 1
+          },
+          pointLabels: {
+            font: {
+              size: 16, // 폰트 크기
+              weight: 'bold', // 폰트 두께 ('normal', 'bold')
+              family: 'Arial', // 폰트 패밀리
+            },
+            color: '#333' // 레이블 색상
+          }
+        }
+      }
+    }
+  });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:src="@{/js/home.js}"></script>
+</body>
+</html>

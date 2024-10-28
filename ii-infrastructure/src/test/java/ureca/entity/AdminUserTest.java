@@ -3,9 +3,7 @@ package ureca.entity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ureca.entity.AdminUserEntity;
-import com.ureca.entity.BookEntity;
 import com.ureca.repository.AdminUserRepository;
-import com.ureca.repository.BookRepository;
 import java.util.Date;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -17,18 +15,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AdminUserTest {
   private static final Logger logger = LoggerFactory.getLogger(AdminUserTest.class);
 
-
-  @Autowired
-  AdminUserRepository adminUserRepository;
+  @Autowired AdminUserRepository adminUserRepository;
 
   // 등록 테스트
   @Test
   void testCreateAdminUser() {
-    AdminUserEntity newAdminUser = AdminUserEntity.builder()
-        .adminLoginId("testAdminUser02")
-        .password("1111")
-        .createdAt(new Date())
-        .build();
+    AdminUserEntity newAdminUser =
+        AdminUserEntity.builder()
+            .adminLoginId("testAdminUser02")
+            .password("1111")
+            .createdAt(new Date())
+            .build();
 
     AdminUserEntity savedAdminUser = adminUserRepository.save(newAdminUser);
     logger.info("데이터 등록 확인: {}", savedAdminUser);
@@ -40,9 +37,7 @@ class AdminUserTest {
   @Test
   void testReadAdminUser() {
     AdminUserEntity getAdminUser =
-        adminUserRepository
-            .findById(1)
-            .orElseThrow(() -> new RuntimeException("data not found"));
+        adminUserRepository.findById(1).orElseThrow(() -> new RuntimeException("data not found"));
     logger.info("데이터 조회 확인: { " + getAdminUser + " }");
   }
 
@@ -57,5 +52,4 @@ class AdminUserTest {
     boolean exists = adminUserRepository.existsById(adminIdToDelete);
     logger.info("데이터 삭제 확인 " + adminIdToDelete + " exists: " + exists);
   }
-
 }

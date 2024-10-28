@@ -1,21 +1,21 @@
-//package com.ureca.config;
+// package com.ureca.config;
 //
-//import com.fasterxml.jackson.annotation.JsonInclude;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import org.springframework.amqp.core.*;
-//import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
-//import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-//import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-//import org.springframework.amqp.rabbit.core.RabbitAdmin;
-//import org.springframework.amqp.rabbit.core.RabbitTemplate;
-//import org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler;
-//import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-//import org.springframework.boot.CommandLineRunner;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
+// import com.fasterxml.jackson.annotation.JsonInclude;
+// import com.fasterxml.jackson.databind.ObjectMapper;
+// import org.springframework.amqp.core.*;
+// import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+// import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+// import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+// import org.springframework.amqp.rabbit.core.RabbitAdmin;
+// import org.springframework.amqp.rabbit.core.RabbitTemplate;
+// import org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler;
+// import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+// import org.springframework.boot.CommandLineRunner;
+// import org.springframework.context.annotation.Bean;
+// import org.springframework.context.annotation.Configuration;
 //
-//@Configuration
-//public class RabbitMQConfig {
+// @Configuration
+// public class RabbitMQConfig {
 //
 //  private static final String EXCHANGE_NAME = "feedbackExchange";
 //  private static final String QUEUE_NAME = "feedbackQueue";
@@ -56,7 +56,8 @@
 //  }
 //
 //  @Bean
-//  public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
+//  public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory
+// connectionFactory) {
 //    SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
 //    factory.setConnectionFactory(connectionFactory);
 //    factory.setErrorHandler(new ConditionalRejectingErrorHandler());
@@ -82,4 +83,4 @@
 //    connectionFactory.setChannelCacheSize(50000);  // 적절한 캐시 크기 설정
 //    return connectionFactory;
 //  }
-//}
+// }

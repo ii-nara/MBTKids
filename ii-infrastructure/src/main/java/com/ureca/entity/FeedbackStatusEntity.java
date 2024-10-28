@@ -52,4 +52,7 @@ public class FeedbackStatusEntity {
     this.isLike = isLike;
   }
 
+  public void updateLikeStatus(LikeStatus likeStatus) {
+    this.isLike = likeStatus;
+  }
 }

@@ -43,17 +43,9 @@ public class BookEntity {
   @Column(name = "writer", length = 50)
   private String writer;
 
-  // 작가 코드
-  @Column(name = "writerCd", length = 20)
-  private String writerCd;
-
   // 출판사
   @Column(name = "publisher", length = 50)
   private String publisher;
-
-  // 출판사 코드
-  @Column(name = "publisherCd", length = 20)
-  private String publisherCd;
 
   // 권장연령
   @Column(name = "recommenedAge", length = 20)
@@ -105,9 +97,7 @@ public class BookEntity {
       String bookImgUrl,
       String plot,
       String writer,
-      String writerCd,
       String publisher,
-      String publisherCd,
       String recommenedAge,
       int typeIE,
       int typeSN,
@@ -123,9 +113,7 @@ public class BookEntity {
     this.bookImgUrl = bookImgUrl;
     this.plot = plot;
     this.writer = writer;
-    this.writerCd = writerCd;
     this.publisher = publisher;
-    this.publisherCd = publisherCd;
     this.recommenedAge = recommenedAge;
     this.typeIE = typeIE;
     this.typeSN = typeSN;

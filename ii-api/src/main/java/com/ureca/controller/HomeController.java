@@ -7,10 +7,10 @@ import com.ureca.dto.BookPage;
 import com.ureca.dto.RequestFeedbackDto;
 import com.ureca.dto.ResBookInfo;
 import com.ureca.service.BookService;
-import com.ureca.service.FeedbackComponentService;
+import com.ureca.service.FeedbackManagementService;
 import com.ureca.service.RecommendService;
 import lombok.RequiredArgsConstructor;
-//import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +30,8 @@ public class HomeController {
 
   private final RecommendService recommendService;
   private final BookService bookService;
-  private final FeedbackComponentService feedbackComponentService;
-//  private final RabbitTemplate rabbitTemplate;
+  private final FeedbackManagementService feedbackManagementService;
+  private final RabbitTemplate rabbitTemplate;
 
   @GetMapping("/home")
   public String home(Model model,
@@ -87,7 +87,7 @@ public class HomeController {
       @RequestParam(defaultValue = "", required = true) Long bookId) {
     // 서비스 호출 - 도서 상세 조회
     ResBookInfo resBookInfo = bookService.getBookInfo(bookId);
-    resBookInfo.updateLikeStatus(feedbackComponentService.findFeedbackStatus(bookId, principalDetails.getChild().getChildId()));
+    resBookInfo.updateLikeStatus(feedbackManagementService.findFeedbackStatus(bookId, principalDetails.getChild().getChildId()));
 
     if (resBookInfo != null) {
       model.addAttribute("ResBookInfo", resBookInfo);
@@ -100,8 +100,7 @@ public class HomeController {
   @PostMapping("/book/feedback")
   public String pressTheButton(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody RequestFeedbackDto requestFeedbackDto) {
     requestFeedbackDto.updateChildId(principalDetails.getChild().getChildId());
-    feedbackComponentService.addFeedback(requestFeedbackDto);
-//    rabbitTemplate.convertAndSend("feedbackExchange", "feedbackRoutingKey", requestFeedbackDto);
+    rabbitTemplate.convertAndSend("feedbackExchange", "feedbackRoutingKey", requestFeedbackDto);
     return "redirect:/mbtkids/book/detail?bookId=" + requestFeedbackDto.getBookId();
   }
 

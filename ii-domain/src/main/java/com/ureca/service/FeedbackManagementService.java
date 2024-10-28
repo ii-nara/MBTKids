@@ -1,13 +1,11 @@
 package com.ureca.service;
 
-import com.ureca.dto.RequestFeedbackDto;
 import com.ureca.dto.ResponseFeedbackDto;
 import com.ureca.entity.BookEntity;
 import com.ureca.entity.ChildEntity;
 import com.ureca.entity.Enum.LikeStatus;
 import com.ureca.entity.FeedbackStatusEntity;
 import com.ureca.repository.BookRepository;
-import com.ureca.repository.ChildRepository;
 import com.ureca.repository.FeedbackStatusRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +19,9 @@ public class FeedbackManagementService {
 
   private final BookRepository bookRepository;
 
-  private final ChildRepository childRepository;
-
-  public ResponseFeedbackDto addFeedbackStatus(RequestFeedbackDto requestFeedbackDto) {
-    ChildEntity child = getChildById(requestFeedbackDto.getChildId());
-    BookEntity book = getBookById(requestFeedbackDto.getBookId());
-
-    FeedbackStatusEntity FeedbackStatus = feedbackStatusRepository
-        .findByBookEntity_BookIdAndChildEntity_ChildId(requestFeedbackDto.getBookId(), requestFeedbackDto.getChildId())
+  public ResponseFeedbackDto addFeedbackStatus(BookEntity book, ChildEntity child, Integer likeStatusValue) {
+    FeedbackStatusEntity feedbackStatus = feedbackStatusRepository
+        .findByBookEntity_BookIdAndChildEntity_ChildId(book.getBookId(), child.getChildId())
         .orElseGet(
             () -> feedbackStatusRepository.save(FeedbackStatusEntity.builder()
             .childEntity(child)
@@ -36,10 +29,10 @@ public class FeedbackManagementService {
             .isLike(LikeStatus.CANCELED)
             .build()));
 
-    int feedbackValue = updateFeedbackStatus(FeedbackStatus, requestFeedbackDto.getLikeStatusValue());
+    int feedbackValue = updateFeedbackStatus(feedbackStatus, likeStatusValue);
 
     return ResponseFeedbackDto.of(book.getBookId(), feedbackValue, book.getTypeIE(),
-        book.getTypeSN(), book.getTypeTF(), book.getTypePJ(), FeedbackStatus.getIsLike());
+        book.getTypeSN(), book.getTypeTF(), book.getTypePJ(), feedbackStatus.getIsLike());
   }
 
   public int updateFeedbackStatus(FeedbackStatusEntity feedbackStatus, Integer likeStatusValue) {
@@ -57,10 +50,6 @@ public class FeedbackManagementService {
         return -1;
       }
     }
-  }
-
-  public ChildEntity getChildById(Long childId) {
-    return childRepository.getReferenceById(childId);
   }
 
   public BookEntity getBookById(Long bookId) {

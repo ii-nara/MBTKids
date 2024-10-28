@@ -3,21 +3,21 @@ package com.ureca.dto;
 import java.util.Date;
 import lombok.Data;
 
-// WBK0110 도서 상세 화면 응답 DTO
+// BOK0100-도서상세 화면 응답 DTO
 @Data
 public class ResBookInfo {
 
-  //도서 아이디
+  // 도서 아이디
   private Long bookId;
-  //도서명
+  // 도서명
   private String bookName;
-  //영화 포스터 URL
+  // 도서 이미지 URL
   private String bookImgUrl;
   // 줄거리
   private String plot;
-  //작가명
+  // 작가명
   private String writer;
-  //출판사
+  // 출판사
   private String publisher;
   // 권장연령
   private String recommenedAge;
@@ -56,9 +56,7 @@ public class ResBookInfo {
       String bookImgUrl,
       String plot,
       String writer,
-      String writerCd,
       String publisher,
-      String publisherCd,
       String recommenedAge,
       String mbtiType,
       int typeIE,

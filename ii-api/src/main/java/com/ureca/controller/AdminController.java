@@ -1,17 +1,12 @@
 package com.ureca.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ureca.Enum.MbtiType;
 import com.ureca.dto.BookInfo;
 import com.ureca.dto.ReqBookInfo;
-import com.ureca.dto.ResBookInfo;
+import com.ureca.dto.ResBookDetail;
+import com.ureca.dto.ResMbtiInfo;
+import com.ureca.service.AiService;
 import com.ureca.service.BookService;
-import com.ureca.service.OpenApiService;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 @Controller
 @RequestMapping("/mbtkids")
@@ -31,13 +25,14 @@ public class AdminController {
   private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
   private BookService bookService;
-  private OpenApiService openApiService;
-  public AdminController(BookService bookService, OpenApiService openApiService) {
+  private AiService aiService;
+
+  public AdminController(BookService bookService, AiService aiService) {
     this.bookService = bookService;
-    this.openApiService = openApiService;
+    this.aiService = aiService;
   }
 
-  //도서 목록 조회
+  //도서 전체 목록 조회
   @GetMapping("/admin/home")
   public String adminBookHome(Model model, @RequestParam(defaultValue = "") String searchWord) {
     //logger.info("검색어 : "+searchWord);
@@ -55,13 +50,21 @@ public class AdminController {
   //도서 상세 조회
   @GetMapping("/admin/detail")
   public String adminBookDetail(Model model, @RequestParam(defaultValue = "", required = true) Long bookId) {
-    // 서비스 호출 - 도서 상세 조회
-    ResBookInfo resBookInfo = bookService.getBookInfo(bookId);
 
-    if (resBookInfo != null) {
-      model.addAttribute("ResBookInfo", resBookInfo);
+    ResBookDetail resBookDetail = new ResBookDetail();
+
+    if(bookId != -1){
+      // 서비스 호출 - 도서 상세 조회
+      resBookDetail = bookService.getBookDetail(bookId);
+      resBookDetail.setEmptyFlags(false);
+    }else{
+      //도서 등록인 경우 빈 객체로 넘김
+      resBookDetail.setEmptyFlags(true);
     }
-    //logger.info("ResBookInfo 전달 !" + resBookInfo);
+
+    model.addAttribute("ResBookDetail", resBookDetail);
+
+    //logger.info("ResBookDetail 전달 !" + resBookDetail);
     return "admin/detail";
   }
 
@@ -75,6 +78,48 @@ public class AdminController {
     return "redirect:/mbtkids/admin/home";
   }
 
+  //도서 등록
+  @PostMapping("/admin/register")
+  public String adminBookRegister(Model model, @ModelAttribute ReqBookInfo reqBookInfo) {
+    logger.info("입력 : "+reqBookInfo);
+    //TODO 저장 로직
+
+
+    return "redirect:/mbtkids/admin/home";
+  }
+
+
+  /**
+   * @title 		  AI를 활용한 도서 성향 부여
+   * @description 도서 줄거리를 전달하면 성향 분석 결과를 반환합니다.
+   * @param       contents 줄거리
+   * @return      ResMbtiInfo
+   */
+  // http://localhost:8080/mbtkids/admin/book/ai
+  @GetMapping("/admin/book/ai")
+  public ResMbtiInfo setBookMbti(String contents) {
+    String resultMbti = "0000"; // 해당없음 초기화
+    String textPJ ="", textTF="", textSN="",textIE="";
+
+    resultMbti = aiService.setBookMbti(contents);
+
+    if(!resultMbti.isEmpty()){
+      textIE = String.valueOf(resultMbti.charAt(0)); // I/E/0
+      textSN = String.valueOf(resultMbti.charAt(1)); // S/N/0
+      textTF = String.valueOf(resultMbti.charAt(2)); // T/F/0
+      textPJ = String.valueOf(resultMbti.charAt(3)); // P/J/0
+    }
+
+    ResMbtiInfo resMbtiInfo = new ResMbtiInfo();
+    resMbtiInfo.setMbtiType(resultMbti);
+    resMbtiInfo.setTypeIE(MbtiType.TYPE_IE.getValueForType(textIE)); // -1/1/0
+    resMbtiInfo.setTypeSN(MbtiType.TYPE_SN.getValueForType(textSN)); // -1/1/0
+    resMbtiInfo.setTypeTF(MbtiType.TYPE_TF.getValueForType(textTF)); // -1/1/0
+    resMbtiInfo.setTypePJ(MbtiType.TYPE_PJ.getValueForType(textPJ)); // -1/1/0
+
+    return resMbtiInfo;
+  } //setBookMbti
+
   //도서 삭제
   @GetMapping("/admin/delete")
   public String adminBookDelete(Model model, @RequestParam(defaultValue = "", required = true) Long bookId) {
@@ -85,52 +130,5 @@ public class AdminController {
     return "redirect:/mbtkids/admin/home";
   }
 
-  // TODO 코드 분리 - 일단 Controller에 다 넣어놓았음
-  // @Value("${api.kcisa.serviceKey}")
-  // private String serviceKey; // application.properties에서 서비스 키를 가져옵니다.
-  // http://localhost:8080/mbtkids/openapi/data
-  @GetMapping("/openapi/data")
-  public void getOpenApiData() throws IOException {
-    String serviceKey = ""; // 인증키
-    String numOfRows = "300"; // 세션당 요청레코드수
-    String pageNo = "1"; // 페이지 수
-    String openApiUrl = "http://api.kcisa.kr/openapi/service/rest/meta2/NLCFsase"; // 오픈 API URL
-
-    String urlText = openApiUrl+"?serviceKey="+serviceKey+"&numOfRows="+numOfRows+"&pageNo="+pageNo;
-    URL url = new URL(urlText);
-    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-    conn.setRequestMethod("GET");
-    conn.setRequestProperty("Content-type", "application/json");
-    conn.setRequestProperty("Accept","application/json");
-    //System.out.println("Response code: " + conn.getResponseCode());
-
-    BufferedReader rd;
-    if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-      rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-    } else {
-      rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-    }
-    StringBuilder sb = new StringBuilder();
-    String line;
-    while ((line = rd.readLine()) != null) {
-      sb.append(line);
-    }
-    rd.close();
-    conn.disconnect();
-    //System.out.println(sb.toString());
-
-    try {
-      ObjectMapper objectMapper = new ObjectMapper();
-      JsonNode rootNode = objectMapper.readTree(sb.toString());
-      // items -> item 배열에 접근
-      JsonNode itemsNode = rootNode.path("response").path("body").path("items").path("item");
-      // service 호출
-      openApiService.setBookList(itemsNode);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-  } //getOpenApiData
 
 }

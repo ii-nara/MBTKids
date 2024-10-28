@@ -1,12 +1,10 @@
 package com.ureca.controller;
 
 import com.ureca.config.auth.PrincipalDetails;
-import com.ureca.entity.ChildEntity;
-import com.ureca.model.MbtiQuestion;
-import com.ureca.model.MbtiQuestionProvider;
 import com.ureca.dto.MbtiInfoResponseDto;
 import com.ureca.dto.MbtiStatusResponseDto;
-import com.ureca.service.ChildAddServiceImpl;
+import com.ureca.model.MbtiQuestion;
+import com.ureca.model.MbtiQuestionProvider;
 import com.ureca.service.MbtiInfoService;
 import com.ureca.service.MbtiManagementService;
 import com.ureca.service.MbtiTestService;
@@ -15,7 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,7 +49,8 @@ public class MbtiTestController {
 
   // 2. 결과 저장
   @PostMapping("/save")
-  public String postMbtiResult(@AuthenticationPrincipal PrincipalDetails principalDetails,
+  public String postMbtiResult(
+      @AuthenticationPrincipal PrincipalDetails principalDetails,
       @RequestParam("answers") String answers) {
     Long childId = principalDetails.getChild().getChildId();
     // 답변 처리
@@ -64,16 +62,20 @@ public class MbtiTestController {
 
   // 3. 결과 조회
   @GetMapping("/result")
-  public String getMbtiResult(@AuthenticationPrincipal PrincipalDetails principalDetails,
-      Model model) {
+  public String getMbtiResult(
+      @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
     // 성향 조회
     Long childId = principalDetails.getChild().getChildId();
     MbtiStatusResponseDto mbtiTestResDto = mbtiManagementService.getMbtiStatus(childId);
     String mbtiType = mbtiTestResDto.getMbtiType();
-    int scoreI = mbtiTestResDto.getTypeI(), scoreE = mbtiTestResDto.getTypeE(),
-        scoreS = mbtiTestResDto.getTypeS(), scoreN = mbtiTestResDto.getTypeN(),
-        scoreT = mbtiTestResDto.getTypeT(), scoreF = mbtiTestResDto.getTypeF(),
-        scoreP = mbtiTestResDto.getTypeP(), scoreJ = mbtiTestResDto.getTypeJ();
+    int scoreI = mbtiTestResDto.getTypeI(),
+        scoreE = mbtiTestResDto.getTypeE(),
+        scoreS = mbtiTestResDto.getTypeS(),
+        scoreN = mbtiTestResDto.getTypeN(),
+        scoreT = mbtiTestResDto.getTypeT(),
+        scoreF = mbtiTestResDto.getTypeF(),
+        scoreP = mbtiTestResDto.getTypeP(),
+        scoreJ = mbtiTestResDto.getTypeJ();
 
     model.addAttribute("mbtiType", mbtiType);
     model.addAttribute("scoreI", mbtiTestService.changeRatio(scoreI, scoreE));

@@ -23,20 +23,22 @@ public class BatchConfig extends DefaultBatchConfiguration {
   private final MbtiStatusRepository mbtiStatusRepository;
 
   @Bean
-  public Job deleteMbtiJob(JobRepository jobRepository,
-      PlatformTransactionManager transactionManager)
+  public Job deleteMbtiJob(
+      JobRepository jobRepository, PlatformTransactionManager transactionManager)
       throws DuplicateJobException {
-    Job job = new JobBuilder("deleteMbtiJob", jobRepository)
-        .start(deleteMbtiStep(jobRepository, transactionManager))
-        .build();
+    Job job =
+        new JobBuilder("deleteMbtiJob", jobRepository)
+            .start(deleteMbtiStep(jobRepository, transactionManager))
+            .build();
     return job;
   }
 
-  public Step deleteMbtiStep(JobRepository jobRepository,
-      PlatformTransactionManager transactionManager) {
-    Step step = new StepBuilder("deleteMbtiStep", jobRepository)
-        .tasklet(deleteMbtiTasklet(), transactionManager)
-        .build();
+  public Step deleteMbtiStep(
+      JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    Step step =
+        new StepBuilder("deleteMbtiStep", jobRepository)
+            .tasklet(deleteMbtiTasklet(), transactionManager)
+            .build();
     return step;
   }
 
@@ -48,5 +50,4 @@ public class BatchConfig extends DefaultBatchConfiguration {
       return RepeatStatus.FINISHED;
     });
   }
-
 }

@@ -10,6 +10,8 @@ public class ReqBookInfo {
   private Long bookId;
   // 도서명
   private String bookName;
+  // 도서 이미지 URL
+  private String bookImgUrl;
   // 도서 이미지 파일
   private MultipartFile bookImgFile;
   // 줄거리
@@ -39,6 +41,7 @@ public class ReqBookInfo {
   public ReqBookInfo(
       Long bookId,
       String bookName,
+      String bookImgUrl,
       MultipartFile bookImgFile,
       String plot,
       String writer,
@@ -51,6 +54,7 @@ public class ReqBookInfo {
       int typePJ,
       String displayYn) {
     this.bookId = bookId;
+    this.bookImgUrl = bookImgUrl;
     this.bookName = bookName;
     this.bookImgFile = bookImgFile;
     this.plot = plot;

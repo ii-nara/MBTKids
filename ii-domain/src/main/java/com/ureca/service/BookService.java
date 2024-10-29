@@ -1,11 +1,14 @@
 package com.ureca.service;
 
 import com.ureca.dto.BookInfo;
+import com.ureca.dto.ReqBookInfo;
 import com.ureca.dto.ResBookDetail;
 import com.ureca.dto.ResBookInfo;
 import com.ureca.entity.BookEntity;
 import com.ureca.repository.BookRepository;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,29 +24,38 @@ public class BookService {
     this.bookRepository = bookRepository;
   }
 
-  // 도서 목록 조회
+  /**
+   * @title 도서 목록 조회
+   * @description 검색어에 해당하는 도서 조회 목록을 조회한다.
+   * @param searchWord 검색어
+   * @return List<BookInfo> 도서 목록
+   */
+  // TODO 관리자/홈 분리하기
   public List<BookInfo> getBookList(String searchWord) {
     List<BookInfo> bookList = bookRepository.findByBookNameOrWriterOrPublisher(searchWord);
-    // logger.info("조회 결과 : "+bookList);
 
-    // 조회된 도서 수와 결과를 로그에 출력
-    logger.info("조회된 도서 수: " + bookList.size());
+    StringBuilder logMessage = new StringBuilder();
+    logMessage.append("조회된 도서 수: ").append(bookList.size()).append("\n");
     if (bookList.isEmpty()) {
       logger.warn("조회된 도서가 없습니다.");
     } else {
-      logger.info("조회 결과: " + bookList);
+      logMessage.append("조회 결과: ").append(bookList);
+      logger.info(logMessage.toString());
     }
 
     return bookList;
   } // getBookList
 
-  // 홈 - 도서 상세 조회
+  /**
+   * @title 홈 - 도서 상세 조회
+   * @description 도서 상세 정보를 조회한다.
+   * @param bookId 도서 아이디
+   * @return ResBookInfo 도서 정보
+   */
   public ResBookInfo getBookInfo(Long bookId) {
 
     BookEntity getBook =
         bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("data not found"));
-    // logger.info("조회 결과 : "+getBook);
-
     ResBookInfo resBookInfo = convertToResBookInfo(getBook);
     resBookInfo.setLikeCnt(bookRepository.countLikesByBookId(bookId));
     resBookInfo.setDisLikeCnt(bookRepository.countDislikesByBookId(bookId));
@@ -51,19 +63,22 @@ public class BookService {
     return resBookInfo;
   } // getBookInfo
 
-  // 관리자웹 - 도서 상세 조회
+  /**
+   * @title 관리자웹 - 도서 상세 조회
+   * @description 도서 상세 정보를 조회한다.
+   * @param bookId 도서 아이디
+   * @return ResBookDetail 도서 정보
+   */
   public ResBookDetail getBookDetail(Long bookId) {
 
     BookEntity getBook =
         bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("data not found"));
-    // logger.info("조회 결과 : "+getBook);
-
     ResBookDetail resBookDetail = convertToResBookDetail(getBook);
     resBookDetail.setLikeCnt(bookRepository.countLikesByBookId(bookId));
     resBookDetail.setDisLikeCnt(bookRepository.countDislikesByBookId(bookId));
 
     return resBookDetail;
-  } // getBookInfo
+  } // getBookDetail
 
   // BookEntity → ResBookDetail 변환
   private ResBookDetail convertToResBookDetail(BookEntity bookEntity) {
@@ -116,12 +131,16 @@ public class BookService {
         );
   } // convertToResBookInfo
 
-  // 도서 삭제
+  /**
+   * @title 관리자웹 - 도서 삭제
+   * @description 도서 정보를 삭제한다.
+   * @param bookId 도서 아이디
+   * @return int 삭제 성공 여부
+   */
   public int deleteBookInfo(Long bookId) {
     int result = 0;
 
-    // 존재하는지 확인하고 삭제
-    if (bookRepository.existsById(bookId)) {
+    if (bookRepository.existsById(bookId)) { // 존재 확인
       bookRepository.deleteById(bookId);
       result = 1;
     } else {
@@ -130,4 +149,93 @@ public class BookService {
 
     return result;
   } // deleteBookInfo
+
+  /**
+   * @title 관리자웹 - 도서 등록
+   * @description 도서 정보를 신규 등록한다.
+   * @param ReqBookInfo 입력한 도서 정보
+   * @param uploadUrl 도서 이미지 URL
+   * @return Long 생성된 도서 아이디
+   */
+  public Long saveBookInfo(ReqBookInfo reqBookInfo, String uploadUrl) {
+    Long userId = 1L; // TODO 관리자 로그인 정보 가져오기
+    Long generatedId = 0L;
+
+    // TODO file -> S3 -> Url
+
+    // 도서명 필수
+    if (reqBookInfo.getBookName() != null && reqBookInfo.getBookName().length() < 100) {
+      // 데이터 추가
+      BookEntity newBook =
+          BookEntity.builder()
+              .bookName(reqBookInfo.getBookName())
+              .bookImgUrl(uploadUrl)
+              .plot(reqBookInfo.getPlot())
+              .writer(reqBookInfo.getWriter())
+              .publisher(reqBookInfo.getPublisher())
+              .recommenedAge(reqBookInfo.getRecommenedAge())
+              .typeIE(reqBookInfo.getTypeIE())
+              .typeSN(reqBookInfo.getTypeSN())
+              .typeTF(reqBookInfo.getTypeTF())
+              .typePJ(reqBookInfo.getTypePJ())
+              .createdAt(new Date())
+              .createId(userId)
+              .displayYn(reqBookInfo.getDisplayYn())
+              .build();
+      BookEntity savedBook = bookRepository.save(newBook);
+      generatedId = savedBook.getBookId();
+    } else {
+      logger.info("Book name required, ≤ 100 chars : ", reqBookInfo.getBookName());
+    }
+
+    return generatedId;
+  } // saveBookInfo
+
+  /**
+   * @title 관리자웹 - 도서 수정
+   * @description 도서 정보를 업데이트한다.
+   * @param ReqBookInfo 수정한 도서 정보
+   * @param uploadUrl 도서 이미지 URL
+   * @return Long 수정한 도서 아이디
+   */
+  public Long updateBookInfo(ReqBookInfo reqBookInfo, String uploadUrl) {
+    Long userId = 1L; // TODO 관리자 로그인 정보 가져오기
+    Long bookId = reqBookInfo.getBookId();
+
+    // 존재하는 도서 정보인지 확인
+    Optional<BookEntity> optionalBook = bookRepository.findById(bookId);
+    if (optionalBook.isPresent()) {
+      // 도서명 필수
+      if (reqBookInfo.getBookName() != null && reqBookInfo.getBookName().length() < 100) {
+        // 업데이트 내용 구성
+        BookEntity updateBook =
+            BookEntity.builder()
+                .bookId(bookId)
+                .bookName(reqBookInfo.getBookName())
+                .bookImgUrl(uploadUrl)
+                .plot(reqBookInfo.getPlot())
+                .writer(reqBookInfo.getWriter())
+                .publisher(reqBookInfo.getPublisher())
+                .recommenedAge(reqBookInfo.getRecommenedAge())
+                .typeIE(reqBookInfo.getTypeIE())
+                .typeSN(reqBookInfo.getTypeSN())
+                .typeTF(reqBookInfo.getTypeTF())
+                .typePJ(reqBookInfo.getTypePJ())
+                .createdAt(new Date())
+                .createId(userId)
+                .displayYn(reqBookInfo.getDisplayYn())
+                .build();
+
+        // 변경된 엔티티 업데이트
+        bookRepository.save(updateBook);
+      } else {
+        logger.info("Book name required, ≤ 100 chars : ", reqBookInfo.getBookName());
+      }
+    } else {
+      // 해당 ID에 대한 엔티티가 존재하지 않을 경우의 처리
+      System.out.println("Book not found with ID: " + bookId);
+    }
+
+    return bookId;
+  } // updateBookInfo
 }

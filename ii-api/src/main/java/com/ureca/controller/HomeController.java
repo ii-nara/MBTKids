@@ -55,9 +55,9 @@ public class HomeController {
   }
 
   /**
+   * @param searchWord 검색어
    * @title 홈 - 도서 전체 목록 조회
    * @description 검색어에 해당하는 도서 조회 목록을 조회한다.
-   * @param searchWord 검색어
    */
   @GetMapping("/book/list")
   public String bookList(Model model, @RequestParam(defaultValue = "") String searchWord) {
@@ -91,13 +91,13 @@ public class HomeController {
     model.addAttribute("currentPage", page);
     model.addAttribute("pageSize", size);
 
-    return "/book/books";
+    return "book/books";
   }
 
   /**
+   * @param bookId 도서 아이디
    * @title 홈 - 도서 상세 조회
    * @description 선택한 도서의 상세 정보를 조회한다.
-   * @param bookId 도서 아이디
    */
   @GetMapping("/book/detail")
   public String bookDetail(
@@ -113,7 +113,7 @@ public class HomeController {
     if (resBookInfo != null) {
       model.addAttribute("ResBookInfo", resBookInfo);
     }
-    return "/book/detail";
+    return "book/detail";
   } // bookDetail
 
   // 도서 좋아요

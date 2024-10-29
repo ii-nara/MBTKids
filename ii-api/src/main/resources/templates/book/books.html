@@ -2,65 +2,67 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>아이둘나라</title>
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link th:href="@{/css/home.css}" rel="stylesheet"/>
-  <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" th:href="@{/css/book/books.css}">
 </head>
 <body>
-<!-- (상단 레이아웃) 네비게이션 바 -->
 <th:block th:replace="navbar :: navbar"></th:block>
 
-<!-- 본문 내용 -->
-<div class="container mt-5">
+<div class="container">
+  <h2>
+    <i class='bx bxs-book-heart'></i>
+    <span th:text="${title} + ' ('+ ${books.getCount()} + '권)'">도서 목록</span>
+  </h2>
 
-  <!-- @@ 여기에 본인 코드 내용 넣어주심 됩니다 -->
-  <h2 th:text="${title} + ' ('+ ${books.getCount()} + '개)'">도서 목록</h2>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>도서 아이디</th>
-      <th>도서명</th>
-      <th>도서 이미지</th>
-      <th>작가명</th>
-      <th>출판사</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="book : ${books.getItems()}">
-      <td th:text="${book.bookId}"></td>
-      <td th:text="${book.bookName}"></td>
-      <td>
-        <img th:src="${book.bookImgUrl}" alt="책 이미지" style="width: 100px; height: auto;"/>
-      </td>
-      <td th:text="${book.writer}"></td>
-      <td th:text="${book.publisher}"></td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="books-grid">
+    <!-- 각 책 카드를 링크로 감싸기 -->
+    <a th:href="@{/mbtkids/book/detail(bookId=${book.bookId})}"
+       class="book-link"
+       th:each="book : ${books.getItems()}">
+      <div class="book-card">
+        <div class="book-image-container">
+          <img th:src="${book.bookImgUrl}" alt="책 이미지" class="book-image"/>
+        </div>
+        <div class="book-info">
+          <h3 class="book-title" th:text="${book.bookName}">도서명</h3>
+          <p class="book-details">
+            <i class='bx bxs-user'></i>
+            <span th:text="${book.writer}">작가명</span>
+          </p>
+          <p class="book-details">
+            <i class='bx bxs-buildings'></i>
+            <span th:text="${book.publisher}">출판사</span>
+          </p>
+        </div>
+      </div>
+    </a>
+  </div>
 
-  <!-- 페이징 버튼 -->
   <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
-      <!-- 이전 페이지 버튼 -->
       <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
         <a class="page-link"
-           th:href="@{/mbtkids/books(type=${type}, page=${currentPage - 1}, size=${pageSize})}">이전</a>
+           th:href="@{/mbtkids/books(type=${type}, page=${currentPage - 1}, size=${pageSize})}">
+          <i class='bx bx-chevron-left'></i> 이전
+        </a>
       </li>
-
-      <!-- 다음 페이지 버튼 -->
       <li class="page-item"
           th:classappend="${!books.isNextPage(currentPage, pageSize)} ? 'disabled'">
         <a class="page-link"
-           th:href="@{/mbtkids/books(type=${type}, page=${currentPage + 1}, size=${pageSize})}">다음</a>
+           th:href="@{/mbtkids/books(type=${type}, page=${currentPage + 1}, size=${pageSize})}">
+          다음 <i class='bx bx-chevron-right'></i>
+        </a>
       </li>
     </ul>
   </nav>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script th:src="@{/js/home.js}"></script>
 </body>
 </html>

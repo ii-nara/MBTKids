@@ -66,7 +66,7 @@ public class HomeController {
       model.addAttribute("ResBookList", resBookList);
     }
     return "book/list";
-  } // adminBookHome
+  } // bookList
 
   @GetMapping("/books")
   public String books(
@@ -94,14 +94,18 @@ public class HomeController {
     return "/book/books";
   }
 
-  // 도서 상세 조회
+  /**
+   * @title 홈 - 도서 상세 조회
+   * @description 선택한 도서의 상세 정보를 조회한다.
+   * @param bookId 도서 아이디
+   */
   @GetMapping("/book/detail")
   public String bookDetail(
       Model model,
       @AuthenticationPrincipal PrincipalDetails principalDetails,
       @RequestParam(defaultValue = "", required = true) Long bookId) {
-    // 서비스 호출 - 도서 상세 조회
-    ResBookInfo resBookInfo = bookService.getBookInfo(bookId);
+
+    ResBookInfo resBookInfo = bookService.getBookInfo(bookId); // service - 도서 상세 조회
     resBookInfo.updateLikeStatus(
         feedbackManagementService.findFeedbackStatus(
             bookId, principalDetails.getChild().getChildId()));
@@ -109,7 +113,6 @@ public class HomeController {
     if (resBookInfo != null) {
       model.addAttribute("ResBookInfo", resBookInfo);
     }
-    // logger.info("ResBookInfo 전달 !" + resBookInfo);
     return "/book/detail";
   } // bookDetail
 

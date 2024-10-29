@@ -39,8 +39,8 @@ public class ParentLoginTest {
   @WithMockUser(username = "testUser")
   @Test
   void 로그인_성공_home접근() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.get("/mbtkids/success"))
+    mockMvc.perform(MockMvcRequestBuilders.get("/mbtkids/childSelectOrAdd"))
         .andExpect(status().isOk())
-        .andExpect(view().name("parent/success"));
+        .andExpect(view().name("parent/childSelectOrAdd"));
   }
 }

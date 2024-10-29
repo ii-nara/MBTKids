@@ -1,9 +1,9 @@
 package com.ureca.service;
 
 import com.ureca.dto.ParentSignUpRequestDto;
+import com.ureca.dto.ReqParentAddInfoDto;
 import com.ureca.entity.ParentEntity;
-import com.ureca.repository.ParentJpaRepository;
-import com.ureca.service.port.ParentService;
+import com.ureca.repository.ParentRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ParentServiceImpl implements ParentService {
+public class ParentService {
 
-  private final ParentJpaRepository parentJpaRepository;
+  private final ParentRepository parentRepository;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  @Override
+
   public ParentEntity create(ParentSignUpRequestDto parentSignUpRequestDto) {
-    parentJpaRepository.findByParentLoginId(parentSignUpRequestDto.getParentLoginId())
+    parentRepository.findByParentLoginId(parentSignUpRequestDto.getParentLoginId())
         .ifPresent(parent -> {
           throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         });
@@ -34,6 +34,15 @@ public class ParentServiceImpl implements ParentService {
         LocalDateTime.now(),
         parentSignUpRequestDto.isInfoAgreeYn()
     );
-    return parentJpaRepository.save(parent);
+    return parentRepository.save(parent);
+  }
+
+  public void saveAdditionalInfo(ReqParentAddInfoDto parentAddInfoDto, ParentEntity parent) {
+    parent.updateAdditionalInfo(
+        parentAddInfoDto.getUserName(),
+        parentAddInfoDto.getPhoneNumber(),
+        parentAddInfoDto.isInfoAgreeYn()
+    );
+    parentRepository.save(parent);
   }
 }

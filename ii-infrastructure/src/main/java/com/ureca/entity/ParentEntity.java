@@ -79,4 +79,12 @@ public class ParentEntity {
         .build();
 
   }
+
+  public void updateAdditionalInfo(String userName, String phoneNumber, boolean infoAgreeYn) {
+    this.userName = userName;
+    this.phoneNumber = phoneNumber;
+    this.infoAgreeYn = infoAgreeYn;
+    this.isActive = true;
+    this.createdAt = LocalDateTime.now();
+  }
 }

@@ -1,12 +1,10 @@
 package com.ureca.controller;
 
 import com.ureca.config.auth.PrincipalDetails;
-import com.ureca.entity.ChildEntity;
-import com.ureca.model.MbtiQuestion;
-import com.ureca.model.MbtiQuestionProvider;
 import com.ureca.dto.MbtiInfoResponseDto;
 import com.ureca.dto.MbtiStatusResponseDto;
-import com.ureca.service.ChildAddServiceImpl;
+import com.ureca.model.MbtiQuestion;
+import com.ureca.model.MbtiQuestionProvider;
 import com.ureca.service.MbtiInfoService;
 import com.ureca.service.MbtiManagementService;
 import com.ureca.service.MbtiTestService;
@@ -15,7 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -46,7 +46,7 @@ subprojects {
     }
 
     bootJar {
-        mainClassName = 'com.ureca.MainApplication.java'
+        mainClassName = 'com.ureca.MainApplication'
     }
 
     test {

@@ -15,15 +15,19 @@ dependencies {
     implementation project(':ii-infrastructure')
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    // 1. thymeleaf
+    // thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    // 2. jackson (to json)
+    // jackson (to json)
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // rabbit MQ
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     // spring-batch
     implementation 'org.springframework.boot:spring-boot-starter-batch'
+    // S3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.300'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
 }
 
 test {

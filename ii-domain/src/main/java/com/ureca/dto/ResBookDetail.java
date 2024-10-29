@@ -14,7 +14,7 @@ public class ResBookDetail {
   private Long bookId;
   // 도서명
   private String bookName;
-  // 영화 포스터 URL
+  // 도서 이미지 URL
   private String bookImgUrl;
   // 줄거리
   private String plot;

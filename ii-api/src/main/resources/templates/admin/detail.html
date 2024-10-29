@@ -22,21 +22,71 @@
         }
 
 
-        //수정 이미지 미리보기
+        // 수정 - 이미지 미리보기
         function previewImage(event) {
             const image = document.getElementById('imagePreview');
-            image.src = URL.createObjectURL(event.target.files[0]);
-            image.style.display = 'block';
+            const fileInput = document.getElementById('imageUpload');
+
+            // 선택한 파일이 있으면 미리보기 이미지 업데이트
+            if (fileInput.files.length > 0) {
+                image.src = URL.createObjectURL(fileInput.files[0]);
+                image.style.display = 'block';
+            } else {
+                image.style.display = 'none'; // 파일이 없으면 미리보기 숨기기
+            }
         }
 
-        //등록 이미지 미리보기
+        // 수정 - 새로 등록한 이미지가 있는지 확인
+        function isFileChanged() {
+            const fileInput = document.getElementById('imageUpload');
+            return fileInput.files.length > 0; // 파일이 선택되었으면 true, 아니면 false
+        }
+
+        // 수정 - 이미지 변경되지 않은 경우는 null로 전송
+        document.querySelector('form').onsubmit = function(event) {
+            const fileInput = document.getElementById('imageUpload');
+
+            // 파일이 선택되지 않았다면
+            if (!isFileChanged()) {
+                // 기존의 bookImgFile hidden input을 null로 설정
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'bookImgFile';
+                hiddenInput.value = 'null'; // null로 설정
+                this.appendChild(hiddenInput);
+            } else {
+                // 파일이 선택된 경우 기존의 bookImgFile hidden input이 있다면 제거
+                const existingInput = this.querySelector('input[name="bookImgFile"]');
+                if (existingInput) {
+                    existingInput.remove(); // 기존의 input 제거
+                }
+            }
+        };
+
+        // 파일 입력의 onchange 이벤트에 미리보기 함수 연결
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            const image = document.getElementById('imagePreview');
+            const fileInput = document.getElementById('imageUpload');
+
+            // 새 이미지가 등록되면 기존 이미지를 숨김
+            if (fileInput.files.length > 0) {
+                image.style.display = 'block'; // 미리보기 표시
+            } else {
+                image.style.display = 'none'; // 미리보기 숨김
+            }
+
+            // 미리보기 이미지 업데이트
+            previewImage(event);
+        });
+
+        //등록 - 이미지 미리보기
         function previewNewImage(event) {
             const image = document.getElementById('newImagePreview');
             image.src = URL.createObjectURL(event.target.files[0]);
             image.style.display = 'block';
         }
 
-        //수정 버튼 클릭
+        //상세 - 수정 버튼 클릭
         function editBook() {
             document.getElementById('detailView').style.display = 'none';
             document.getElementById('editForm').style.display = 'block';
@@ -48,7 +98,7 @@
             });
         }
 
-        //수정 - 취소 버튼
+        //수정 - 취소 버튼 클릭
         function cancelEdit() {
             document.getElementById('detailView').style.display = 'block';
             document.getElementById('editForm').style.display = 'none';
@@ -60,7 +110,7 @@
             });
         }
 
-        //등록 - 토글버튼
+        //등록 - 토글 버튼 클릭
         function registerToggleType(button, type1, type2, hiddenInputId) {
             const currentValue = parseInt(button.getAttribute('data-value'));
             let newValue;
@@ -80,6 +130,7 @@
             document.getElementById(hiddenInputId).value = newValue;
         }
 
+        //수정 - 토글 버튼 클릭
         function toggleType(button, type1, type2, typeKey) {
             const hiddenInput = document.getElementById(typeKey); // 해당 타입의 hidden input
 
@@ -211,16 +262,15 @@
         <div class="card">
             <div class="card-body">
                 <form th:action="@{/mbtkids/admin/update}" method="post" enctype="multipart/form-data">
-                    <!-- 그대로 넘기는 값
+                    <!-- 그대로 넘기는 값 -->
                     <input type="hidden" name="bookId" th:value="${ResBookDetail.bookId}" />
-                    <input type="hidden" name="publisherCd" th:value="${ResBookDetail.publisherCd}" />
-                    <input type="hidden" name="writerCd" th:value="${ResBookDetail.writerCd}" />
-                    -->
+                    <input type="hidden" name="bookImgUrl" th:value="${ResBookDetail.bookImgUrl}" />
+
                     <img th:src="${ResBookDetail.bookImgUrl}" alt="도서 이미지" class="card-img-top" style="width: 200px; height: auto;"/>
 
                     <div class="form-group">
                         <label for="imageUpload">도서 이미지 업로드:</label>
-                        <input type="file" id="imageUpload" name="bookImgUrl" class="form-control" onchange="previewImage(event)">
+                        <input type="file" id="imageUpload" name="bookImgFile" class="form-control" onchange="previewImage(event)">
                         <img id="imagePreview" alt="이미지 미리보기" style="display:none; width: 200px; height: auto; margin-top: 10px;"/>
                     </div>
 
@@ -268,10 +318,16 @@
                 (${ResBookDetail.typeSN == -1} ? 'S' : (${ResBookDetail.typeSN == 1} ? 'N' : '해당없음')) + ' ' +
                 (${ResBookDetail.typeTF == -1} ? 'T' : (${ResBookDetail.typeTF == 1} ? 'F' : '해당없음')) + ' ' +
                 (${ResBookDetail.typePJ == -1} ? 'P' : (${ResBookDetail.typePJ == 1} ? 'J' : '해당없음'))"></span>
+                    <!--
                     <input type="hidden" id="typeIE" name="typeIE" value="${ResBookDetail.typeIE}" />
                     <input type="hidden" id="typeSN" name="typeSN" value="${ResBookDetail.typeSN}" />
                     <input type="hidden" id="typeTF" name="typeTF" value="${ResBookDetail.typeTF}" />
                     <input type="hidden" id="typePJ" name="typePJ" value="${ResBookDetail.typePJ}" />
+                    -->
+                    <input type="hidden" id="typeIE" name="typeIE" th:value="${ResBookDetail.typeIE}" />
+                    <input type="hidden" id="typeSN" name="typeSN" th:value="${ResBookDetail.typeSN}" />
+                    <input type="hidden" id="typeTF" name="typeTF" th:value="${ResBookDetail.typeTF}" />
+                    <input type="hidden" id="typePJ" name="typePJ" th:value="${ResBookDetail.typePJ}" />
 
                     <table class="table mt-3">
                         <thead>
@@ -326,10 +382,13 @@
         <div class="card">
             <div class="card-body">
                 <form th:action="@{/mbtkids/admin/register}" method="post" enctype="multipart/form-data">
+                    <!-- 그대로 넘기는 값
+                    <input type="hidden" name="bookId" th:value="${ResBookDetail.bookId}" /> -->
+                    <input type="hidden" name="bookImgUrl" th:value="${ResBookDetail.bookImgUrl}" />
 
                     <div class="form-group">
                         <label for="newImageUpload">도서 이미지 업로드:</label>
-                        <input type="file" id="newImageUpload" name="bookImgUrl" class="form-control" onchange="previewNewImage(event)" required>
+                        <input type="file" id="newImageUpload" name="bookImgFile" class="form-control" onchange="previewNewImage(event)" required>
                         <img id="newImagePreview" alt="이미지 미리보기" style="display:none; width: 200px; height: auto; margin-top: 10px;"/>
                     </div>
 

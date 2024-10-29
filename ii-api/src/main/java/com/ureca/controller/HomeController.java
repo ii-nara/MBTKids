@@ -50,7 +50,7 @@ public class HomeController {
     model.addAttribute("currentPage", DEFAULT_OFFSET);
     model.addAttribute("pageSize", DEFAULT_LIMIT);
 
-    return "/home";
+    return "home";
   }
 
   @GetMapping("/books")

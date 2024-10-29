@@ -25,12 +25,11 @@ public class BookService {
   }
 
   /**
-   * @title 도서 목록 조회
+   * @title 관리자웹 - 도서 목록 조회
    * @description 검색어에 해당하는 도서 조회 목록을 조회한다.
    * @param searchWord 검색어
    * @return List<BookInfo> 도서 목록
    */
-  // TODO 관리자/홈 분리하기
   public List<BookInfo> getBookList(String searchWord) {
     List<BookInfo> bookList = bookRepository.findByBookNameOrWriterOrPublisher(searchWord);
 
@@ -45,6 +44,27 @@ public class BookService {
 
     return bookList;
   } // getBookList
+
+  /**
+   * @title 홈 - 도서 목록 조회
+   * @description 검색어에 해당하는 도서 조회 목록을 조회한다.
+   * @param searchWord 검색어
+   * @return List<BookInfo> 도서 목록
+   */
+  public List<BookInfo> getBookListView(String searchWord) {
+    List<BookInfo> bookList = bookRepository.findVisibleBooksBySearchTerm(searchWord);
+
+    StringBuilder logMessage = new StringBuilder();
+    logMessage.append("조회된 도서 수: ").append(bookList.size()).append("\n");
+    if (bookList.isEmpty()) {
+      logger.warn("조회된 도서가 없습니다.");
+    } else {
+      logMessage.append("조회 결과: ").append(bookList);
+      logger.info(logMessage.toString());
+    }
+
+    return bookList;
+  } // getBookListView
 
   /**
    * @title 홈 - 도서 상세 조회

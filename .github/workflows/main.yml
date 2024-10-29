@@ -24,6 +24,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - uses: actions/checkout@v3
+      - run: touch ./ii-api/src/main/resources/application.properties
+      - run: echo "${{ secrets.APPLICATION }}" > ./ii-api/src/main/resources/application.properties
+      - run: cat ./ii-api/src/main/resources/application.properties
+
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 

@@ -6,7 +6,6 @@ import static org.hamcrest.core.Is.is;
 import com.ureca.dto.RequestFeedbackDto;
 import com.ureca.entity.BookEntity;
 import com.ureca.entity.ChildEntity;
-import com.ureca.entity.Enum.LikeStatus;
 import com.ureca.entity.MbtiHistoryEntity;
 import com.ureca.entity.MbtiStatusEntity;
 import com.ureca.entity.ParentEntity;
@@ -15,7 +14,7 @@ import com.ureca.repository.ChildRepository;
 import com.ureca.repository.FeedbackStatusRepository;
 import com.ureca.repository.MbtiHistoryRepository;
 import com.ureca.repository.MbtiStatusRepository;
-import com.ureca.repository.ParentJpaRepository;
+import com.ureca.repository.ParentRepository;
 import com.ureca.service.FeedbackComponentService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -44,7 +43,7 @@ public class addFeedbackSyncTest {
   private BookRepository bookRepository;
 
   @Autowired
-  private ParentJpaRepository parentJpaRepository;
+  private ParentRepository parentRepository;
 
   @Autowired
   private ChildRepository childRepository;
@@ -55,6 +54,9 @@ public class addFeedbackSyncTest {
   @Autowired
   private MbtiHistoryRepository mbtiHistoryRepository;
 
+  @Autowired
+  private FeedbackStatusRepository feedbackStatusRepository;
+
   private BookEntity testBook;
 
   private ParentEntity testParent;
@@ -63,14 +65,9 @@ public class addFeedbackSyncTest {
 
   private List<RequestFeedbackDto> testRequestFeedback;
 
-  private long historyCount;
-  @Autowired
-  private FeedbackStatusRepository feedbackStatusRepository;
-
-
   @BeforeAll
   void setUp() {
-    int testCount = 4500;
+    int testCount = 4000;
 
     testChildren = new ArrayList<>();
     testRequestFeedback = new ArrayList<>();
@@ -78,7 +75,7 @@ public class addFeedbackSyncTest {
     testBook = bookRepository.save(BookEntity.builder()
         .bookName("테스트 도서").typeIE(1).typeSN(1).typeTF(-1).typePJ(-1).build());
 
-    testParent = parentJpaRepository.save(ParentEntity.builder().email("").parentLoginId("")
+    testParent = parentRepository.save(ParentEntity.builder().email("").parentLoginId("")
         .password("").createdAt(LocalDateTime.now()).build());
 
     for (int i = 0; i < testCount; i++) {
@@ -113,10 +110,9 @@ public class addFeedbackSyncTest {
   @Test
   void addFeedback() throws InterruptedException {
 
-    int numThreads = 3000;
+    int numThreads = 4000;
 
     CountDownLatch countDownLatch = new CountDownLatch(numThreads);
-//    ExecutorService executorService = Executors.newFixedThreadPool(numThreads); // 정적
     ExecutorService executorService = Executors.newCachedThreadPool(); // 동적
 
     for (int i = 0; i < numThreads; i++) {
@@ -124,10 +120,8 @@ public class addFeedbackSyncTest {
       executorService.execute(() -> {
         try {
           feedbackComponentService.addFeedback(testRequestFeedback.get(finalI));
-//          if (finalI % 2 == 0) feedbackComponentService.addFeedback(testRequestFeedback.get(finalI)); // 좋아요 취소
         } catch (Exception e) {
           e.printStackTrace();
-          System.out.println("충돌 발생");
         } finally {
           countDownLatch.countDown(); // 예외 발생해도 countDown 실행
         }
@@ -137,9 +131,9 @@ public class addFeedbackSyncTest {
     countDownLatch.await(10, TimeUnit.SECONDS);
     executorService.shutdown();
 
-//    long afterTest = feedbackStatusRepository.countByBookEntity_BookIdAndLikeStatus(testBook.getBookId(), LikeStatus.LIKE);
-//    System.out.println("좋아요 개수 : " + afterTest);
-//    assertThat(afterTest, is((long) numThreads));
+    long afterTest = feedbackStatusRepository.countByBookEntity_BookId(testBook.getBookId());
+    System.out.println("좋아요 개수 : " + afterTest);
+    assertThat(afterTest, is((long) numThreads));
   }
 
 }

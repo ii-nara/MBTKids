@@ -13,7 +13,7 @@ import com.ureca.repository.BookRepository;
 import com.ureca.repository.ChildRepository;
 import com.ureca.repository.MbtiHistoryRepository;
 import com.ureca.repository.MbtiStatusRepository;
-import com.ureca.repository.ParentJpaRepository;
+import com.ureca.repository.ParentRepository;
 import com.ureca.service.FeedbackComponentService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -38,7 +38,7 @@ public class addFeedbackTest {
   private BookRepository bookRepository;
 
   @Autowired
-  private ParentJpaRepository parentJpaRepository;
+  private ParentRepository parentRepository;
 
   @Autowired
   private ChildRepository childRepository;
@@ -59,8 +59,6 @@ public class addFeedbackTest {
 
   private long historyCount;
 
-
-
   @BeforeAll
   void setUp() {
     testChildren = new ArrayList<>();
@@ -69,7 +67,7 @@ public class addFeedbackTest {
     testBook = bookRepository.save(BookEntity.builder()
         .bookName("테스트 도서").typeIE(1).typeSN(1).typeTF(-1).typePJ(-1).build());
 
-    testParent = parentJpaRepository.save(ParentEntity.builder().email("").parentLoginId("")
+    testParent = parentRepository.save(ParentEntity.builder().email("").parentLoginId("")
         .password("").createdAt(LocalDateTime.now()).build());
 
     for (int i = 0; i < 5; i++) {

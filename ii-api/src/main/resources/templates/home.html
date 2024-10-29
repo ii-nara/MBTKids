@@ -38,7 +38,7 @@
     <h2>아이 성향 추천</h2>
     <div class="horizontal-scroll">
       <div class="card" th:each="book : ${similarBooks.getItems()}">
-        <a th:href="@{/book/detail(bookId=${book.bookId})}">
+        <a th:href="@{/mbtkids/book/detail(bookId=${book.bookId})}">
           <img th:src="${book.bookImgUrl}" class="card-img-top" alt="책 이미지" style="height: 200px;">
           <div class="card-body">
             <h5 class="card-title">
@@ -63,7 +63,7 @@
     <h2>반대 성향 추천</h2>
     <div class="horizontal-scroll">
       <div class="card" th:each="book : ${oppositeBooks.getItems()}">
-        <a th:href="@{/book/detail(bookId=${book.bookId})}">
+        <a th:href="@{/mbtkids/book/detail(bookId=${book.bookId})}">
           <img th:src="${book.bookImgUrl}" class="card-img-top" alt="책 이미지" style="height: 200px;">
           <div class="card-body">
             <h5 class="card-title">
@@ -88,7 +88,7 @@
     <h2>유사 성향 아이들 추천</h2>
     <div class="horizontal-scroll">
       <div class="card" th:each="book : ${likedBooks.getItems()}">
-        <a th:href="@{/book/detail(bookId=${book.bookId})}">
+        <a th:href="@{/mbtkids/book/detail(bookId=${book.bookId})}">
           <img th:src="${book.bookImgUrl}" class="card-img-top" alt="책 이미지" style="height: 200px;">
           <div class="card-body">
             <h5 class="card-title">

@@ -18,11 +18,11 @@ public class FeedbackComponentService {
 
   private final MbtiManagementService mbtiManagementService;
 
-  private final ChildAddServiceImpl childAddService;
+  private final ChildService childService;
 
   public void addFeedback(RequestFeedbackDto requestFeedbackDto) {
     BookEntity book = feedbackManagementService.getBookById(requestFeedbackDto.getBookId());
-    ChildEntity child = childAddService.findChildById(requestFeedbackDto.getChildId());
+    ChildEntity child = childService.findChildById(requestFeedbackDto.getChildId());
     ResponseFeedbackDto responseFeedbackDto = feedbackManagementService.addFeedbackStatus(book, child, requestFeedbackDto.getLikeStatusValue());
     mbtiManagementService.updateMbtiStatus(child, responseFeedbackDto);
   }

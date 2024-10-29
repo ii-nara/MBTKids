@@ -9,6 +9,7 @@ import com.ureca.dto.ResBookInfo;
 import com.ureca.service.BookService;
 import com.ureca.service.FeedbackManagementService;
 import com.ureca.service.RecommendService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -53,6 +54,20 @@ public class HomeController {
     return "home";
   }
 
+  /**
+   * @title 홈 - 도서 전체 목록 조회
+   * @description 검색어에 해당하는 도서 조회 목록을 조회한다.
+   * @param searchWord 검색어
+   */
+  @GetMapping("/book/list")
+  public String bookList(Model model, @RequestParam(defaultValue = "") String searchWord) {
+    List<BookInfo> resBookList = bookService.getBookListView(searchWord); // service - 도서 목록 조회
+    if (resBookList != null) {
+      model.addAttribute("ResBookList", resBookList);
+    }
+    return "book/list";
+  } // bookList
+
   @GetMapping("/books")
   public String books(
       Model model,
@@ -79,14 +94,18 @@ public class HomeController {
     return "/book/books";
   }
 
-  // 도서 상세 조회
+  /**
+   * @title 홈 - 도서 상세 조회
+   * @description 선택한 도서의 상세 정보를 조회한다.
+   * @param bookId 도서 아이디
+   */
   @GetMapping("/book/detail")
   public String bookDetail(
       Model model,
       @AuthenticationPrincipal PrincipalDetails principalDetails,
       @RequestParam(defaultValue = "", required = true) Long bookId) {
-    // 서비스 호출 - 도서 상세 조회
-    ResBookInfo resBookInfo = bookService.getBookInfo(bookId);
+
+    ResBookInfo resBookInfo = bookService.getBookInfo(bookId); // service - 도서 상세 조회
     resBookInfo.updateLikeStatus(
         feedbackManagementService.findFeedbackStatus(
             bookId, principalDetails.getChild().getChildId()));
@@ -94,7 +113,6 @@ public class HomeController {
     if (resBookInfo != null) {
       model.addAttribute("ResBookInfo", resBookInfo);
     }
-    // logger.info("ResBookInfo 전달 !" + resBookInfo);
     return "/book/detail";
   } // bookDetail
 

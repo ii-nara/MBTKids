@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
-  // 도서 목록 조회
+  // 관리자웹 - 도서 목록 조회
   @Query(
       "SELECT new com.ureca.dto.BookInfo(b.bookId, b.bookName, b.bookImgUrl, b.writer, b.publisher) "
           + "FROM BookEntity b "
@@ -17,6 +17,16 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
           + "OR b.writer LIKE CONCAT('%', :searchWord, '%') "
           + "OR b.publisher LIKE CONCAT('%', :searchWord, '%')")
   List<BookInfo> findByBookNameOrWriterOrPublisher(@Param("searchWord") String searchWord);
+
+  // 홈 - 도서 목록 조회
+  @Query(
+      "SELECT new com.ureca.dto.BookInfo(b.bookId, b.bookName, b.bookImgUrl, b.writer, b.publisher) "
+          + "FROM BookEntity b "
+          + "WHERE (b.bookName LIKE CONCAT('%', :searchWord, '%') "
+          + "OR b.writer LIKE CONCAT('%', :searchWord, '%') "
+          + "OR b.publisher LIKE CONCAT('%', :searchWord, '%')) "
+          + "AND b.displayYn = 'Y'")
+  List<BookInfo> findVisibleBooksBySearchTerm(@Param("searchWord") String searchWord);
 
   // 도서별 좋아요 개수
   @Query(

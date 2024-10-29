@@ -21,31 +21,41 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(AbstractHttpConfigurer::disable);
-    http.authorizeHttpRequests(auth -> auth
-            .requestMatchers("/mbtkids", "/mbtkids/register", "/mbtkids/login").permitAll()
-            .requestMatchers("/mbtkids/child/**").authenticated()
-            .requestMatchers("/mbtkids/childSelectOrAdd").authenticated()
-            .anyRequest().permitAll()
-        )
-        .formLogin(login -> login
-            .loginPage("/mbtkids/login")
-            .loginProcessingUrl("/mbtkids/login")
-            .usernameParameter("loginIdOrEmail")
-            .defaultSuccessUrl("/mbtkids/childSelectOrAdd", true)
-            .failureUrl("/mbtkids")
-            .permitAll())
-        .oauth2Login(oauth -> oauth
-            .loginPage("/mbtkids/login")
-            .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
-                .userService(principalOauth2UserService))
-            .successHandler(customAuthenticationSuccessHandler)
-        )
-        .logout(logout -> logout
-            .logoutUrl("/mbtkids/logout")
-            .logoutSuccessUrl("/mbtkids")
-            .invalidateHttpSession(true)
-            .clearAuthentication(true)
-            .permitAll());
+    http.authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers("/mbtkids", "/mbtkids/register", "/mbtkids/login")
+                    .permitAll()
+                    .requestMatchers("/mbtkids/child/**")
+                    .authenticated()
+                    .requestMatchers("/mbtkids/childSelectOrAdd")
+                    .authenticated()
+                    .anyRequest()
+                    .permitAll())
+        .formLogin(
+            login ->
+                login
+                    .loginPage("/mbtkids/login")
+                    .loginProcessingUrl("/mbtkids/login")
+                    .usernameParameter("loginIdOrEmail")
+                    .defaultSuccessUrl("/mbtkids/childSelectOrAdd", true)
+                    .failureUrl("/mbtkids")
+                    .permitAll())
+        .oauth2Login(
+            oauth ->
+                oauth
+                    .loginPage("/mbtkids/login")
+                    .userInfoEndpoint(
+                        userInfoEndpointConfig ->
+                            userInfoEndpointConfig.userService(principalOauth2UserService))
+                    .successHandler(customAuthenticationSuccessHandler))
+        .logout(
+            logout ->
+                logout
+                    .logoutUrl("/mbtkids/logout")
+                    .logoutSuccessUrl("/mbtkids")
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .permitAll());
 
     return http.build();
   }

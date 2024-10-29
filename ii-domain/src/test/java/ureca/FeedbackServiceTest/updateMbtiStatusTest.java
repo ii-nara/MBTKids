@@ -22,8 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @TestInstance(Lifecycle.PER_CLASS)
 public class updateMbtiStatusTest {
 
-  @Autowired
-  private MbtiManagementService mbtiManagementService;
+  @Autowired private MbtiManagementService mbtiManagementService;
 
   private MbtiStatusEntity mbtiStatus;
 
@@ -33,39 +32,45 @@ public class updateMbtiStatusTest {
 
   @BeforeAll
   void setUp() {
-    mbtiStatus = MbtiStatusEntity.builder()
-        .typeIE(5)
-        .typeSN(5)
-        .typeTF(5)
-        .typePJ(5).build();
+    mbtiStatus = MbtiStatusEntity.builder().typeIE(5).typeSN(5).typeTF(5).typePJ(5).build();
 
-    child = ChildEntity.builder()
-        .parentId(1L)
-        .mbtiStatusEntity(mbtiStatus)
-        .childName("테스트")
-        .childAge(5)
-        .createdAt(LocalDateTime.now()).build();
+    child =
+        ChildEntity.builder()
+            .parentId(1L)
+            .mbtiStatusEntity(mbtiStatus)
+            .childName("테스트")
+            .childAge(5)
+            .createdAt(LocalDateTime.now())
+            .build();
 
     responseFeedbackDto = responseFeedbackDto.of(1L, 1, 1, 1, -1, -1, LikeStatus.DISLIKE);
 
     System.out.println("============ 최초 상태 ==================");
-    System.out.println("now MBTI"
-        + "\nIE -> " + mbtiStatus.getTypeIE()
-        + "\nSN -> " + mbtiStatus.getTypeSN()
-        + "\nTF -> " + mbtiStatus.getTypeTF()
-        + "\npj -> " + mbtiStatus.getTypePJ()
-    );
+    System.out.println(
+        "now MBTI"
+            + "\nIE -> "
+            + mbtiStatus.getTypeIE()
+            + "\nSN -> "
+            + mbtiStatus.getTypeSN()
+            + "\nTF -> "
+            + mbtiStatus.getTypeTF()
+            + "\npj -> "
+            + mbtiStatus.getTypePJ());
     System.out.println("==============================");
   }
 
   @AfterEach
   void printFeedback() {
-    System.out.println("now MBTI"
-        + "\nIE -> " + mbtiStatus.getTypeIE()
-        + "\nSN -> " + mbtiStatus.getTypeSN()
-        + "\nTF -> " + mbtiStatus.getTypeTF()
-        + "\npj -> " + mbtiStatus.getTypePJ()
-    );
+    System.out.println(
+        "now MBTI"
+            + "\nIE -> "
+            + mbtiStatus.getTypeIE()
+            + "\nSN -> "
+            + mbtiStatus.getTypeSN()
+            + "\nTF -> "
+            + mbtiStatus.getTypeTF()
+            + "\npj -> "
+            + mbtiStatus.getTypePJ());
     System.out.println("==============================");
   }
 
@@ -109,5 +114,4 @@ public class updateMbtiStatusTest {
   void test6() {
     mbtiManagementService.updateMbtiStatus(child, responseFeedbackDto);
   }
-
 }

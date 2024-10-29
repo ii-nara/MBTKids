@@ -3,10 +3,10 @@ package com.ureca.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ureca.model.MbtiQuestion;
-import com.ureca.model.MbtiQuestionProvider;
 import com.ureca.dto.MbtiStatusRequestDto;
 import com.ureca.dto.MbtiStatusResponseDto;
+import com.ureca.model.MbtiQuestion;
+import com.ureca.model.MbtiQuestionProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,8 +31,8 @@ public class MbtiTestService {
   private final MbtiQuestionProvider mbtiQuestionProvider;
   private final MbtiManagementService mbtiManagementService;
 
-  MbtiTestService(MbtiQuestionProvider mbtiQuestionProvider,
-      MbtiManagementService mbtiManagementService) {
+  MbtiTestService(
+      MbtiQuestionProvider mbtiQuestionProvider, MbtiManagementService mbtiManagementService) {
     this.objectMapper = new ObjectMapper();
     this.mbtiQuestionProvider = mbtiQuestionProvider;
     this.mbtiManagementService = mbtiManagementService;
@@ -41,8 +41,7 @@ public class MbtiTestService {
   // 1-1. JSON to List<Integer>
   public List<Integer> jsonStrToList(String answers) {
     try {
-      return objectMapper.readValue(answers, new TypeReference<List<Integer>>() {
-      });
+      return objectMapper.readValue(answers, new TypeReference<List<Integer>>() {});
     } catch (JsonProcessingException e) {
       logger.error("JSON parsing error: ", e.getMessage());
       return Collections.emptyList();
@@ -51,15 +50,14 @@ public class MbtiTestService {
 
   // 1-2. 백분율 변환
   public int changeRatio(int scoreA, int scoreB) {
-    if(scoreA + scoreB == 0) return 0;
+    if (scoreA + scoreB == 0) return 0;
     return (int) Math.floor((scoreA * 100.0) / (scoreA + scoreB));
   }
 
   // 2. 초기화
   // MBTI 성향별 강도, 개수 Map
   private Map<String, Integer> initMbtiMap() {
-    return new HashMap<>(Map.of("I", 0, "E", 0, "S", 0, "N", 0,
-        "T", 0, "F", 0, "P", 0, "J", 0));
+    return new HashMap<>(Map.of("I", 0, "E", 0, "S", 0, "N", 0, "T", 0, "F", 0, "P", 0, "J", 0));
   }
 
   // MBTI 유형별 요소 Map
@@ -73,8 +71,8 @@ public class MbtiTestService {
   }
 
   // 3. 답변 -> 성향별 총 점수 및 개수
-  private void calculateSum(List<Integer> answerList, Map<String, Integer> scoreMap,
-      Map<String, Integer> countMap) {
+  private void calculateSum(
+      List<Integer> answerList, Map<String, Integer> scoreMap, Map<String, Integer> countMap) {
     // 질문 목록
     List<MbtiQuestion> questionList = mbtiQuestionProvider.getMbtiQuestions();
     // 모든 응답에 대해
@@ -87,14 +85,16 @@ public class MbtiTestService {
       // 답변 : 정수 (1~4)
       int answerValue = answerList.get(i);
       // 점수 계산 : 긍정 (1~2), 부정 (3~4)
-      int score = (answerValue <= POSITIVE_THRESHOLD) ?
-          (NEGATIVE_THRESHOLD - answerValue) : (answerValue - POSITIVE_THRESHOLD); // 강도
+      int score =
+          (answerValue <= POSITIVE_THRESHOLD)
+              ? (NEGATIVE_THRESHOLD - answerValue)
+              : (answerValue - POSITIVE_THRESHOLD); // 강도
       String type = (answerValue <= POSITIVE_THRESHOLD) ? positiveType : negativeType; // MBTI
       // 결과
       scoreMap.put(type, scoreMap.get(type) + score);
       countMap.put(type, countMap.get(type) + 1);
-      System.out.println("scoreMap: "+scoreMap.toString());
-      System.out.println("countMap: "+countMap.toString());
+      System.out.println("scoreMap: " + scoreMap.toString());
+      System.out.println("countMap: " + countMap.toString());
     }
   }
 
@@ -149,18 +149,19 @@ public class MbtiTestService {
     calculateSum(answerList, scoreMap, countMap);
     // (4) MBTI 계산
     String mbti = calculateMbti(countMap);
-    System.out.println("mbti: "+mbti);
+    System.out.println("mbti: " + mbti);
     // (5) 강도 계산
     List<Integer> scoreList = calculateScore(scoreMap);
-    System.out.println("score: "+scoreList.toString());
+    System.out.println("score: " + scoreList.toString());
     // (6) 저장
-    MbtiStatusRequestDto requestDto = MbtiStatusRequestDto.builder()
-        .mbti(mbti.toString())
-        .scoreIE(scoreList.get(INDEX_IE))
-        .scoreSN(scoreList.get(INDEX_SN))
-        .scoreTF(scoreList.get(INDEX_TF))
-        .scorePJ(scoreList.get(INDEX_PJ))
-        .build();
+    MbtiStatusRequestDto requestDto =
+        MbtiStatusRequestDto.builder()
+            .mbti(mbti.toString())
+            .scoreIE(scoreList.get(INDEX_IE))
+            .scoreSN(scoreList.get(INDEX_SN))
+            .scoreTF(scoreList.get(INDEX_TF))
+            .scorePJ(scoreList.get(INDEX_PJ))
+            .build();
     MbtiStatusResponseDto responseDto = mbtiManagementService.insertMbtiStatus(childId, requestDto);
     return responseDto;
   }

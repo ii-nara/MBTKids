@@ -32,8 +32,8 @@ public class MbtiManagementController {
     Long childId = child.getChildId();
 
     MbtiStatusResponseDto mbtiStatusResponseDto = mbtiManagementService.getMbtiStatus(childId);
-    MbtiInfoResponseDto mbtiInfoResponseDto = mbtiInfoService.getMbtiNmInfo(
-        mbtiStatusResponseDto.getMbtiType());
+    MbtiInfoResponseDto mbtiInfoResponseDto =
+        mbtiInfoService.getMbtiNmInfo(mbtiStatusResponseDto.getMbtiType());
 
     model.addAttribute(child);
     model.addAttribute(mbtiStatusResponseDto);
@@ -43,18 +43,23 @@ public class MbtiManagementController {
 
   @GetMapping("/history")
   public String getHistory(
-      @RequestParam(value = "startDate", defaultValue = "#{T(java.time.LocalDate).now().minusWeeks(1)}") LocalDate startDate,
-      @RequestParam(value = "endDate", defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate endDate,
+      @RequestParam(
+              value = "startDate",
+              defaultValue = "#{T(java.time.LocalDate).now().minusWeeks(1)}")
+          LocalDate startDate,
+      @RequestParam(value = "endDate", defaultValue = "#{T(java.time.LocalDate).now()}")
+          LocalDate endDate,
       Model model,
       @AuthenticationPrincipal PrincipalDetails principalDetails) {
     Long childId = principalDetails.getChild().getChildId();
-    List<MbtiHistoryResponseDto> mbtiHistoryList = mbtiManagementService.getMbtiHistory(childId,
-        startDate, endDate);
+    List<MbtiHistoryResponseDto> mbtiHistoryList =
+        mbtiManagementService.getMbtiHistory(childId, startDate, endDate);
 
     if (mbtiHistoryList.isEmpty()) {
       model.addAttribute("noDataAlert", true);
-      mbtiHistoryList = mbtiManagementService.getMbtiHistory(childId, LocalDate.now().minusWeeks(1),
-          LocalDate.now());
+      mbtiHistoryList =
+          mbtiManagementService.getMbtiHistory(
+              childId, LocalDate.now().minusWeeks(1), LocalDate.now());
     } else {
       model.addAttribute("noDataAlert", false);
     }
@@ -68,5 +73,4 @@ public class MbtiManagementController {
     mbtiManagementService.deleteMbtiLogical(childId);
     return "redirect:/mbtkids/childSelectOrAdd";
   }
-
 }

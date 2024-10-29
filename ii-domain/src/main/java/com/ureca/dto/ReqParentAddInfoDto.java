@@ -10,5 +10,4 @@ public class ReqParentAddInfoDto {
   private final String userName;
   private final String phoneNumber;
   private final boolean infoAgreeYn;
-
 }

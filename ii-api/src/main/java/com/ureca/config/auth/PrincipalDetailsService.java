@@ -18,11 +18,15 @@ public class PrincipalDetailsService implements UserDetailsService {
   public UserDetails loadUserByUsername(String loginIdOrEmail) throws UsernameNotFoundException {
     ParentEntity parent;
     if (loginIdOrEmail.contains("@")) {
-      parent = parentRepository.findByEmail(loginIdOrEmail)
-          .orElseThrow(() -> new IllegalArgumentException("아이디 또는 이메일을 확인해주세요."));
+      parent =
+          parentRepository
+              .findByEmail(loginIdOrEmail)
+              .orElseThrow(() -> new IllegalArgumentException("아이디 또는 이메일을 확인해주세요."));
     } else {
-      parent = parentRepository.findByParentLoginId(loginIdOrEmail)
-          .orElseThrow(() -> new IllegalArgumentException("아이디 또는 이메일을 확인해주세요."));
+      parent =
+          parentRepository
+              .findByParentLoginId(loginIdOrEmail)
+              .orElseThrow(() -> new IllegalArgumentException("아이디 또는 이메일을 확인해주세요."));
     }
     return new PrincipalDetails(parent);
   }

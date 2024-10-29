@@ -38,7 +38,8 @@ public class ParentController {
   }
 
   @PostMapping("/oauth/additionalInfo")
-  public String addInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,
+  public String addInfo(
+      @AuthenticationPrincipal PrincipalDetails principalDetails,
       @ModelAttribute ReqParentAddInfoDto parentAddInfoDto) {
     ParentEntity parent = principalDetails.getParent();
     parentService.saveAdditionalInfo(parentAddInfoDto, parent);
@@ -47,8 +48,8 @@ public class ParentController {
   }
 
   @GetMapping("/childSelectOrAdd")
-  public String loginSuccess(Model model, @AuthenticationPrincipal
-  PrincipalDetails principalDetails) {
+  public String loginSuccess(
+      Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
     ParentEntity parent = principalDetails.getParent();
     model.addAttribute("parent", parent);
 
@@ -59,8 +60,8 @@ public class ParentController {
   }
 
   @GetMapping("/child/select/{childId}")
-  public String childProfile(@PathVariable Long childId, @AuthenticationPrincipal PrincipalDetails
-      principalDetails) {
+  public String childProfile(
+      @PathVariable Long childId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
     ChildEntity child = childAddService.findChildById(childId);
     principalDetails.setChild(child);
 
@@ -68,8 +69,8 @@ public class ParentController {
   }
 
   @GetMapping("/child/profile")
-  public String childProfile(Model model,
-      @AuthenticationPrincipal PrincipalDetails principalDetails) {
+  public String childProfile(
+      Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
     ChildEntity child = principalDetails.getChild();
     model.addAttribute("child", child);
 
@@ -78,7 +79,7 @@ public class ParentController {
       return "redirect:/mbtkids/mbti/test";
     }
     return "redirect:/mbtkids/home";
-    //기존 : return "parent/childProfile";
+    // 기존 : return "parent/childProfile";
   }
 
   @GetMapping("/child/add")
@@ -87,8 +88,9 @@ public class ParentController {
   }
 
   @PostMapping("/child/add")
-  public String addChild(@AuthenticationPrincipal PrincipalDetails principalDetails, @ModelAttribute
-  ChildCreateDto childCreateDto) {
+  public String addChild(
+      @AuthenticationPrincipal PrincipalDetails principalDetails,
+      @ModelAttribute ChildCreateDto childCreateDto) {
 
     ParentEntity parent = principalDetails.getParent();
 
@@ -98,8 +100,8 @@ public class ParentController {
   }
 
   @PostMapping("/register")
-  public String register(@ModelAttribute ParentSignUpRequestDto parentSignUpRequestDto,
-      Model model) {
+  public String register(
+      @ModelAttribute ParentSignUpRequestDto parentSignUpRequestDto, Model model) {
     try {
       parentService.create(parentSignUpRequestDto);
       model.addAttribute("message", "회원가입이 완료되었습니다.");

@@ -12,11 +12,7 @@ public class AiService {
 
     String mbti = "0000";
 
-    //ai 성향 분석 결과 내용 mbti에 넣기("ENTJ"), 해당없음은 0으로("0") 넣기 ex)EN0J
+    // ai 성향 분석 결과 내용 mbti에 넣기("ENTJ"), 해당없음은 0으로("0") 넣기 ex)EN0J
     return mbti;
-
-
-  } //setBookMbti
-
-
+  } // setBookMbti
 }

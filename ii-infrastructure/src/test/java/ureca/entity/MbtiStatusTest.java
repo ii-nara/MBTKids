@@ -15,24 +15,16 @@ public class MbtiStatusTest {
 
   private static final Logger logger = LoggerFactory.getLogger(MbtiStatusTest.class);
 
-  @Autowired
-  MbtiStatusRepository mbtiStatusRepository;
+  @Autowired MbtiStatusRepository mbtiStatusRepository;
 
   @Test
   public void insertMbti() {
     for (int i = 0; i < 10; i++) {
-      MbtiStatusEntity newMbtiStatus = MbtiStatusEntity.builder()
-          .typeIE(1)
-          .typeSN(10)
-          .typeTF(3)
-          .typePJ(8)
-          .build();
+      MbtiStatusEntity newMbtiStatus =
+          MbtiStatusEntity.builder().typeIE(1).typeSN(10).typeTF(3).typePJ(8).build();
 
       MbtiStatusEntity savedMbtiStatus = mbtiStatusRepository.save(newMbtiStatus);
       logger.info(savedMbtiStatus.toString());
     }
-
-
   }
-
 }

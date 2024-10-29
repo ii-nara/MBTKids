@@ -24,7 +24,7 @@ public class BookService {
   // 도서 목록 조회
   public List<BookInfo> getBookList(String searchWord) {
     List<BookInfo> bookList = bookRepository.findByBookNameOrWriterOrPublisher(searchWord);
-    //logger.info("조회 결과 : "+bookList);
+    // logger.info("조회 결과 : "+bookList);
 
     // 조회된 도서 수와 결과를 로그에 출력
     logger.info("조회된 도서 수: " + bookList.size());
@@ -34,41 +34,36 @@ public class BookService {
       logger.info("조회 결과: " + bookList);
     }
 
-
     return bookList;
-  } //getBookList
+  } // getBookList
 
   // 홈 - 도서 상세 조회
   public ResBookInfo getBookInfo(Long bookId) {
 
     BookEntity getBook =
-        bookRepository
-            .findById(bookId)
-            .orElseThrow(() -> new RuntimeException("data not found"));
-    //logger.info("조회 결과 : "+getBook);
+        bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("data not found"));
+    // logger.info("조회 결과 : "+getBook);
 
     ResBookInfo resBookInfo = convertToResBookInfo(getBook);
     resBookInfo.setLikeCnt(bookRepository.countLikesByBookId(bookId));
     resBookInfo.setDisLikeCnt(bookRepository.countDislikesByBookId(bookId));
 
     return resBookInfo;
-  } //getBookInfo
+  } // getBookInfo
 
   // 관리자웹 - 도서 상세 조회
   public ResBookDetail getBookDetail(Long bookId) {
 
     BookEntity getBook =
-        bookRepository
-            .findById(bookId)
-            .orElseThrow(() -> new RuntimeException("data not found"));
-    //logger.info("조회 결과 : "+getBook);
+        bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("data not found"));
+    // logger.info("조회 결과 : "+getBook);
 
     ResBookDetail resBookDetail = convertToResBookDetail(getBook);
     resBookDetail.setLikeCnt(bookRepository.countLikesByBookId(bookId));
     resBookDetail.setDisLikeCnt(bookRepository.countDislikesByBookId(bookId));
 
     return resBookDetail;
-  } //getBookInfo
+  } // getBookInfo
 
   // BookEntity → ResBookDetail 변환
   private ResBookDetail convertToResBookDetail(BookEntity bookEntity) {
@@ -92,9 +87,9 @@ public class BookService {
         bookEntity.getUpdateId(), // 수정자
         bookEntity.getDisplayYn(),
         0, // likeCnt 기본값 (필요에 따라 조정)
-        0  // disLikeCnt 기본값 (필요에 따라 조정)
-    );
-  } //convertToResBookDetail
+        0 // disLikeCnt 기본값 (필요에 따라 조정)
+        );
+  } // convertToResBookDetail
 
   // BookEntity → ResBookInfo 변환
   private ResBookInfo convertToResBookInfo(BookEntity bookEntity) {
@@ -117,9 +112,9 @@ public class BookService {
         bookEntity.getUpdateId(), // 수정자
         bookEntity.getDisplayYn(),
         0, // likeCnt 기본값 (필요에 따라 조정)
-        0  // disLikeCnt 기본값 (필요에 따라 조정)
-    );
-  } //convertToResBookInfo
+        0 // disLikeCnt 기본값 (필요에 따라 조정)
+        );
+  } // convertToResBookInfo
 
   // 도서 삭제
   public int deleteBookInfo(Long bookId) {
@@ -134,6 +129,5 @@ public class BookService {
     }
 
     return result;
-  } //deleteBookInfo
-
+  } // deleteBookInfo
 }

@@ -23,7 +23,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
   private final ParentRepository parentRepository;
 
-
   @Override
   public OAuth2User loadUser(OAuth2UserRequest req) throws OAuth2AuthenticationException {
     System.out.println("userRequest : " + req.getClientRegistration());
@@ -39,7 +38,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
       oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
     } else if (req.getClientRegistration().getRegistrationId().equals("kakao")) {
       System.out.println("카카오 로그인 요청");
-//      oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
+      //      oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
     }
 
     String provider = oAuth2UserInfo.getProvider();
@@ -53,15 +52,16 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     ParentEntity parent = null;
     if (parentOpt.isEmpty()) {
-      parent = ParentEntity.builder()
-          .parentLoginId(loginId)
-          .email(email)
-          .password(password)
-          .userName(username)
-          .provider(provider)
-          .createdAt(LocalDateTime.now())
-          .isActive(false)
-          .build();
+      parent =
+          ParentEntity.builder()
+              .parentLoginId(loginId)
+              .email(email)
+              .password(password)
+              .userName(username)
+              .provider(provider)
+              .createdAt(LocalDateTime.now())
+              .isActive(false)
+              .build();
       parentRepository.save(parent);
     }
     return new PrincipalDetails(parent, oAuth2User.getAttributes());

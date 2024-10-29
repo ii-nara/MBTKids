@@ -22,33 +22,30 @@ public class MbtiHistoryTest {
 
   private static final Logger logger = LoggerFactory.getLogger(FeetbackStatusTest.class);
 
-  @Autowired
-  MbtiHistoryRepository mbtiHistoryRepository;
-  @Autowired
-  private MbtiStatusRepository mbtiStatusRepository;
+  @Autowired MbtiHistoryRepository mbtiHistoryRepository;
+  @Autowired private MbtiStatusRepository mbtiStatusRepository;
 
   private MbtiStatusEntity mbtiStatusEntity;
 
   @BeforeAll
   public void setup() {
-    mbtiStatusEntity = mbtiStatusRepository.save(MbtiStatusEntity
-        .builder().typeIE(1)
-        .typeSN(10)
-        .typeTF(3)
-        .typePJ(8).build());
+    mbtiStatusEntity =
+        mbtiStatusRepository.save(
+            MbtiStatusEntity.builder().typeIE(1).typeSN(10).typeTF(3).typePJ(8).build());
   }
 
   @Test
   public void insertMbti() {
     for (int i = 0; i < 30; i++) {
-      MbtiHistoryEntity newMbtiStatus = MbtiHistoryEntity.builder()
-          .isLike(LikeStatus.valueOf("LIKE"))
-          .bookId(1L)
-          .typeIE(1)
-          .typeSN(10)
-          .typeTF(1)
-          .typePJ(10)
-          .build();
+      MbtiHistoryEntity newMbtiStatus =
+          MbtiHistoryEntity.builder()
+              .isLike(LikeStatus.valueOf("LIKE"))
+              .bookId(1L)
+              .typeIE(1)
+              .typeSN(10)
+              .typeTF(1)
+              .typePJ(10)
+              .build();
 
       mbtiStatusEntity.addHistory(newMbtiStatus);
     }
@@ -58,7 +55,7 @@ public class MbtiHistoryTest {
   @Test
   void delete() {
     // 부모가 사라지면 같이 사라집니다.
-    mbtiStatusRepository.delete(mbtiStatusRepository.findById(mbtiStatusEntity.getMbtiStausId() - 1L).get());
+    mbtiStatusRepository.delete(
+        mbtiStatusRepository.findById(mbtiStatusEntity.getMbtiStausId() - 1L).get());
   }
-
 }

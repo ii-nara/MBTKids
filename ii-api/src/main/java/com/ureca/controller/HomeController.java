@@ -34,18 +34,15 @@ public class HomeController {
   private final RabbitTemplate rabbitTemplate;
 
   @GetMapping("/home")
-  public String home(Model model,
-      @AuthenticationPrincipal PrincipalDetails principalDetails) {
+  public String home(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
     Long childId = principalDetails.getChild().getChildId();
 
-    BookPage<BookInfo> similarBooks = recommendService.recommendSimilarBooks(childId,
-        DEFAULT_OFFSET,
-        DEFAULT_LIMIT);
-    BookPage<BookInfo> oppositeBooks = recommendService.recommendOppositeBooks(childId,
-        DEFAULT_OFFSET,
-        DEFAULT_LIMIT);
-    BookPage<BookInfo> likedBooks = recommendService.recommendSimilarChildLikedBooks(
-        childId, DEFAULT_OFFSET, DEFAULT_LIMIT);
+    BookPage<BookInfo> similarBooks =
+        recommendService.recommendSimilarBooks(childId, DEFAULT_OFFSET, DEFAULT_LIMIT);
+    BookPage<BookInfo> oppositeBooks =
+        recommendService.recommendOppositeBooks(childId, DEFAULT_OFFSET, DEFAULT_LIMIT);
+    BookPage<BookInfo> likedBooks =
+        recommendService.recommendSimilarChildLikedBooks(childId, DEFAULT_OFFSET, DEFAULT_LIMIT);
 
     model.addAttribute("similarBooks", similarBooks);
     model.addAttribute("oppositeBooks", oppositeBooks);
@@ -57,7 +54,8 @@ public class HomeController {
   }
 
   @GetMapping("/books")
-  public String books(Model model,
+  public String books(
+      Model model,
       @RequestParam(value = "type") String type,
       @RequestParam(value = "page", defaultValue = "" + DEFAULT_OFFSET) int page,
       @RequestParam(value = "size", defaultValue = "" + DEFAULT_LIMIT) int size,
@@ -71,8 +69,8 @@ public class HomeController {
       return "redirect:/mbtkids/home";
     }
 
-    model.addAttribute("books",
-        recommendationType.recommend(recommendService, childId, page, size));
+    model.addAttribute(
+        "books", recommendationType.recommend(recommendService, childId, page, size));
     model.addAttribute("title", recommendationType.getTitle());
     model.addAttribute("type", type);
     model.addAttribute("currentPage", page);
@@ -81,27 +79,32 @@ public class HomeController {
     return "/book/books";
   }
 
-  //도서 상세 조회
+  // 도서 상세 조회
   @GetMapping("/book/detail")
-  public String bookDetail(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,
+  public String bookDetail(
+      Model model,
+      @AuthenticationPrincipal PrincipalDetails principalDetails,
       @RequestParam(defaultValue = "", required = true) Long bookId) {
     // 서비스 호출 - 도서 상세 조회
     ResBookInfo resBookInfo = bookService.getBookInfo(bookId);
-    resBookInfo.updateLikeStatus(feedbackManagementService.findFeedbackStatus(bookId, principalDetails.getChild().getChildId()));
+    resBookInfo.updateLikeStatus(
+        feedbackManagementService.findFeedbackStatus(
+            bookId, principalDetails.getChild().getChildId()));
 
     if (resBookInfo != null) {
       model.addAttribute("ResBookInfo", resBookInfo);
     }
-    //logger.info("ResBookInfo 전달 !" + resBookInfo);
+    // logger.info("ResBookInfo 전달 !" + resBookInfo);
     return "/book/detail";
-  } //bookDetail
+  } // bookDetail
 
-  //도서 좋아요
+  // 도서 좋아요
   @PostMapping("/book/feedback")
-  public String pressTheButton(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody RequestFeedbackDto requestFeedbackDto) {
+  public String pressTheButton(
+      @AuthenticationPrincipal PrincipalDetails principalDetails,
+      @RequestBody RequestFeedbackDto requestFeedbackDto) {
     requestFeedbackDto.updateChildId(principalDetails.getChild().getChildId());
     rabbitTemplate.convertAndSend("feedbackExchange", "feedbackRoutingKey", requestFeedbackDto);
     return "redirect:/mbtkids/book/detail?bookId=" + requestFeedbackDto.getBookId();
   }
-
 }

@@ -6,22 +6,22 @@ import org.springframework.web.multipart.MultipartFile;
 // WBK0111-도서수정, WBK0200-도서등록 화면 요청 DTO
 @Data
 public class ReqBookInfo {
-  //도서 아이디 - 수정만 존재
+  // 도서 아이디 - 수정만 존재
   private Long bookId;
-  //도서명
+  // 도서명
   private String bookName;
   // 도서 이미지 파일
   private MultipartFile bookImgFile;
   // 줄거리
   private String plot;
-  //작가명
+  // 작가명
   private String writer;
-  //출판사
+  // 출판사
   private String publisher;
   // 권장연령
   private String recommenedAge;
 
-  //성향
+  // 성향
   private String mbtiType;
   // 앞 : -1, 뒤 : 1, 상태없음 : 0
   // I/E

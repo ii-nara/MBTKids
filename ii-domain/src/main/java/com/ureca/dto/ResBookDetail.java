@@ -7,25 +7,25 @@ import lombok.Data;
 @Data
 public class ResBookDetail {
 
-  //신규 등록 여부
+  // 신규 등록 여부
   private boolean emptyFlags;
 
-  //도서 아이디
+  // 도서 아이디
   private Long bookId;
-  //도서명
+  // 도서명
   private String bookName;
-  //영화 포스터 URL
+  // 영화 포스터 URL
   private String bookImgUrl;
   // 줄거리
   private String plot;
-  //작가명
+  // 작가명
   private String writer;
-  //출판사
+  // 출판사
   private String publisher;
   // 권장연령
   private String recommenedAge;
 
-  //성향
+  // 성향
   private String mbtiType;
   // 앞 : -1, 뒤 : 1, 상태없음 : 0
   // I/E
@@ -95,7 +95,5 @@ public class ResBookDetail {
     this.disLikeCnt = disLikeCnt;
   }
 
-  public ResBookDetail() {
-
-  }
+  public ResBookDetail() {}
 }

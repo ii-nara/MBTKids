@@ -16,14 +16,17 @@ public class RecommendService {
   private final BookRepository bookRepository;
 
   private BookPage<BookInfo> getBookPage(Long count, List<BookEntity> entities) {
-    List<BookInfo> bookInfos = entities.stream()
-        .map(entity -> new BookInfo(
-            entity.getBookId(),
-            entity.getBookName(),
-            entity.getBookImgUrl(),
-            entity.getWriter(),
-            entity.getPublisher()))
-        .collect(Collectors.toList());
+    List<BookInfo> bookInfos =
+        entities.stream()
+            .map(
+                entity ->
+                    new BookInfo(
+                        entity.getBookId(),
+                        entity.getBookName(),
+                        entity.getBookImgUrl(),
+                        entity.getWriter(),
+                        entity.getPublisher()))
+            .collect(Collectors.toList());
     return new BookPage<>(count, bookInfos);
   }
 

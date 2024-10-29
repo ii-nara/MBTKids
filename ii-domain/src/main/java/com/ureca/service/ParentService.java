@@ -16,24 +16,25 @@ public class ParentService {
   private final ParentRepository parentRepository;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
   public ParentEntity create(ParentSignUpRequestDto parentSignUpRequestDto) {
-    parentRepository.findByParentLoginId(parentSignUpRequestDto.getParentLoginId())
-        .ifPresent(parent -> {
-          throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
-        });
+    parentRepository
+        .findByParentLoginId(parentSignUpRequestDto.getParentLoginId())
+        .ifPresent(
+            parent -> {
+              throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
+            });
 
     String encodedPwd = bCryptPasswordEncoder.encode(parentSignUpRequestDto.getPassword());
-    ParentEntity parent = ParentEntity.createParent(
-        parentSignUpRequestDto.getEmail(),
-        parentSignUpRequestDto.getParentLoginId(),
-        encodedPwd,
-        parentSignUpRequestDto.getUserName(),
-        parentSignUpRequestDto.getPhoneNumber(),
-        parentSignUpRequestDto.getProvider(),
-        LocalDateTime.now(),
-        parentSignUpRequestDto.isInfoAgreeYn()
-    );
+    ParentEntity parent =
+        ParentEntity.createParent(
+            parentSignUpRequestDto.getEmail(),
+            parentSignUpRequestDto.getParentLoginId(),
+            encodedPwd,
+            parentSignUpRequestDto.getUserName(),
+            parentSignUpRequestDto.getPhoneNumber(),
+            parentSignUpRequestDto.getProvider(),
+            LocalDateTime.now(),
+            parentSignUpRequestDto.isInfoAgreeYn());
     return parentRepository.save(parent);
   }
 
@@ -41,8 +42,7 @@ public class ParentService {
     parent.updateAdditionalInfo(
         parentAddInfoDto.getUserName(),
         parentAddInfoDto.getPhoneNumber(),
-        parentAddInfoDto.isInfoAgreeYn()
-    );
+        parentAddInfoDto.isInfoAgreeYn());
     parentRepository.save(parent);
   }
 }

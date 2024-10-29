@@ -16,12 +16,13 @@ public class ChildService {
   private final ChildRepository childRepository;
 
   public void addChild(ParentEntity parent, ChildCreateDto dto) {
-    ChildEntity child = ChildEntity.builder()
-        .childName(dto.getChildName())
-        .childAge(dto.getChildAge())
-        .parentId(parent.getParentId())
-        .createdAt(LocalDateTime.now())
-        .build();
+    ChildEntity child =
+        ChildEntity.builder()
+            .childName(dto.getChildName())
+            .childAge(dto.getChildAge())
+            .parentId(parent.getParentId())
+            .createdAt(LocalDateTime.now())
+            .build();
     childRepository.save(child);
   }
 
@@ -30,7 +31,8 @@ public class ChildService {
   }
 
   public ChildEntity findChildById(Long childId) {
-    return childRepository.findById(childId)
+    return childRepository
+        .findById(childId)
         .orElseThrow(() -> new IllegalArgumentException("해당 자식이 존재하지 않습니다."));
   }
 }

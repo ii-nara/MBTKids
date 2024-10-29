@@ -36,26 +36,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 @TestInstance(Lifecycle.PER_CLASS)
 public class addFeedbackSyncTest {
 
-  @Autowired
-  private FeedbackComponentService feedbackComponentService;
+  @Autowired private FeedbackComponentService feedbackComponentService;
 
-  @Autowired
-  private BookRepository bookRepository;
+  @Autowired private BookRepository bookRepository;
 
-  @Autowired
-  private ParentRepository parentRepository;
+  @Autowired private ParentRepository parentRepository;
 
-  @Autowired
-  private ChildRepository childRepository;
+  @Autowired private ChildRepository childRepository;
 
-  @Autowired
-  private MbtiStatusRepository mbtiStatusRepository;
+  @Autowired private MbtiStatusRepository mbtiStatusRepository;
 
-  @Autowired
-  private MbtiHistoryRepository mbtiHistoryRepository;
+  @Autowired private MbtiHistoryRepository mbtiHistoryRepository;
 
-  @Autowired
-  private FeedbackStatusRepository feedbackStatusRepository;
+  @Autowired private FeedbackStatusRepository feedbackStatusRepository;
 
   private BookEntity testBook;
 
@@ -72,39 +65,61 @@ public class addFeedbackSyncTest {
     testChildren = new ArrayList<>();
     testRequestFeedback = new ArrayList<>();
 
-    testBook = bookRepository.save(BookEntity.builder()
-        .bookName("테스트 도서").typeIE(1).typeSN(1).typeTF(-1).typePJ(-1).build());
+    testBook =
+        bookRepository.save(
+            BookEntity.builder()
+                .bookName("테스트 도서")
+                .typeIE(1)
+                .typeSN(1)
+                .typeTF(-1)
+                .typePJ(-1)
+                .build());
 
-    testParent = parentRepository.save(ParentEntity.builder().email("").parentLoginId("")
-        .password("").createdAt(LocalDateTime.now()).build());
+    testParent =
+        parentRepository.save(
+            ParentEntity.builder()
+                .email("")
+                .parentLoginId("")
+                .password("")
+                .createdAt(LocalDateTime.now())
+                .build());
 
     for (int i = 0; i < testCount; i++) {
-      ChildEntity testChild = childRepository.save(ChildEntity.builder()
-          .parentId(testParent.getParentId()).childName("테스트 자녀" + i)
-          .childAge(5).build());
+      ChildEntity testChild =
+          childRepository.save(
+              ChildEntity.builder()
+                  .parentId(testParent.getParentId())
+                  .childName("테스트 자녀" + i)
+                  .childAge(5)
+                  .build());
 
-      MbtiHistoryEntity mbtiHistory = mbtiHistoryRepository.save(MbtiHistoryEntity.builder()
-          .typeIE(5).typeSN(5).typeTF(5).typePJ(5).build());
+      MbtiHistoryEntity mbtiHistory =
+          mbtiHistoryRepository.save(
+              MbtiHistoryEntity.builder().typeIE(5).typeSN(5).typeTF(5).typePJ(5).build());
 
-      MbtiStatusEntity mbtiStatus = mbtiStatusRepository.save(MbtiStatusEntity.builder()
-          .typeIE(5).typeSN(5).typeTF(5).typePJ(5).childEntity(testChild).build());
+      MbtiStatusEntity mbtiStatus =
+          mbtiStatusRepository.save(
+              MbtiStatusEntity.builder()
+                  .typeIE(5)
+                  .typeSN(5)
+                  .typeTF(5)
+                  .typePJ(5)
+                  .childEntity(testChild)
+                  .build());
 
       mbtiStatus.addHistory(mbtiHistory);
 
       testChild.setMbtiStatusEntity(mbtiStatus);
 
       testChildren.add(testChild);
-
     }
 
     for (int i = 0; i < testCount; i++) {
-      testRequestFeedback.add(RequestFeedbackDto.of(
-          testChildren.get(i).getChildId(), testBook.getBookId(), 1)
-      );
+      testRequestFeedback.add(
+          RequestFeedbackDto.of(testChildren.get(i).getChildId(), testBook.getBookId(), 1));
     }
 
     System.out.println("======================== Set Up is end =====================");
-
   }
 
   @Test
@@ -117,15 +132,16 @@ public class addFeedbackSyncTest {
 
     for (int i = 0; i < numThreads; i++) {
       int finalI = i;
-      executorService.execute(() -> {
-        try {
-          feedbackComponentService.addFeedback(testRequestFeedback.get(finalI));
-        } catch (Exception e) {
-          e.printStackTrace();
-        } finally {
-          countDownLatch.countDown(); // 예외 발생해도 countDown 실행
-        }
-      });
+      executorService.execute(
+          () -> {
+            try {
+              feedbackComponentService.addFeedback(testRequestFeedback.get(finalI));
+            } catch (Exception e) {
+              e.printStackTrace();
+            } finally {
+              countDownLatch.countDown(); // 예외 발생해도 countDown 실행
+            }
+          });
     }
 
     countDownLatch.await(10, TimeUnit.SECONDS);
@@ -135,5 +151,4 @@ public class addFeedbackSyncTest {
     System.out.println("좋아요 개수 : " + afterTest);
     assertThat(afterTest, is((long) numThreads));
   }
-
 }

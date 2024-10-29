@@ -21,12 +21,12 @@ public class BatchScheduler {
   private final JobLauncher jobLauncher;
   private final JobRegistry jobRegistry;
 
-//  @Bean
-//  public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor() {
-//    JobRegistryBeanPostProcessor jobProcessor = new JobRegistryBeanPostProcessor();
-//    jobProcessor.setJobRegistry(jobRegistry);
-//    return jobProcessor;
-//  }
+  //  @Bean
+  //  public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor() {
+  //    JobRegistryBeanPostProcessor jobProcessor = new JobRegistryBeanPostProcessor();
+  //    jobProcessor.setJobRegistry(jobRegistry);
+  //    return jobProcessor;
+  //  }
 
   @Scheduled(cron = "0 0 0 * * * ") // 매일 오전 00:00 실행
   public void runJob() {
@@ -37,11 +37,10 @@ public class BatchScheduler {
       jobLauncher.run(job, jobParam.toJobParameters());
     } catch (NoSuchJobException e) {
       throw new RuntimeException(e);
-    } catch (JobInstanceAlreadyCompleteException |
-             JobExecutionAlreadyRunningException |
-             JobParametersInvalidException |
-             JobRestartException e
-    ) {
+    } catch (JobInstanceAlreadyCompleteException
+        | JobExecutionAlreadyRunningException
+        | JobParametersInvalidException
+        | JobRestartException e) {
       throw new RuntimeException(e);
     }
   }

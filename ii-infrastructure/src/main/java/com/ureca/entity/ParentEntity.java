@@ -61,11 +61,15 @@ public class ParentEntity {
   @Column(name = "infoAgreeYn")
   private boolean infoAgreeYn;
 
-
-  public static ParentEntity createParent(String email, String parentLoginId, String password,
+  public static ParentEntity createParent(
+      String email,
+      String parentLoginId,
+      String password,
       String userName,
-      String phoneNumber, String provider,
-      LocalDateTime createdAt, boolean infoAgreeYn) {
+      String phoneNumber,
+      String provider,
+      LocalDateTime createdAt,
+      boolean infoAgreeYn) {
     return ParentEntity.builder()
         .email(email)
         .parentLoginId(parentLoginId)
@@ -77,7 +81,6 @@ public class ParentEntity {
         .isActive(true)
         .infoAgreeYn(infoAgreeYn)
         .build();
-
   }
 
   public void updateAdditionalInfo(String userName, String phoneNumber, boolean infoAgreeYn) {

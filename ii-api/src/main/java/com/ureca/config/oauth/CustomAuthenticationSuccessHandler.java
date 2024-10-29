@@ -19,14 +19,17 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
   private final ParentRepository parentRepository;
 
   @Override
-  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-      Authentication authentication) throws IOException, ServletException {
+  public void onAuthenticationSuccess(
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+      throws IOException, ServletException {
 
     PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
     String email = principalDetails.getParent().getEmail();
 
-    ParentEntity parent = parentRepository.findByEmail(email)
-        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    ParentEntity parent =
+        parentRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     if (parent.isActive()) {
       response.sendRedirect(request.getContextPath() + "/mbtkids/childSelectOrAdd");

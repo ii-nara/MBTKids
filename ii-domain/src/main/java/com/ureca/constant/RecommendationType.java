@@ -7,16 +7,16 @@ import lombok.Getter;
 
 @Getter
 public enum RecommendationType {
-  SIMILAR("아이 성향 추천",
-      (service, childId, page, size) -> service.recommendSimilarBooks(childId,
-          page * size, size)),
-  OPPOSITE("반대 성향 추천",
-      (service, childId, page, size) -> service.recommendOppositeBooks(childId,
-          page * size, size)),
-  LIKE("유사 성향 아이들 추천",
-      (service, childId, page, size) -> service.recommendSimilarChildLikedBooks(
-          childId,
-          page * size, size));
+  SIMILAR(
+      "아이 성향 추천",
+      (service, childId, page, size) -> service.recommendSimilarBooks(childId, page * size, size)),
+  OPPOSITE(
+      "반대 성향 추천",
+      (service, childId, page, size) -> service.recommendOppositeBooks(childId, page * size, size)),
+  LIKE(
+      "유사 성향 아이들 추천",
+      (service, childId, page, size) ->
+          service.recommendSimilarChildLikedBooks(childId, page * size, size));
 
   private final String title;
   private final RecommendAction action;

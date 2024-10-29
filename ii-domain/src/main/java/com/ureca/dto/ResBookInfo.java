@@ -21,7 +21,7 @@ public class ResBookInfo {
   private String publisher;
   // 권장연령
   private String recommenedAge;
-  //성향
+  // 성향
   private String mbtiType;
   // 앞 : -1, 뒤 : 1, 상태없음 : 0
   // I/E
@@ -94,5 +94,4 @@ public class ResBookInfo {
   public void updateLikeStatus(String likeStatus) {
     this.likeStatus = likeStatus;
   }
-
 }

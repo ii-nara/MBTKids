@@ -60,7 +60,13 @@ public class MbtiHistoryEntity {
   private LocalDateTime timeStamp;
 
   @Builder
-  public MbtiHistoryEntity(Long bookId, LikeStatus isLike, Integer typeIE, Integer typeSN, Integer typeTF, Integer typePJ) {
+  public MbtiHistoryEntity(
+      Long bookId,
+      LikeStatus isLike,
+      Integer typeIE,
+      Integer typeSN,
+      Integer typeTF,
+      Integer typePJ) {
     this.bookId = (bookId != null) ? bookId : null;
     this.isLike = (isLike != null) ? isLike : null;
     this.typeIE = typeIE;

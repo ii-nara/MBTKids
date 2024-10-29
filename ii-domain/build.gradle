@@ -21,6 +21,14 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
 test {
     useJUnitPlatform()
 }

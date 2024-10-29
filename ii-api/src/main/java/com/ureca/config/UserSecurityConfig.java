@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class UserSecurityConfig {
 
   private final PrincipalOauth2UserService principalOauth2UserService;
   private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;

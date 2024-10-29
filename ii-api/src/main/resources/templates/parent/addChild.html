@@ -3,24 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>자식 추가</title>
+  <title>아이둘나라</title>
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/css/parent/addChild.css">
 </head>
 <body>
-<h1>자식 추가</h1>
+<i class='bx bxs-star decoration decoration-1'></i>
+<i class='bx bxs-heart decoration decoration-2'></i>
 
-<form action="/mbtkids/child/add" method="POST">
-  <label for="childName">자식 이름:</label>
-  <input type="text" id="childName" name="childName" required><br><br>
+<div class="container">
+  <h1 class="title">
+    <i class='bx bx-child'></i>
+    새로운 아이 등록하기
+  </h1>
 
-  <label for="childAge">자식 나이:</label>
-  <input type="number" id="childAge" name="childAge" required><br><br>
+  <form action="/mbtkids/child/add" method="POST">
+    <div class="form-group">
+      <label for="childName">아이 이름</label>
+      <input type="text"
+             id="childName"
+             name="childName"
+             required
+             placeholder="아이의 이름을 입력해주세요">
+      <i class='bx bx-smile'></i>
+    </div>
 
-  <button type="submit">저장</button>
-</form>
+    <div class="form-group">
+      <label for="childAge">아이 나이</label>
+      <input type="number"
+             id="childAge"
+             name="childAge"
+             required
+             min="1"
+             max="12"
+             placeholder="아이의 나이를 입력해주세요">
+      <i class='bx bx-cake'></i>
+    </div>
 
-<!-- 필요하면 자식 추가 취소 버튼도 추가 가능 -->
-<a href="/mbtkids/childSelectOrAdd">
-  <button type="button">취소</button>
-</a>
+    <div class="button-group">
+      <a href="/mbtkids/childSelectOrAdd" style="flex: 1;">
+        <button type="button" class="btn btn-secondary" style="width: 100%;">
+          <i class='bx bx-arrow-back'></i> 돌아가기
+        </button>
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class='bx bx-check'></i> 등록하기
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const form = document.querySelector('form');
+  const nameInput = document.getElementById('childName');
+  const ageInput = document.getElementById('childAge');
+
+  form.addEventListener('submit', (e) => {
+    if (nameInput.value.trim() === '') {
+      e.preventDefault();
+      alert('아이의 이름을 입력해주세요!');
+      nameInput.focus();
+    }
+
+    const age = parseInt(ageInput.value);
+    if (isNaN(age) || age < 1 || age > 12) {
+      e.preventDefault();
+      alert('1-12세 사이의 나이를 입력해주세요!');
+      ageInput.focus();
+    }
+  });
+</script>
 </body>
 </html>

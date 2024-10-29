@@ -24,6 +24,9 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
   }
 
   public PrincipalDetails(ParentEntity parent, Map<String, Object> attributes) {
+    if (parent == null) {
+      throw new IllegalArgumentException("Parent entity cannot be null");
+    }
     this.parent = parent;
     this.attributes = attributes;
   }

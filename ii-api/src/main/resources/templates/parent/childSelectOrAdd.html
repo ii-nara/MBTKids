@@ -5,32 +5,36 @@
   <title>아이둘나라</title>
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link th:href="@{/css/home.css}" rel="stylesheet"/>
-  <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/css/parent/childSelectOrAdd.css">
 </head>
 <body>
-<!-- (상단 레이아웃) 네비게이션 바 -->
 <th:block th:replace="navbar :: navbar"></th:block>
 
-<!-- 본문 내용 -->
-<div class="container mt-5">
-  <h1>자식을 추가하거나 선택하세요</h1>
+<div class="main-container">
+  <h1 class="page-title">
+    <i class='bx bxs-baby-carriage title-icon'></i>
+    우리 아이를 선택해주세요
+  </h1>
 
-  <ul>
+  <ul class="children-list">
     <th:block th:each="child : ${children}">
       <li>
-        <a th:href="@{/mbtkids/child/select/{childId}(childId=${child.childId})}">
-          <span th:text="${child.childName}">자식 이름</span>
+        <a th:href="@{/mbtkids/child/select/{childId}(childId=${child.childId})}"
+           class="child-card">
+          <i class='bx bx-child child-icon'></i>
+          <div class="child-name" th:text="${child.childName}">자식 이름</div>
         </a>
       </li>
     </th:block>
   </ul>
 
-  <!-- 자식 추가 페이지로 이동하는 버튼 -->
-  <a href="/mbtkids/child/add">
-    <button>자식 추가</button>
+  <a href="/mbtkids/child/add" class="add-child-btn">
+    <i class='bx bx-plus-circle add-icon'></i>
+    새로운 아이 추가
   </a>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

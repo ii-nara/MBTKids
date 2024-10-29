@@ -33,7 +33,7 @@ public class ParentController {
   }
 
   @GetMapping("/oauth/additionalInfo")
-  public String addInfoForm(Model model) {
+  public String addInfoForm() {
     return "parent/additionalForm";
   }
 

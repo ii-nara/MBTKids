@@ -3,92 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
-  <link rel="stylesheet" href="/css/parent/home.css">
+  <title>아이둘나라</title>
   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/css/parent/auth.css">
 </head>
 <body>
 <div class="login">
   <div class="login__content">
     <div class="login__img">
-      <img
-          src="/img/iinara.png"
-          alt="user login">
+      <img src="/img/iinara.png" alt="Reading kids illustration">
     </div>
     <div class="login__forms">
-
-      <!-- 로그인 폼 -->
       <form action="/mbtkids/login" method="POST" class="login__register block" id="login-in">
-        <h1 class="login__title">Sign In</h1>
+        <h1 class="login__title">책 친구가 되어주세요!</h1>
         <div class="login__box">
           <i class='bx bx-user login__icon'></i>
-          <input type="text" id="loginIdOrEmail" name="loginIdOrEmail"
-                 placeholder="Username or Email" class="login__input" required>
+          <input type="text" id="loginIdOrEmail" name="loginIdOrEmail" placeholder="아이디 또는 이메일"
+                 class="login__input" required>
         </div>
         <div class="login__box">
           <i class='bx bx-lock login__icon'></i>
-          <input type="password" id="password" name="password" placeholder="Password"
+          <input type="password" id="password" name="password" placeholder="비밀번호"
                  class="login__input" required>
         </div>
-        <button type="submit" class="login__button">로그인</button>
+        <button type="submit" class="login__button">시작하기</button>
 
         <div>
-          <span class="login__account">회원가입이 필요하신가요?</span>
-          <span class="login__signin" id="sign-up">Sign Up</span>
+          <span class="login__account">아직 회원이 아니신가요?</span>
+          <span class="login__signin" id="sign-up">함께하기</span>
+        </div>
+
+        <div class="login__social">
+          <a href="/oauth2/authorization/google" class="login__social--icon">
+            <i class='bx bxl-google'></i>
+          </a>
+          <a href="/oauth2/authorization/kakao" class="login__social--icon">
+            <img src="/img/kakao_login_small.png" alt="Kakao Login">
+          </a>
         </div>
       </form>
 
-      <!-- 회원가입 폼 -->
-      <form th:action="@{/mbtkids/register}" method="post" class="login__create none" id="login-up">
-        <h1 class="login__title">Create Account</h1>
+      <form action="/mbtkids/register" method="post" class="login__create none" id="login-up">
+        <h1 class="login__title">새로운 책 친구</h1>
         <div class="login__box">
           <i class='bx bx-user login__icon'></i>
-          <input type="text" id="parentLoginId" name="parentLoginId" placeholder="Login ID"
+          <input type="text" id="parentLoginId" name="parentLoginId" placeholder="로그인 아이디"
                  class="login__input" required>
         </div>
         <div class="login__box">
           <i class='bx bx-at login__icon'></i>
-          <input type="email" id="email" name="email" placeholder="Email" class="login__input"
+          <input type="email" id="email" name="email" placeholder="이메일" class="login__input"
                  required>
         </div>
         <div class="login__box">
           <i class='bx bx-lock login__icon'></i>
-          <input type="password" id="join_password" name="password" placeholder="Password"
+          <input type="password" id="join_password" name="password" placeholder="비밀번호"
                  class="login__input" required>
         </div>
         <div class="login__box">
           <i class='bx bx-user-circle login__icon'></i>
-          <input type="text" id="userName" name="userName" placeholder="User Name"
-                 class="login__input">
+          <input type="text" id="userName" name="userName" placeholder="이름" class="login__input">
         </div>
         <div class="login__box">
           <i class='bx bx-phone login__icon'></i>
-          <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Phone Number"
+          <input type="text" id="phoneNumber" name="phoneNumber" placeholder="전화번호"
                  class="login__input">
         </div>
-        <div class="login__box">
-          <label for="infoAgreeYn">Agree to Terms:</label>
-          <input type="hidden" name="infoAgreeYn" value="false">
+
+        <div class="agreement__box">
           <input type="checkbox" id="infoAgreeYn" name="infoAgreeYn" value="true">
+          <label for="infoAgreeYn">서비스 이용약관에 동의합니다</label>
         </div>
-        <button type="submit" class="login__button">회원가입</button>
+
+        <button type="submit" class="login__button">함께하기</button>
 
         <div>
-          <span class="login__account">이미 회원이신가요?</span>
-          <span class="login__signup" id="sign-in">로그인 화면으로</span>
-        </div>
-
-        <div class="login__social">
-          <a href="/oauth2/authorization/google" class="login__social--icon"><i
-              class='bx bxl-google'></i></a>
+          <span class="login__account">이미 책 친구신가요?</span>
+          <span class="login__signup" id="sign-in">로그인하기</span>
         </div>
       </form>
-
     </div>
   </div>
 </div>
 
-<!-- JavaScript 코드 추가 -->
 <script>
   const signup = document.getElementById("sign-up");
   const signin = document.getElementById("sign-in");
@@ -98,7 +95,6 @@
   signup.addEventListener("click", () => {
     loginin.classList.remove("block");
     loginin.classList.add("none");
-
     loginup.classList.remove("none");
     loginup.classList.add("block");
   });
@@ -106,11 +102,9 @@
   signin.addEventListener("click", () => {
     loginin.classList.remove("none");
     loginin.classList.add("block");
-
     loginup.classList.remove("block");
     loginup.classList.add("none");
   });
 </script>
 </body>
 </html>
-

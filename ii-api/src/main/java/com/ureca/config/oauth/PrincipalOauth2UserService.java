@@ -23,7 +23,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
   private final ParentRepository parentRepository;
 
-
   @Override
   public OAuth2User loadUser(OAuth2UserRequest req) throws OAuth2AuthenticationException {
     System.out.println("userRequest : " + req.getClientRegistration());
@@ -49,19 +48,23 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     String password = bCryptPasswordEncoder.encode("소셜로그인");
     String email = oAuth2UserInfo.getEmail();
 
-    ParentEntity parent = parentRepository.findByParentLoginId(loginId)
-        .orElseGet(() -> {
-          ParentEntity newParent = ParentEntity.builder()
-              .parentLoginId(loginId)
-              .email(email)
-              .password(password)
-              .userName(username)
-              .provider(provider)
-              .createdAt(LocalDateTime.now())
-              .isActive(false)
-              .build();
-          return parentRepository.save(newParent);
-        });
+    ParentEntity parent =
+        parentRepository
+            .findByParentLoginId(loginId)
+            .orElseGet(
+                () -> {
+                  ParentEntity newParent =
+                      ParentEntity.builder()
+                          .parentLoginId(loginId)
+                          .email(email)
+                          .password(password)
+                          .userName(username)
+                          .provider(provider)
+                          .createdAt(LocalDateTime.now())
+                          .isActive(false)
+                          .build();
+                  return parentRepository.save(newParent);
+                });
     return new PrincipalDetails(parent, oAuth2User.getAttributes());
   }
 }

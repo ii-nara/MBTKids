@@ -16,8 +16,7 @@ class BookTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BookTest.class);
 
-  @Autowired
-  BookRepository bookRepository;
+  @Autowired BookRepository bookRepository;
 
   // 등록 테스트
   @Test

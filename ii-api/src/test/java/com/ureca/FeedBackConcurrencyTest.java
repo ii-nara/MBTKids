@@ -35,23 +35,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 @TestInstance(Lifecycle.PER_CLASS)
 public class FeedBackConcurrencyTest {
 
-  @Autowired
-  private RabbitTemplate rabbitTemplate;
+  @Autowired private RabbitTemplate rabbitTemplate;
 
-  @Autowired
-  private BookRepository bookRepository;
+  @Autowired private BookRepository bookRepository;
 
-  @Autowired
-  private ParentRepository parentJpaRepository;
+  @Autowired private ParentRepository parentJpaRepository;
 
-  @Autowired
-  private ChildRepository childRepository;
+  @Autowired private ChildRepository childRepository;
 
-  @Autowired
-  private MbtiStatusRepository mbtiStatusRepository;
+  @Autowired private MbtiStatusRepository mbtiStatusRepository;
 
-  @Autowired
-  private MbtiHistoryRepository mbtiHistoryRepository;
+  @Autowired private MbtiHistoryRepository mbtiHistoryRepository;
 
   private BookEntity testBook;
 

@@ -3,11 +3,11 @@ package com.ureca.config.oauth;
 import com.ureca.config.CustomBCryptPasswordEncoder;
 import com.ureca.config.auth.PrincipalDetails;
 import com.ureca.config.oauth.provider.GoogleUserInfo;
+import com.ureca.config.oauth.provider.KakaoUserInfo;
 import com.ureca.config.oauth.provider.OAuth2UserInfo;
 import com.ureca.entity.ParentEntity;
 import com.ureca.repository.ParentRepository;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -39,7 +39,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
       oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
     } else if (req.getClientRegistration().getRegistrationId().equals("kakao")) {
       System.out.println("카카오 로그인 요청");
-//      oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
+      oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
     }
 
     String provider = oAuth2UserInfo.getProvider();

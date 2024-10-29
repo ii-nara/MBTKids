@@ -26,8 +26,8 @@ public class MbtiManagementService {
   private final ChildRepository childRepository;
 
   // toDTO
-  private MbtiStatusResponseDto createMbtiStatusResponseDto(int typeE, int typeN, int typeF,
-      int typeJ) {
+  private MbtiStatusResponseDto createMbtiStatusResponseDto(
+      int typeE, int typeN, int typeF, int typeJ) {
     int typeI = MAX_SCORE - typeE;
     int typeS = MAX_SCORE - typeN;
     int typeT = MAX_SCORE - typeF;
@@ -54,8 +54,10 @@ public class MbtiManagementService {
 
   // 0. 자녀 조회
   public ChildEntity getChild(Long childId) {
-    ChildEntity childEntity = childRepository.findById(childId)
-        .orElseThrow(() -> new RuntimeException("ID: " + childId + "의 자녀를 찾을 수 없습니다."));
+    ChildEntity childEntity =
+        childRepository
+            .findById(childId)
+            .orElseThrow(() -> new RuntimeException("ID: " + childId + "의 자녀를 찾을 수 없습니다."));
     return childEntity;
   }
 
@@ -64,13 +66,16 @@ public class MbtiManagementService {
   public MbtiStatusResponseDto getMbtiStatus(Long childId) {
     ChildEntity child = getChild(childId);
     MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
-    return createMbtiStatusResponseDto(mbtiStatus.getTypeIE(), mbtiStatus.getTypeSN(),
-        mbtiStatus.getTypeTF(), mbtiStatus.getTypePJ());
+    return createMbtiStatusResponseDto(
+        mbtiStatus.getTypeIE(),
+        mbtiStatus.getTypeSN(),
+        mbtiStatus.getTypeTF(),
+        mbtiStatus.getTypePJ());
   }
 
   // 2. 조회 (히스토리)
-  public List<MbtiHistoryResponseDto> getMbtiHistory(Long childId, LocalDate startDate,
-      LocalDate endDate) {
+  public List<MbtiHistoryResponseDto> getMbtiHistory(
+      Long childId, LocalDate startDate, LocalDate endDate) {
     ChildEntity child = getChild(childId);
     MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
     List<MbtiHistoryEntity> mbtiHistoryEntityList = mbtiStatus.getMbtiHistoryEntities();
@@ -87,23 +92,26 @@ public class MbtiManagementService {
         continue;
       }
 
-      MbtiStatusResponseDto mbtiStatusResponseDto = createMbtiStatusResponseDto(
-          mbtiHistoryEntity.getTypeIE(),
-          mbtiHistoryEntity.getTypeSN(), mbtiHistoryEntity.getTypeTF(),
-          mbtiHistoryEntity.getTypePJ());
+      MbtiStatusResponseDto mbtiStatusResponseDto =
+          createMbtiStatusResponseDto(
+              mbtiHistoryEntity.getTypeIE(),
+              mbtiHistoryEntity.getTypeSN(),
+              mbtiHistoryEntity.getTypeTF(),
+              mbtiHistoryEntity.getTypePJ());
 
-      MbtiHistoryResponseDto mbtiHistoryResponseDto = MbtiHistoryResponseDto.builder()
-          .typeI(mbtiStatusResponseDto.getTypeI())
-          .typeE(mbtiStatusResponseDto.getTypeE())
-          .typeS(mbtiStatusResponseDto.getTypeS())
-          .typeN(mbtiStatusResponseDto.getTypeN())
-          .typeF(mbtiStatusResponseDto.getTypeF())
-          .typeT(mbtiStatusResponseDto.getTypeT())
-          .typeJ(mbtiStatusResponseDto.getTypeJ())
-          .typeP(mbtiStatusResponseDto.getTypeP())
-          .MbtiType(mbtiStatusResponseDto.getMbtiType())
-          .updateAt(updateAt)
-          .build();
+      MbtiHistoryResponseDto mbtiHistoryResponseDto =
+          MbtiHistoryResponseDto.builder()
+              .typeI(mbtiStatusResponseDto.getTypeI())
+              .typeE(mbtiStatusResponseDto.getTypeE())
+              .typeS(mbtiStatusResponseDto.getTypeS())
+              .typeN(mbtiStatusResponseDto.getTypeN())
+              .typeF(mbtiStatusResponseDto.getTypeF())
+              .typeT(mbtiStatusResponseDto.getTypeT())
+              .typeJ(mbtiStatusResponseDto.getTypeJ())
+              .typeP(mbtiStatusResponseDto.getTypeP())
+              .MbtiType(mbtiStatusResponseDto.getMbtiType())
+              .updateAt(updateAt)
+              .build();
 
       mbtiHistoryDtoList.add(mbtiHistoryResponseDto);
     }
@@ -111,23 +119,25 @@ public class MbtiManagementService {
   }
 
   // 3. 등록 (성향)
-  public MbtiStatusResponseDto insertMbtiStatus(Long childId,
-      MbtiStatusRequestDto mbtiStatusReqDto) {
+  public MbtiStatusResponseDto insertMbtiStatus(
+      Long childId, MbtiStatusRequestDto mbtiStatusReqDto) {
     ChildEntity child = getChild(childId);
     // 성향 등록
-    MbtiStatusEntity mbtiStatus = MbtiStatusEntity.builder()
-        .typeIE(mbtiStatusReqDto.getScoreIE())
-        .typeSN(mbtiStatusReqDto.getScoreSN())
-        .typeTF(mbtiStatusReqDto.getScoreTF())
-        .typePJ(mbtiStatusReqDto.getScorePJ())
-        .childEntity(child)
-        .build();
-    MbtiHistoryEntity mbtiHistoryEntity = MbtiHistoryEntity.builder()
-        .typeIE(mbtiStatusReqDto.getScoreIE())
-        .typeSN(mbtiStatusReqDto.getScoreSN())
-        .typeTF(mbtiStatusReqDto.getScoreTF())
-        .typePJ(mbtiStatusReqDto.getScorePJ())
-        .build();
+    MbtiStatusEntity mbtiStatus =
+        MbtiStatusEntity.builder()
+            .typeIE(mbtiStatusReqDto.getScoreIE())
+            .typeSN(mbtiStatusReqDto.getScoreSN())
+            .typeTF(mbtiStatusReqDto.getScoreTF())
+            .typePJ(mbtiStatusReqDto.getScorePJ())
+            .childEntity(child)
+            .build();
+    MbtiHistoryEntity mbtiHistoryEntity =
+        MbtiHistoryEntity.builder()
+            .typeIE(mbtiStatusReqDto.getScoreIE())
+            .typeSN(mbtiStatusReqDto.getScoreSN())
+            .typeTF(mbtiStatusReqDto.getScoreTF())
+            .typePJ(mbtiStatusReqDto.getScorePJ())
+            .build();
     // 히스토리 등록
     mbtiStatus.addHistory(mbtiHistoryEntity);
     mbtiStatusRepository.save(mbtiStatus);
@@ -135,9 +145,10 @@ public class MbtiManagementService {
     child.setMbtiStatusEntity(mbtiStatus);
     childRepository.save(child);
     // to Dto
-    MbtiStatusResponseDto mbtiStatusResponseDto = createMbtiStatusResponseDto(
-        mbtiStatus.getTypeIE(), mbtiStatus.getTypeSN(),
-        mbtiStatus.getTypeTF(), mbtiStatus.getTypePJ());
+    MbtiStatusResponseDto mbtiStatusResponseDto =
+        createMbtiStatusResponseDto(
+            mbtiStatus.getTypeIE(), mbtiStatus.getTypeSN(),
+            mbtiStatus.getTypeTF(), mbtiStatus.getTypePJ());
     return mbtiStatusResponseDto;
   }
 
@@ -148,28 +159,45 @@ public class MbtiManagementService {
     mbtiStatus.setDeleteAt(LocalDateTime.now());
     mbtiStatus.setChildEntity(null);
     mbtiStatusRepository.save(mbtiStatus);
-    //childRepository.save(child);
+    // childRepository.save(child);
   }
 
   public void updateMbtiStatus(ChildEntity child, ResponseFeedbackDto responseFeedbackDto) {
     MbtiStatusEntity mbtiStatus = child.getMbtiStatusEntity();
     mbtiStatus.updateMbtiType(
-        Math.max(1, Math.min(10, mbtiStatus.getTypeIE()
-            + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookIE()))
-        , Math.max(1, Math.min(10, mbtiStatus.getTypeSN()
-            + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookSN()))
-        , Math.max(1, Math.min(10, mbtiStatus.getTypeTF()
-            + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookTF()))
-        , Math.max(1, Math.min(10, mbtiStatus.getTypePJ()
-            + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookPJ()))
-    );
+        Math.max(
+            1,
+            Math.min(
+                10,
+                mbtiStatus.getTypeIE()
+                    + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookIE())),
+        Math.max(
+            1,
+            Math.min(
+                10,
+                mbtiStatus.getTypeSN()
+                    + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookSN())),
+        Math.max(
+            1,
+            Math.min(
+                10,
+                mbtiStatus.getTypeTF()
+                    + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookTF())),
+        Math.max(
+            1,
+            Math.min(
+                10,
+                mbtiStatus.getTypePJ()
+                    + responseFeedbackDto.getFeedbackValue() * responseFeedbackDto.getBookPJ())));
 
-    mbtiStatus.addHistory(MbtiHistoryEntity.builder()
-        .bookId(responseFeedbackDto.getBookId())
-        .isLike(responseFeedbackDto.getLikeStatus())
-        .typeIE(mbtiStatus.getTypeIE())
-        .typeSN(mbtiStatus.getTypeSN())
-        .typeTF(mbtiStatus.getTypeTF())
-        .typePJ(mbtiStatus.getTypePJ()).build());
+    mbtiStatus.addHistory(
+        MbtiHistoryEntity.builder()
+            .bookId(responseFeedbackDto.getBookId())
+            .isLike(responseFeedbackDto.getLikeStatus())
+            .typeIE(mbtiStatus.getTypeIE())
+            .typeSN(mbtiStatus.getTypeSN())
+            .typeTF(mbtiStatus.getTypeTF())
+            .typePJ(mbtiStatus.getTypePJ())
+            .build());
   }
 }

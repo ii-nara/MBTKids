@@ -23,7 +23,9 @@ public class FeedbackComponentService {
   public void addFeedback(RequestFeedbackDto requestFeedbackDto) {
     BookEntity book = feedbackManagementService.getBookById(requestFeedbackDto.getBookId());
     ChildEntity child = childService.findChildById(requestFeedbackDto.getChildId());
-    ResponseFeedbackDto responseFeedbackDto = feedbackManagementService.addFeedbackStatus(book, child, requestFeedbackDto.getLikeStatusValue());
+    ResponseFeedbackDto responseFeedbackDto =
+        feedbackManagementService.addFeedbackStatus(
+            book, child, requestFeedbackDto.getLikeStatusValue());
     mbtiManagementService.updateMbtiStatus(child, responseFeedbackDto);
   }
 
@@ -32,5 +34,4 @@ public class FeedbackComponentService {
   public void handleFeedback(@Payload RequestFeedbackDto requestFeedbackDto) {
     addFeedback(requestFeedbackDto);
   }
-
 }

@@ -22,7 +22,14 @@ public class ResponseFeedbackDto {
 
   private LikeStatus likeStatus;
 
-  public static ResponseFeedbackDto of(Long bookId, Integer feedbackValue, Integer bookIE, Integer bookSN, Integer bookTF, Integer bookPJ, LikeStatus likeStatus) {
+  public static ResponseFeedbackDto of(
+      Long bookId,
+      Integer feedbackValue,
+      Integer bookIE,
+      Integer bookSN,
+      Integer bookTF,
+      Integer bookPJ,
+      LikeStatus likeStatus) {
     return ResponseFeedbackDto.builder()
         .bookId(bookId)
         .feedbackValue(feedbackValue)
@@ -33,6 +40,4 @@ public class ResponseFeedbackDto {
         .likeStatus(likeStatus)
         .build();
   }
-
-
 }

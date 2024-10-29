@@ -31,7 +31,8 @@ public class RequestFeedbackDto {
   }
 
   @JsonCreator
-  public RequestFeedbackDto(@JsonProperty("childId") Long childId,
+  public RequestFeedbackDto(
+      @JsonProperty("childId") Long childId,
       @JsonProperty("bookId") Long bookId,
       @JsonProperty("LikeStatusValue") Integer likeStatusValue) {
     this.childId = childId;

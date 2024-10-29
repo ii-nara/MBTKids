@@ -49,7 +49,8 @@ public class MbtiTestController {
 
   // 2. 결과 저장
   @PostMapping("/save")
-  public String postMbtiResult(@AuthenticationPrincipal PrincipalDetails principalDetails,
+  public String postMbtiResult(
+      @AuthenticationPrincipal PrincipalDetails principalDetails,
       @RequestParam("answers") String answers) {
     Long childId = principalDetails.getChild().getChildId();
     // 답변 처리
@@ -61,16 +62,20 @@ public class MbtiTestController {
 
   // 3. 결과 조회
   @GetMapping("/result")
-  public String getMbtiResult(@AuthenticationPrincipal PrincipalDetails principalDetails,
-      Model model) {
+  public String getMbtiResult(
+      @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
     // 성향 조회
     Long childId = principalDetails.getChild().getChildId();
     MbtiStatusResponseDto mbtiTestResDto = mbtiManagementService.getMbtiStatus(childId);
     String mbtiType = mbtiTestResDto.getMbtiType();
-    int scoreI = mbtiTestResDto.getTypeI(), scoreE = mbtiTestResDto.getTypeE(),
-        scoreS = mbtiTestResDto.getTypeS(), scoreN = mbtiTestResDto.getTypeN(),
-        scoreT = mbtiTestResDto.getTypeT(), scoreF = mbtiTestResDto.getTypeF(),
-        scoreP = mbtiTestResDto.getTypeP(), scoreJ = mbtiTestResDto.getTypeJ();
+    int scoreI = mbtiTestResDto.getTypeI(),
+        scoreE = mbtiTestResDto.getTypeE(),
+        scoreS = mbtiTestResDto.getTypeS(),
+        scoreN = mbtiTestResDto.getTypeN(),
+        scoreT = mbtiTestResDto.getTypeT(),
+        scoreF = mbtiTestResDto.getTypeF(),
+        scoreP = mbtiTestResDto.getTypeP(),
+        scoreJ = mbtiTestResDto.getTypeJ();
 
     model.addAttribute("mbtiType", mbtiType);
     model.addAttribute("scoreI", mbtiTestService.changeRatio(scoreI, scoreE));

@@ -6,7 +6,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -46,7 +45,10 @@ public class ChildEntity {
   private LocalDateTime createdAt;
 
   @Builder
-  public ChildEntity(Long parentId, MbtiStatusEntity mbtiStatusEntity, String childName,
+  public ChildEntity(
+      Long parentId,
+      MbtiStatusEntity mbtiStatusEntity,
+      String childName,
       int childAge,
       LocalDateTime createdAt) {
     this.parentId = parentId;

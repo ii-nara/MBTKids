@@ -29,8 +29,7 @@ public class AdminSecurityConfig {
                 auth.requestMatchers("/mbtkids/admin/login")
                     .permitAll()
                     .requestMatchers("/mbtkids/admin/**")
-                    .authenticated()
-        )
+                    .authenticated())
         .formLogin(
             login ->
                 login

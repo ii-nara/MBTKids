@@ -29,11 +29,12 @@ public class AdminSecurityConfig {
                 auth.requestMatchers("/mbtkids/admin/login")
                     .permitAll()
                     .requestMatchers("/mbtkids/admin/**")
-                    .authenticated())
+                    .authenticated()
+        )
         .formLogin(
             login ->
                 login
-                    .loginPage("/mbtkids/admin/login")
+                    .loginPage("/mbtkids/admin")
                     .loginProcessingUrl("/mbtkids/admin/login")
                     .usernameParameter("adminLoginId")
                     .defaultSuccessUrl("/mbtkids/admin/home", true)

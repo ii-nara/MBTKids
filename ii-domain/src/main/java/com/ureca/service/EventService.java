@@ -15,9 +15,10 @@ public class EventService {
 
   @Transactional
   public void save(EventSaveRequestDto eventSaveRequestDto) {
-    eventRepository.save(EventEntity.builder()
-        .name(eventSaveRequestDto.getName())
-        .phoneNumber(eventSaveRequestDto.getPhone())
-        .build());
+    eventRepository.save(
+        EventEntity.builder()
+            .name(eventSaveRequestDto.getName())
+            .phoneNumber(eventSaveRequestDto.getPhone())
+            .build());
   }
 }

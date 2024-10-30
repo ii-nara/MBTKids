@@ -20,15 +20,16 @@ public class EventController {
 
   @GetMapping("/form")
   public String showEventForm(Model model) {
-    //todo 이미 응모한 사람 버튼 비활성화
+    // todo 이미 응모한 사람 버튼 비활성화
     model.addAttribute("eventSaveRequestDto", new EventSaveRequestDto());
     return "event/form";
   }
 
   @PostMapping
-  public String submitApplication(@ModelAttribute EventSaveRequestDto eventSaveRequestDto,
+  public String submitApplication(
+      @ModelAttribute EventSaveRequestDto eventSaveRequestDto,
       RedirectAttributes redirectAttributes) {
-    //todo session (부모 아이디? 자녀 아이디?)
+    // todo session (부모 아이디? 자녀 아이디?)
     eventService.save(eventSaveRequestDto);
 
     redirectAttributes.addFlashAttribute("successMessage", "응모가 완료되었습니다!");

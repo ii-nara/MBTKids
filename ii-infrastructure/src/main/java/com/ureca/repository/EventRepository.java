@@ -3,6 +3,4 @@ package com.ureca.repository;
 import com.ureca.entity.EventEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface EventRepository extends JpaRepository<EventEntity, Long> {
-
-}
+public interface EventRepository extends JpaRepository<EventEntity, Long> {}

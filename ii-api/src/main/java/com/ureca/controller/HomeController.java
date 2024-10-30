@@ -7,11 +7,11 @@ import com.ureca.dto.BookPage;
 import com.ureca.dto.RequestFeedbackDto;
 import com.ureca.dto.ResBookInfo;
 import com.ureca.service.BookService;
+import com.ureca.service.FeedbackComponentService;
 import com.ureca.service.FeedbackManagementService;
 import com.ureca.service.RecommendService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +32,7 @@ public class HomeController {
   private final RecommendService recommendService;
   private final BookService bookService;
   private final FeedbackManagementService feedbackManagementService;
-  private final RabbitTemplate rabbitTemplate;
+  private final FeedbackComponentService feedbackComponentService;
 
   @GetMapping("/home")
   public String home(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -122,7 +122,7 @@ public class HomeController {
       @AuthenticationPrincipal PrincipalDetails principalDetails,
       @RequestBody RequestFeedbackDto requestFeedbackDto) {
     requestFeedbackDto.updateChildId(principalDetails.getChild().getChildId());
-    rabbitTemplate.convertAndSend("feedbackExchange", "feedbackRoutingKey", requestFeedbackDto);
+    feedbackComponentService.addFeedback(requestFeedbackDto);
     return "redirect:/mbtkids/book/detail?bookId=" + requestFeedbackDto.getBookId();
   }
 }

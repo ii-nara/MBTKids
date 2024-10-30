@@ -33,12 +33,18 @@ public class UserSecurityConfig {
                     .permitAll()
                     .requestMatchers("/mbtkids/child/**")
                     .authenticated()
+                    .requestMatchers("/mbtkids/home")
+                    .authenticated()
+                    .requestMatchers("/mbtkids/book/detail", "mbtkids/books")
+                    .authenticated()
+                    .requestMatchers("/mbtkids/mbti/**")
+                    .authenticated()
                     .anyRequest()
                     .permitAll())
         .formLogin(
             login ->
                 login
-                    .loginPage("/mbtkids/login")
+                    .loginPage("/mbtkids")
                     .loginProcessingUrl("/mbtkids/login")
                     .usernameParameter("loginIdOrEmail")
                     .defaultSuccessUrl("/mbtkids/childSelectOrAdd", true)

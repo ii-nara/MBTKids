@@ -33,7 +33,7 @@ public class AdminSecurityConfig {
         .formLogin(
             login ->
                 login
-                    .loginPage("/mbtkids/admin/login")
+                    .loginPage("/mbtkids/admin")
                     .loginProcessingUrl("/mbtkids/admin/login")
                     .usernameParameter("adminLoginId")
                     .defaultSuccessUrl("/mbtkids/admin/home", true)

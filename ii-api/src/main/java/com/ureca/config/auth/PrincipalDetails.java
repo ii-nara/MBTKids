@@ -75,4 +75,12 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
   public String getName() {
     return null;
   }
+
+  public Long getChildId() {
+    return child != null ? child.getChildId() : null;
+  }
+
+  public void clearChild() {
+    this.child = null;
+  }
 }

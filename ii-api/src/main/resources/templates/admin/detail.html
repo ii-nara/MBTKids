@@ -2,10 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>아이둘나라</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이둘나라 관리자</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link th:href="@{/css/admin/home.css}" rel="stylesheet"/>
-    <link th:href="@{/css/admin/navbar.css}" rel="stylesheet"/>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/css/admin/AdminDetail.css}">
     <script>
 
         //화면 진입 구분
@@ -182,8 +183,31 @@
 </head>
 <body>
 <!-- (상단 레이아웃) 네비게이션 바 -->
-<th:block th:replace="~{navbar :: navbar}"></th:block>
-
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="/mbtkids/admin/home">
+            <i class='bx bxs-book-reader'></i>
+            아이둘나라 관리자
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <i class='bx bx-menu'></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/mbtkids/admin/home">
+                        <i class='bx bx-home'></i> 홈
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/mbtkids/admin/logout">
+                        <i class='bx bx-log-out'></i> 로그아웃
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 <!-- 본문 내용 -->
 <div class="container mt-5">
 

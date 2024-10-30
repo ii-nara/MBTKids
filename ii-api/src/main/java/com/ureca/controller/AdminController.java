@@ -45,10 +45,15 @@ public class AdminController {
   private String bookPath;
 
   /**
+   * @param searchWord 검색어
    * @title 관리자웹 - 도서 전체 목록 조회
    * @description 검색어에 해당하는 도서 조회 목록을 조회한다.
-   * @param searchWord 검색어
    */
+  @GetMapping("/admin")
+  public String adminLoginForm() {
+    return "admin/loginForm";
+  }
+
   @GetMapping("/admin/home")
   public String adminBookHome(Model model, @RequestParam(defaultValue = "") String searchWord) {
     List<BookInfo> resBookList = bookService.getBookList(searchWord); // service - 도서 목록 조회
@@ -59,9 +64,9 @@ public class AdminController {
   } // adminBookHome
 
   /**
+   * @param bookId 도서 아이디
    * @title 관리자웹 - 도서 상세 조회
    * @description 선택한 도서의 상세 정보를 조회한다.
-   * @param bookId 도서 아이디
    */
   @GetMapping("/admin/detail")
   public String adminBookDetail(
@@ -82,9 +87,9 @@ public class AdminController {
   } // adminBookDetail
 
   /**
+   * @param ReqBookInfo 입력 정보
    * @title 관리자웹 - 도서 수정
    * @description 수정한 도서 정보를 저장한다.
-   * @param ReqBookInfo 입력 정보
    */
   @PostMapping("/admin/update")
   public String adminBookUpdate(Model model, @ModelAttribute ReqBookInfo reqBookInfo)
@@ -122,9 +127,9 @@ public class AdminController {
   } // adminBookUpdate
 
   /**
+   * @param ReqBookInfo 입력 정보
    * @title 관리자웹 - 도서 등록
    * @description 입력한 도서 정보를 저장한다.
-   * @param ReqBookInfo 입력 정보
    */
   @PostMapping("/admin/register")
   public String adminBookRegister(Model model, @ModelAttribute ReqBookInfo reqBookInfo)
@@ -165,10 +170,10 @@ public class AdminController {
   } // getObjectMetadata
 
   /**
-   * @title AI를 활용한 도서 성향 부여
-   * @description 도서 줄거리를 전달하면 성향 분석 결과를 반환합니다.
    * @param contents 줄거리
    * @return ResMbtiInfo
+   * @title AI를 활용한 도서 성향 부여
+   * @description 도서 줄거리를 전달하면 성향 분석 결과를 반환합니다.
    */
   // http://localhost:8080/mbtkids/admin/book/ai
   @GetMapping("/admin/book/ai")
@@ -200,7 +205,9 @@ public class AdminController {
   public String adminBookDelete(
       Model model, @RequestParam(defaultValue = "", required = true) Long bookId) {
     int result = bookService.deleteBookInfo(bookId); // service - 도서 삭제
-    if (result > 0) logger.info("삭제 성공" + result);
+    if (result > 0) {
+      logger.info("삭제 성공" + result);
+    }
 
     return "redirect:/mbtkids/admin/home";
   }

@@ -1,0 +1,205 @@
+/* 관리자 페이지 기본 스타일 */
+:root {
+  --primary-color: #2C3E50;
+  --secondary-color: #3498DB;
+  --success-color: #2ECC71;
+  --warning-color: #F1C40F;
+  --danger-color: #E74C3C;
+  --info-color: #00B4D8;
+  --text-color: #2C3E50;
+  --border-color: #BDC3C7;
+  --background-color: #ECF0F1;
+}
+
+body {
+  font-family: 'Pretendard-Regular', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* 메인 컨테이너 */
+.container {
+  padding-top: 2rem;
+  max-width: 1000px;
+}
+
+/* 상단 제목 */
+h2 {
+  font-family: 'Pretendard-Bold';
+  color: var(--text-color);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--primary-color);
+  background: white;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 카드 스타일 */
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.card-title {
+  font-family: 'Pretendard-Bold';
+  color: var(--text-color);
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* 도서 이미지 */
+.card-img-top {
+  width: 200px;
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+/* 상세 정보 스타일 */
+.card-text {
+  line-height: 2;
+}
+
+.card-text strong {
+  color: var(--primary-color);
+  display: inline-block;
+  min-width: 120px;
+}
+
+/* 폼 스타일 */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  padding: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+textarea.form-control {
+  min-height: 120px;
+}
+
+/* MBTI 테이블 */
+.table {
+  margin: 1.5rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table th {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 1rem;
+}
+
+.btn-outline-primary {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: white;
+}
+
+/* 버튼 스타일 */
+.btn {
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: var(--border-color);
+  border: none;
+}
+
+.btn-warning {
+  background-color: var(--warning-color);
+  border: none;
+  color: var(--text-color);
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  border: none;
+  color: white;
+}
+
+.btn-info {
+  background-color: var(--info-color);
+  border: none;
+  color: white;
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  border: none;
+}
+
+/* 이미지 미리보기 */
+#imagePreview, #newImagePreview {
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+}
+
+/* 성향 표시 */
+#bookPersonality, #bookPersonalityEdit {
+  font-family: 'Pretendard-Bold';
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+  margin-left: 1rem;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .table {
+    display: block;
+    overflow-x: auto;
+  }
+}

@@ -36,45 +36,22 @@ jobs:
         # run: ./gradlew clean build
         run: ./gradlew ii-api:clean build -x test # 테스트 Skip
 
-        # 디렉토리 생성
-      - name: Make Directory
-        run: mkdir -p deploy
-        
-        # Jar 파일 복사
-      - name: Copy Jar
-        run: cp ./ii-api/build/libs/*.jar ./deploy
-
-        # appspec.yml 파일 복사
-      - name: Copy appspec.yml
-        run: cp appspec.yml ./deploy
-
-        # script files 복사
-      - name: Copy script
-        run: cp ./scripts/*.sh ./deploy
-
-      - name: Make zip file
-        run: zip -r ./MBTKids.zip ./deploy
-        shell: bash
-
-      - name: Configure AWS credentials
+      - name: Setup AWS ECR Details
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
+          aws-region: ${{secrets.AWS_REGION}}
 
-      - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./MBTKids.zip s3://$S3_BUCKET_NAME/
+      - name: Login to Amazon ECR
+        id: login-pf-aws-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-      # Deploy
-      - name: Deploy
+      - name: Build and push Docker image
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run:
-          aws deploy create-deployment
-          --application-name MBTKids
-          --deployment-group-name MBTKids-group
-          --file-exists-behavior OVERWRITE
-          --s3-location bucket=${{ env.S3_BUCKET_NAME }},bundleType=zip,key=MBTKids.zip
-          --region ap-northeast-2
+          ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
+          ECR_REPOSITORY: mbtkids
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

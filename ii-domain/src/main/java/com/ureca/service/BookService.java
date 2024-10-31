@@ -6,6 +6,7 @@ import com.ureca.dto.ResBookDetail;
 import com.ureca.dto.ResBookInfo;
 import com.ureca.entity.BookEntity;
 import com.ureca.repository.BookRepository;
+import com.ureca.repository.FeedbackStatusRepository;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +20,12 @@ public class BookService {
   private static final Logger logger = LoggerFactory.getLogger(BookService.class);
 
   private BookRepository bookRepository;
+  private FeedbackStatusRepository feedbackStatusRepository;
 
-  public BookService(BookRepository bookRepository) {
+  public BookService(
+      BookRepository bookRepository, FeedbackStatusRepository feedbackStatusRepository) {
     this.bookRepository = bookRepository;
+    this.feedbackStatusRepository = feedbackStatusRepository;
   }
 
   /**
@@ -161,6 +165,7 @@ public class BookService {
     int result = 0;
 
     if (bookRepository.existsById(bookId)) { // 존재 확인
+      feedbackStatusRepository.deleteByBookId(bookId);
       bookRepository.deleteById(bookId);
       result = 1;
     } else {

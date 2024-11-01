@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,6 +21,7 @@ public class AiService {
   private static final Logger logger = LoggerFactory.getLogger(AiService.class);
   private final RestTemplate restTemplate;
   private final BookRepository bookRepository;
+
   // Lambda REST API URL
   @Value("${api.lambda.url}")
   private String lambdaUrl;

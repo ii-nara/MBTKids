@@ -9,4 +9,7 @@ public interface FeedbackStatusRepository extends JpaRepository<FeedbackStatusEn
       Long bookId, Long childId);
 
   long countByBookEntity_BookId(Long bookId);
+
+  // 도서 삭제
+  void deleteAllByBookEntity_BookId(Long bookId);
 }

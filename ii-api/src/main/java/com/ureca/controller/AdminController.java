@@ -3,12 +3,10 @@ package com.ureca.controller;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.ureca.Enum.MbtiType;
 import com.ureca.config.S3Config;
 import com.ureca.dto.BookInfo;
 import com.ureca.dto.ReqBookInfo;
 import com.ureca.dto.ResBookDetail;
-import com.ureca.dto.ResMbtiInfo;
 import com.ureca.service.AiService;
 import com.ureca.service.BookService;
 import java.io.IOException;
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/mbtkids")
@@ -170,34 +169,32 @@ public class AdminController {
   } // getObjectMetadata
 
   /**
+   * @param bookId 책 아이디
+   * @param title 책 제목
    * @param contents 줄거리
-   * @return ResMbtiInfo
+   * @return modelAndView
    * @title AI를 활용한 도서 성향 부여
-   * @description 도서 줄거리를 전달하면 성향 분석 결과를 반환합니다.
+   * @description 도서 줄거리를 전달하면 성향 분석 결과를 반환해 DB에 등록합니다.
    */
   // http://localhost:8080/mbtkids/admin/book/ai
   @GetMapping("/admin/book/ai")
-  public ResMbtiInfo setBookMbti(String contents) {
-    String textPJ = "", textTF = "", textSN = "", textIE = "";
-    String resultMbti = "0000"; // 해당없음 초기화
-
-    resultMbti = aiService.setBookMbti(contents);
-
-    if (!resultMbti.isEmpty()) {
-      textIE = String.valueOf(resultMbti.charAt(0)); // I/E/0
-      textSN = String.valueOf(resultMbti.charAt(1)); // S/N/0
-      textTF = String.valueOf(resultMbti.charAt(2)); // T/F/0
-      textPJ = String.valueOf(resultMbti.charAt(3)); // P/J/0
-    }
-
-    ResMbtiInfo resMbtiInfo = new ResMbtiInfo();
-    resMbtiInfo.setMbtiType(resultMbti);
-    resMbtiInfo.setTypeIE(MbtiType.TYPE_IE.getValueForType(textIE)); // -1/1/0
-    resMbtiInfo.setTypeSN(MbtiType.TYPE_SN.getValueForType(textSN)); // -1/1/0
-    resMbtiInfo.setTypeTF(MbtiType.TYPE_TF.getValueForType(textTF)); // -1/1/0
-    resMbtiInfo.setTypePJ(MbtiType.TYPE_PJ.getValueForType(textPJ)); // -1/1/0
-
-    return resMbtiInfo;
+  public ModelAndView setBookMbti(
+      @RequestParam Long bookId,
+      @RequestParam String title,
+      @RequestParam String contents,
+      Model model) {
+    // TODO 관리자 로그인 정보 가져오기
+    Long userId = 1L;
+    // 도서 -> MBTI 추론 API 요청 및 응답
+    String resultMbti = aiService.apiBookMbti(title, contents);
+    // DB 등록
+    aiService.updateBookMbti(userId, bookId, resultMbti);
+    // 다시 수정 페이지로 리다이렉트
+    ResBookDetail resBookDetail = bookService.getBookDetail(bookId);
+    resBookDetail.setEmptyFlags(false);
+    ModelAndView modelAndView = new ModelAndView("admin/detail");
+    modelAndView.addObject("ResBookDetail", resBookDetail);
+    return modelAndView;
   } // setBookMbti
 
   // 도서 삭제

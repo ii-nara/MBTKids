@@ -42,7 +42,7 @@ public class OpenApiService {
 
       // AI 성향 분석 Service 실행
       String textPJ = "", textTF = "", textSN = "", textIE = "";
-      String mbti = aiService.setBookMbti(contents);
+      String mbti = aiService.apiBookMbti(title, contents);
 
       if (!mbti.isEmpty()) {
         textIE = String.valueOf(mbti.charAt(0)); // I/E/0

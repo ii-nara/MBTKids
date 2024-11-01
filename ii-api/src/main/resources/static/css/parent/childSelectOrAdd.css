@@ -53,13 +53,19 @@ body {
 .children-list {
   list-style: none;
   padding: 0;
-  display: grid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
   margin: 2rem 0;
+  flex-wrap: wrap;
 }
 
 .child-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background-color: white;
   border: 3px solid var(--main-color);
   border-radius: 15px;
@@ -69,6 +75,8 @@ body {
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  min-width: 200px;
+  max-width: 250px;
 }
 
 .child-card:hover {

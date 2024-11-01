@@ -13,8 +13,6 @@ public interface FeedbackStatusRepository extends JpaRepository<FeedbackStatusEn
 
   long countByBookEntity_BookId(Long bookId);
 
-  @Modifying
-  @Transactional
-  @Query("DELETE FROM FeedbackStatusEntity f WHERE f.bookEntity.bookId = :bookId")
-  void deleteByBookId(Long bookId);
+  // 도서 삭제
+  void deleteAllByBookEntity_BookId(Long bookId);
 }

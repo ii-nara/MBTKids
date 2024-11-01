@@ -13,6 +13,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BookService {
@@ -161,12 +162,13 @@ public class BookService {
    * @param bookId 도서 아이디
    * @return int 삭제 성공 여부
    */
+  @Transactional
   public int deleteBookInfo(Long bookId) {
     int result = 0;
 
     if (bookRepository.existsById(bookId)) { // 존재 확인
-      feedbackStatusRepository.deleteByBookId(bookId);
-      bookRepository.deleteById(bookId);
+      feedbackStatusRepository.deleteAllByBookEntity_BookId(bookId); // 관련된 피드백 상태 삭제
+      bookRepository.deleteById(bookId); // 도서 삭제
       result = 1;
     } else {
       throw new IllegalArgumentException("Book not found with id: " + bookId);

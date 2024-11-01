@@ -74,6 +74,12 @@
       font-size: 14px;
       margin-top: 5px;
     }
+
+    .submit-btn:disabled {
+      background-color: #d3d3d3; /* Light gray color for disabled state */
+      color: #777; /* Darker gray text for readability */
+      cursor: not-allowed; /* Show not-allowed cursor */
+    }
   </style>
 </head>
 <body>
@@ -108,7 +114,9 @@
           <div class="error-message" id="phoneError" style="color: red; display: none;"></div>
           <!-- 에러 메시지 추가 -->
         </div>
-        <button type="submit" class="submit-btn">응모하기</button>
+        <button type="submit" class="submit-btn"
+                th:disabled="${exists}"
+                th:text="${exists} ? '응모완료' : '응모하기'"></button>
       </form>
     </div>
   </div>

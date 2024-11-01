@@ -48,6 +48,11 @@ public class AdminController {
    * @title 관리자웹 - 도서 전체 목록 조회
    * @description 검색어에 해당하는 도서 조회 목록을 조회한다.
    */
+  @GetMapping("/admin")
+  public String adminLoginForm() {
+    return "admin/loginForm";
+  }
+
   @GetMapping("/admin/home")
   public String adminBookHome(Model model, @RequestParam(defaultValue = "") String searchWord) {
     List<BookInfo> resBookList = bookService.getBookList(searchWord); // service - 도서 목록 조회

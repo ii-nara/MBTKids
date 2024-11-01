@@ -1,5 +1,6 @@
 package com.ureca.controller;
 
+import com.ureca.config.auth.AdminDetails;
 import com.ureca.config.auth.PrincipalDetails;
 import com.ureca.dto.ChildCreateDto;
 import com.ureca.dto.ParentSignUpRequestDto;
@@ -8,9 +9,13 @@ import com.ureca.entity.ChildEntity;
 import com.ureca.entity.ParentEntity;
 import com.ureca.service.ChildService;
 import com.ureca.service.ParentService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +33,17 @@ public class ParentController {
   private final ChildService childAddService;
 
   @GetMapping()
-  public String home() {
+  public String home(HttpServletRequest request) {
+    HttpSession session = request.getSession(false);
+
+    if (session != null) {
+      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      if (auth != null && auth.getPrincipal() instanceof AdminDetails) {
+        session.invalidate();
+        SecurityContextHolder.clearContext();
+      }
+    }
+
     return "parent/home";
   }
 
@@ -52,6 +67,10 @@ public class ParentController {
       Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
     ParentEntity parent = principalDetails.getParent();
     model.addAttribute("parent", parent);
+
+    if (principalDetails.getChildId() != null) {
+      principalDetails.clearChild();
+    }
 
     List<ChildEntity> children = childAddService.findChildrenByParentId(parent.getParentId());
     model.addAttribute("children", children);

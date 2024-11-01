@@ -184,8 +184,31 @@
 </head>
 <body>
 <!-- (상단 레이아웃) 네비게이션 바 -->
-<th:block th:replace="~{navbar :: navbar}"></th:block>
-
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="/mbtkids/admin/home">
+            <i class='bx bxs-book-reader'></i>
+            아이둘나라 관리자
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <i class='bx bx-menu'></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/mbtkids/admin/home">
+                        <i class='bx bx-home'></i> 홈
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/mbtkids/admin/logout">
+                        <i class='bx bx-log-out'></i> 로그아웃
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 <!-- 본문 내용 -->
 <div class="container mt-5">
 

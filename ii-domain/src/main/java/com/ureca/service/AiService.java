@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,7 +20,10 @@ public class AiService {
 
   private static final Logger logger = LoggerFactory.getLogger(AiService.class);
   private final RestTemplate restTemplate;
-  private BookRepository bookRepository;
+  private final BookRepository bookRepository;
+  // Lambda REST API URL
+  @Value("${api.lambda.url}")
+  private String lambdaUrl;
 
   public AiService(RestTemplate restTemplate, BookRepository bookRepository) {
     this.restTemplate = restTemplate;
@@ -28,13 +32,11 @@ public class AiService {
 
   // [1] 도서 책 기반 MBTI 성향 API 요청 및 응답
   public String apiBookMbti(String title, String contents) {
-    // Lambda REST API 요청
-    String lambdaUrl = "https://pnyeqz4g2l.execute-api.ap-northeast-2.amazonaws.com/IINARA/similar";
-    // 책 제목, 줄거리 전달
+    // 책 제목, 줄거리 입력
     Map<String, String> request = new HashMap<>();
     request.put("title", title);
     request.put("contents", contents);
-    // 응답
+    // Lambda REST API 요청
     ResponseEntity<String> response = restTemplate.postForEntity(lambdaUrl, request, String.class);
     logger.info("응답: {}", response.getBody());
     return parseMbtiFromResponse(response.getBody());

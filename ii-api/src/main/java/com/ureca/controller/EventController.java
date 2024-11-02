@@ -21,8 +21,8 @@ public class EventController {
   @GetMapping("/form")
   public String showEventForm(Model model) {
     // todo 이미 응모한 사람 버튼 비활성화
-    model.addAttribute("eventSaveRequestDto", EventSaveRequestDto.builder().build());
-    return "events/form";
+    model.addAttribute("eventSaveRequestDto", new EventSaveRequestDto());
+    return "event/form";
   }
 
   @PostMapping

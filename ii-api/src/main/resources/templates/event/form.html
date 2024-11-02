@@ -17,6 +17,8 @@
   </style>
 </head>
 <body>
+<div th:replace="~{navbar :: navbar}"></div>
+
 <div class="event-container">
   <!-- 응모완료 알림 -->
   <div th:if="${successMessage}" class="alert alert-success" role="alert">
@@ -72,7 +74,8 @@
         <div class="error-message" id="phoneError" style="display: none;"></div>
       </div>
 
-      <button type="submit" class="submit-btn" th:disabled="${exists}" th:text="${exists} ? '응모완료' : '응모하기'">
+      <button type="submit" class="submit-btn" th:disabled="${exists}"
+              th:text="${exists} ? '응모완료' : '응모하기'">
         <i class='bx bx-party'></i>
         이벤트 응모하기
       </button>

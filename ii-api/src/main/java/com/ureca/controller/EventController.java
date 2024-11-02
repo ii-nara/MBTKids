@@ -38,8 +38,8 @@ public class EventController {
       @ModelAttribute EventSaveRequestDto eventSaveRequestDto,
       RedirectAttributes redirectAttributes) {
     Long parentId = principalDetails.getParent().getParentId();
-    eventService.eventApplication(eventSaveRequestDto);
-    redirectAttributes.addFlashAttribute("successMessage", "응모가 완료되었습니다!");
+    String message = eventService.eventApplication(parentId, eventSaveRequestDto);
+    redirectAttributes.addFlashAttribute("successMessage", message);
     return "redirect:/mbtkids/events/form";
   }
 }

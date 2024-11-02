@@ -21,8 +21,8 @@ public class EventController {
   @GetMapping("/form")
   public String showEventForm(Model model) {
     // todo 이미 응모한 사람 버튼 비활성화
-    model.addAttribute("eventSaveRequestDto", new EventSaveRequestDto());
-    return "event/form";
+    model.addAttribute("eventSaveRequestDto", EventSaveRequestDto.builder().build());
+    return "events/form";
   }
 
   @PostMapping
@@ -30,8 +30,7 @@ public class EventController {
       @ModelAttribute EventSaveRequestDto eventSaveRequestDto,
       RedirectAttributes redirectAttributes) {
     // todo session (부모 아이디? 자녀 아이디?)
-    eventService.save(eventSaveRequestDto);
-
+    eventService.eventApplication(eventSaveRequestDto);
     redirectAttributes.addFlashAttribute("successMessage", "응모가 완료되었습니다!");
     return "redirect:/mbtkids/events/form";
   }

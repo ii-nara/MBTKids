@@ -8,8 +8,17 @@
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" th:href="@{/css/event/events.css}">
+  <style>
+    .submit-btn:disabled {
+      background-color: #d3d3d3; /* Light gray color for disabled state */
+      color: #777; /* Darker gray text for readability */
+      cursor: not-allowed; /* Show not-allowed cursor */
+    }
+  </style>
 </head>
 <body>
+<div th:replace="~{navbar :: navbar}"></div>
+
 <div class="event-container">
   <!-- 응모완료 알림 -->
   <div th:if="${successMessage}" class="alert alert-success" role="alert">
@@ -65,7 +74,8 @@
         <div class="error-message" id="phoneError" style="display: none;"></div>
       </div>
 
-      <button type="submit" class="submit-btn">
+      <button type="submit" class="submit-btn" th:disabled="${exists}"
+              th:text="${exists} ? '응모완료' : '응모하기'">
         <i class='bx bx-party'></i>
         이벤트 응모하기
       </button>

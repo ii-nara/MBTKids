@@ -21,9 +21,8 @@ public class EventController {
   private final EventService eventService;
 
   @GetMapping("/form")
-  public String showEventForm(Model model,
-      @AuthenticationPrincipal PrincipalDetails principalDetails
-  ) {
+  public String showEventForm(
+      Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
     if (principalDetails == null) {
       return "redirect:/mbtkids";
     }

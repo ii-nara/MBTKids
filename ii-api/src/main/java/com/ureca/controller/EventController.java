@@ -30,8 +30,7 @@ public class EventController {
       @ModelAttribute EventSaveRequestDto eventSaveRequestDto,
       RedirectAttributes redirectAttributes) {
     // todo session (부모 아이디? 자녀 아이디?)
-    eventService.save(eventSaveRequestDto);
-
+    eventService.eventApplication(eventSaveRequestDto);
     redirectAttributes.addFlashAttribute("successMessage", "응모가 완료되었습니다!");
     return "redirect:/mbtkids/events/form";
   }

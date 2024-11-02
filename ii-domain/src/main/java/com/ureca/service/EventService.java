@@ -4,9 +4,11 @@ import com.ureca.dto.EventSaveRequestDto;
 import com.ureca.entity.EventEntity;
 import com.ureca.repository.EventRepository;
 import java.time.Duration;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,9 @@ public class EventService {
     return valueOps.get(key) != null;
   }
 
+  @Resource(name = "eventRabbitTemplate")
+  private final RabbitTemplate rabbitTemplate;
+
   @Transactional
   public String save(Long parentId, EventSaveRequestDto eventSaveRequestDto) {
     if (exist(parentId)) {
@@ -44,5 +49,9 @@ public class EventService {
             .build());
 
     return "응모가 완료되었습니다.";
+  }
+
+  public void eventApplication(EventSaveRequestDto eventSaveRequestDto) {
+    rabbitTemplate.convertAndSend("eventExchange", "eventRoutingKey", eventSaveRequestDto);
   }
 }

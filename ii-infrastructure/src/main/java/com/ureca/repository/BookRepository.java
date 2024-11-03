@@ -9,6 +9,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
+  // 도서 전체 조회
+  @Query("SELECT b.bookId FROM BookEntity b")
+  List<Long> findAllBookIds();
+
   // 관리자웹 - 도서 목록 조회
   @Query(
       "SELECT new com.ureca.dto.BookInfo(b.bookId, b.bookName, b.bookImgUrl, b.writer, b.publisher) "

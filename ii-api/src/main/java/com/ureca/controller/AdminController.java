@@ -7,16 +7,25 @@ import com.ureca.config.S3Config;
 import com.ureca.dto.BookInfo;
 import com.ureca.dto.ReqBookInfo;
 import com.ureca.dto.ResBookDetail;
+import com.ureca.entity.BookStatsEntity;
 import com.ureca.service.AiService;
 import com.ureca.service.BookService;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import org.apache.poi.ss.usermodel.Row; // Apache POI의 Row
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -207,5 +216,97 @@ public class AdminController {
     }
 
     return "redirect:/mbtkids/admin/home";
-  }
+  } // adminBookDelete
+
+  /**
+   * @title 도서 통계 조회
+   * @description 도서 통계 정보 조회한다.
+   * @param startDate 시작일자
+   * @param endDate 종료일자
+   * @param publisher 출판사명
+   * @param bookName 도서명
+   */
+  @GetMapping("/admin/stats")
+  public String adminBookStats(
+      Model model,
+      @RequestParam LocalDate startDate,
+      @RequestParam LocalDate endDate,
+      @RequestParam(required = false, defaultValue = "") String publisher,
+      @RequestParam(required = false, defaultValue = "") String bookName) {
+    // 도서 통계 조회
+    List<BookStatsEntity> statsList =
+        bookService.getBookStatsByStats(startDate, endDate, publisher, bookName);
+
+    // 조회된 통계 리스트가 null이 아닐 경우 모델에 추가
+    if (statsList != null) {
+      model.addAttribute("StatsList", statsList);
+    }
+
+    return "admin/stats"; // 뷰 이름 반환
+  } // adminBookStats
+
+  /**
+   * @title 도서 통계 엑셀 다운로드
+   * @description 도서 통계 조회 결과를 엑셀로 다운로드 받는다.
+   * @param startDate 시작일자
+   * @param endDate 종료일자
+   * @param publisher 출판사명
+   * @param bookName 도서명
+   */
+  @GetMapping("/admin/excel")
+  public ResponseEntity<?> exportExcel(
+      @RequestParam String startDate,
+      @RequestParam String endDate,
+      @RequestParam(required = false) String publisher,
+      @RequestParam(required = false) String bookName) {
+
+    // TODO Excel Service 로 분리하기
+    SXSSFWorkbook workbook = new SXSSFWorkbook(); // 엑셀 파일 생성
+    Sheet sheet = workbook.createSheet("도서 통계"); // 시트 생성
+    int rowNo = 0;
+
+    // 헤더 row 생성
+    Row headerRow = sheet.createRow(rowNo++); // Apache POI의 Row 사용
+    headerRow.createCell(0).setCellValue("ID");
+    headerRow.createCell(1).setCellValue("도서명");
+    headerRow.createCell(2).setCellValue("출판사");
+    headerRow.createCell(3).setCellValue("좋아요 개수");
+    headerRow.createCell(4).setCellValue("싫어요 개수");
+    headerRow.createCell(5).setCellValue("평균 연령대");
+    headerRow.createCell(6).setCellValue("평균 성향");
+    headerRow.createCell(7).setCellValue("통계 출력 일자");
+
+    try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+      // 데이터 조회
+      List<BookStatsEntity> statsList =
+          bookService.getBookStatsByStats(
+              LocalDate.parse(startDate), LocalDate.parse(endDate), publisher, bookName);
+
+      for (BookStatsEntity stat : statsList) {
+        Row row = sheet.createRow(rowNo++);
+        row.createCell(0).setCellValue(stat.getStatsId());
+        row.createCell(1).setCellValue(stat.getBookName());
+        row.createCell(2).setCellValue(stat.getPublisher());
+        row.createCell(3).setCellValue(stat.getLikeCnt());
+        row.createCell(4).setCellValue(stat.getDisLikeCnt());
+        row.createCell(5).setCellValue(stat.getAvgAge());
+        row.createCell(6).setCellValue(stat.getAvgMbti());
+        row.createCell(7).setCellValue(stat.getStatsAt().toString()); // 날짜 형식 변환 필요할 수 있음
+      }
+
+      workbook.write(outputStream);
+      workbook.dispose(); // 메모리 절약을 위해 SXSSFWorkbook 사용 후 dispose 호출
+
+      byte[] excelFile = outputStream.toByteArray();
+
+      HttpHeaders headers = new HttpHeaders();
+      headers.add("Content-Disposition", "attachment; filename=book_stats.xlsx");
+
+      return new ResponseEntity<>(excelFile, headers, HttpStatus.OK);
+
+    } catch (IOException e) {
+      // 예외 처리
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  } // exportExcel
 }

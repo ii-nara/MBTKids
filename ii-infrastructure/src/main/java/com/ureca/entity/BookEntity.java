@@ -28,7 +28,7 @@ public class BookEntity {
   private Long bookId;
 
   // 도서명
-  @Column(name = "bookName", length = 50)
+  @Column(name = "bookName", length = 100)
   private String bookName;
 
   // 이미지 URL

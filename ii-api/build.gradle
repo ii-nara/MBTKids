@@ -34,6 +34,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // Prometheus
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    // Excel
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'org.apache.xmlbeans:xmlbeans:5.1.1'
+    implementation 'org.apache.commons:commons-compress:1.21'
 }
 
 jar {

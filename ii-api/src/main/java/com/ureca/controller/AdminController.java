@@ -4,6 +4,7 @@ import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.ureca.config.S3Config;
+import com.ureca.config.auth.AdminDetails;
 import com.ureca.dto.BookInfo;
 import com.ureca.dto.ReqBookInfo;
 import com.ureca.dto.ResBookDetail;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -100,8 +102,12 @@ public class AdminController {
    * @description 수정한 도서 정보를 저장한다.
    */
   @PostMapping("/admin/update")
-  public String adminBookUpdate(Model model, @ModelAttribute ReqBookInfo reqBookInfo)
+  public String adminBookUpdate(
+      Model model,
+      @ModelAttribute ReqBookInfo reqBookInfo,
+      @AuthenticationPrincipal AdminDetails adminDetails)
       throws IOException {
+    Long adminId = adminDetails.getAdmin().getAdminId();
     String uploadUrl = "";
 
     // 수정하는 파일이 존재하는 경우
@@ -129,7 +135,7 @@ public class AdminController {
       uploadUrl = reqBookInfo.getBookImgUrl();
     }
 
-    bookService.updateBookInfo(reqBookInfo, uploadUrl); // service - 도서 정보 업데이트
+    bookService.updateBookInfo(reqBookInfo, uploadUrl, adminId); // service - 도서 정보 업데이트
 
     return "redirect:/mbtkids/admin/home";
   } // adminBookUpdate
@@ -140,8 +146,12 @@ public class AdminController {
    * @description 입력한 도서 정보를 저장한다.
    */
   @PostMapping("/admin/register")
-  public String adminBookRegister(Model model, @ModelAttribute ReqBookInfo reqBookInfo)
+  public String adminBookRegister(
+      Model model,
+      @ModelAttribute ReqBookInfo reqBookInfo,
+      @AuthenticationPrincipal AdminDetails adminDetails)
       throws IOException {
+    Long adminId = adminDetails.getAdmin().getAdminId();
     String uploadUrl = "";
 
     // TODO S3 공통 Service로 빼기
@@ -162,7 +172,7 @@ public class AdminController {
       throw new IOException("Error uploading file to S3", e);
     }
 
-    bookService.saveBookInfo(reqBookInfo, uploadUrl); // service - 도서 정보 추가
+    bookService.saveBookInfo(reqBookInfo, uploadUrl, adminId); // service - 도서 정보 추가
 
     // TODO 이미지 이름 ID 값으로 지정
 
@@ -191,9 +201,9 @@ public class AdminController {
       @RequestParam Long bookId,
       @RequestParam String title,
       @RequestParam String contents,
-      Model model) {
-    // TODO 관리자 로그인 정보 가져오기
-    Long userId = 1L;
+      Model model,
+      @AuthenticationPrincipal AdminDetails adminDetails) {
+    Long userId = adminDetails.getAdmin().getAdminId();
     // 도서 -> MBTI 추론 API 요청 및 응답
     String resultMbti = aiService.apiBookMbti(title, contents);
     // DB 등록
@@ -235,7 +245,8 @@ public class AdminController {
       @RequestParam(required = false, defaultValue = "") String bookName) {
     // 도서 통계 조회
     List<BookStatsEntity> statsList =
-        bookService.getBookStatsByStats(startDate, endDate, publisher, bookName);
+        bookService.getBookStatsByStats(
+            startDate, endDate, publisher, bookName); // service - 도서 통계 조회
 
     // 조회된 통계 리스트가 null이 아닐 경우 모델에 추가
     if (statsList != null) {
@@ -284,7 +295,7 @@ public class AdminController {
 
       for (BookStatsEntity stat : statsList) {
         Row row = sheet.createRow(rowNo++);
-        row.createCell(0).setCellValue(stat.getStatsId());
+        row.createCell(0).setCellValue(stat.getBookId());
         row.createCell(1).setCellValue(stat.getBookName());
         row.createCell(2).setCellValue(stat.getPublisher());
         row.createCell(3).setCellValue(stat.getLikeCnt());

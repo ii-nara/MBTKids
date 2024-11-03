@@ -185,6 +185,7 @@ public class BookService {
 
     if (bookRepository.existsById(bookId)) { // 존재 확인
       feedbackStatusRepository.deleteAllByBookEntity_BookId(bookId); // 관련된 피드백 상태 삭제
+      bookStatsRepository.deleteByBookId(bookId); // 관련된 도서 통계 삭제
       bookRepository.deleteById(bookId); // 도서 삭제
       result = 1;
     } else {
@@ -201,11 +202,8 @@ public class BookService {
    * @param uploadUrl 도서 이미지 URL
    * @return Long 생성된 도서 아이디
    */
-  public Long saveBookInfo(ReqBookInfo reqBookInfo, String uploadUrl) {
-    Long userId = 1L; // TODO 관리자 로그인 정보 가져오기
+  public Long saveBookInfo(ReqBookInfo reqBookInfo, String uploadUrl, Long adminId) {
     Long generatedId = 0L;
-
-    // TODO file -> S3 -> Url
 
     // 도서명 필수
     if (reqBookInfo.getBookName() != null && reqBookInfo.getBookName().length() < 100) {
@@ -223,7 +221,7 @@ public class BookService {
               .typeTF(reqBookInfo.getTypeTF())
               .typePJ(reqBookInfo.getTypePJ())
               .createdAt(new Date())
-              .createId(userId)
+              .createId(adminId)
               .displayYn(reqBookInfo.getDisplayYn())
               .build();
       BookEntity savedBook = bookRepository.save(newBook);
@@ -242,8 +240,7 @@ public class BookService {
    * @param uploadUrl 도서 이미지 URL
    * @return Long 수정한 도서 아이디
    */
-  public Long updateBookInfo(ReqBookInfo reqBookInfo, String uploadUrl) {
-    Long userId = 1L; // TODO 관리자 로그인 정보 가져오기
+  public Long updateBookInfo(ReqBookInfo reqBookInfo, String uploadUrl, Long adminId) {
     Long bookId = reqBookInfo.getBookId();
 
     // 존재하는 도서 정보인지 확인
@@ -252,9 +249,10 @@ public class BookService {
       // 도서명 필수
       if (reqBookInfo.getBookName() != null && reqBookInfo.getBookName().length() < 100) {
         // 업데이트 내용 구성
+        BookEntity existingBook = optionalBook.get();
         BookEntity updateBook =
             BookEntity.builder()
-                .bookId(bookId)
+                .bookId(existingBook.getBookId()) // 기존
                 .bookName(reqBookInfo.getBookName())
                 .bookImgUrl(uploadUrl)
                 .plot(reqBookInfo.getPlot())
@@ -265,8 +263,10 @@ public class BookService {
                 .typeSN(reqBookInfo.getTypeSN())
                 .typeTF(reqBookInfo.getTypeTF())
                 .typePJ(reqBookInfo.getTypePJ())
-                .createdAt(new Date())
-                .createId(userId)
+                .createdAt(existingBook.getCreatedAt()) // 기존
+                .createId(existingBook.getCreateId()) // 기존
+                .updateAt(new Date())
+                .updateId(adminId)
                 .displayYn(reqBookInfo.getDisplayYn())
                 .build();
 

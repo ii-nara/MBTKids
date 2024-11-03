@@ -25,6 +25,8 @@ body {
   background-color: var(--background-color);
   color: var(--dark-color);
   font-family: 'Pretendard-Regular', sans-serif;
+  padding-top: 80px; /* navbar 높이 + 여유공간 */
+  margin: 0; /* 추가 */
 }
 
 /* 본문 중앙 정렬 및 반응형 레이아웃 */
@@ -126,6 +128,6 @@ body {
   color: #000;
 }
 
-.dateform{
+.dateform {
   margin-bottom: 3rem !important;
 }

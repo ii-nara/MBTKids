@@ -14,37 +14,44 @@
 
 :root {
   --main-color: #ffe552;
-  --dark-color: #404040;
-  --blue: #D1E9FF;
-  --yellow: #FFF2CC;
-  --orange: #FFE7E5;
+  --secondary-color: #FF9EAA;
+  --accent-color: #91D8E4;
+  --sky-blue: #D1E9FFFF;
+  --dark-color: #332217;
+  --background-color: #FFF5E4;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--dark-color);
+  font-family: 'Pretendard-Regular', sans-serif;
 }
 
 /* 본문 중앙 정렬 및 반응형 레이아웃 */
 .container {
-  font-family: 'Pretendard-Regular';
-  color: var(--dark-color);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  min-height: 85vh; /* 화면 높이 조정 */
-  padding: 1em;
-  box-sizing: border-box;
-  text-align: center;
+}
+
+.white {
+  padding: 1.6em;
+  background-color: white;
+  border-radius: 25px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 /* 타이틀 스타일 */
 #title {
-  color: #ffc107;
+  color: var(--dark-color);
   font-weight: bold;
-  font-size: 2em; /* 타이틀 크기 조정 */
-  margin-bottom: 0.5em;
+  font-size: 2em;
+  margin-top: -30px;
 }
 
 /* 반응형 레이더 차트 */
 #mbtiRadarChart {
-  width: 30vw; /* 화면 너비의 30% */
+  width: 30vw;
   height: 30vw;
   max-width: 400px;
   max-height: 400px;
@@ -63,7 +70,7 @@
 .suffix {
   font-family: 'Pretendard-Bold';
   font-size: 2.5em;
-  color: white;
+  color: var(--secondary-color);
   margin-top: 0.8em;
 }
 
@@ -76,27 +83,16 @@
 /* 설명 */
 .description {
   background-color: #fff0c6;
+  color: #613c22;
   padding: 1.5em;
   border-radius: 20px;
   font-size: 1em;
-  color: #613c22;
-  margin-bottom: 1.2em;
+  margin: 0.2em;
   text-align: left;
 }
 
-/* 설명 박스 */
-.description-box {
-  background-color: #fff0c6;
-  border-radius: 15px;
-  padding: 1em;
-  color: #613c22;
-  font-size: 1em;
-  width: 80%;
-  max-width: 500px;
-  margin: 1em auto;
-}
-
-.btn-history {
+/* 버튼 스타일 */
+.btn-history, .btn-delete {
   display: block;
   width: 30em;
   padding: 15px;
@@ -106,66 +102,30 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-.btn-history:hover {
-  filter: brightness(75%);
-  color: var(--dark-color);
+.btn-history {
+  background-color: var(--sky-blue);
+  color: #007bff;
 }
 
-.btn-history:active {
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  margin-bottom: 1.5em;
+}
+
+.btn-history:hover {
+  filter: brightness(75%);
+}
+
+.btn-delete:hover {
+  filter: brightness(90%);
+}
+
+.btn-history:active, .btn-delete:active {
   filter: brightness(100%);
   color: #000;
 }
 
-.btn-blue {
-  background-color: var(--blue);
-  color: #007bff;
-}
-
-/* 삭제 버튼 스타일 */
-.btn-danger {
-  font-family: 'Pretendard-Bold';
-  font-size: 1.1em;
-  padding: 0.6em 2em;
-  background-color: #dc3545;
-  color: white;
-}
-
-/* 네비게이션 바 */
-.navbar {
-  background-color: var(--main-color);
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-}
-
-.navbar-brand {
-  font-family: 'Pretendard-Bold';
-  color: var(--text-color) !important;
-  font-size: 1.5rem;
-}
-
-.navbar .nav-link {
-  color: var(--text-color) !important;
-  font-weight: 500;
-  margin-left: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 50px;
-  transition: all 0.3s ease;
-}
-
-.navbar .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-/* body에 navbar 높이만큼 패딩 추가 */
-body {
-  font-family: 'Pretendard-Regular', sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  padding-top: 70px; /* navbar 높이 + 여유공간 */
-  margin: 0; /* 추가 */
+.dateform{
+  margin-bottom: 3rem !important;
 }

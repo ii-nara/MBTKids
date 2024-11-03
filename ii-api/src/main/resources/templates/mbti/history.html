@@ -6,6 +6,8 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
   <link th:href="@{/css/mbti/status.css}" rel="stylesheet"/>
   <link th:href="@{/css/navbar.css}" rel="stylesheet"/>
 </head>
@@ -21,7 +23,7 @@
   </script>
 
   <!-- 달력 폼 -->
-  <form th:action="@{/mbtkids/mbti/history}" method="get" class="mb-4">
+  <form th:action="@{/mbtkids/mbti/history}" method="get" class="mb-4 dateform">
     <label for="startDate">시작 날짜:</label>
     <input type="date" id="startDate" name="startDate"
            th:value="${startDate}"
@@ -35,19 +37,21 @@
     <button type="submit" class="btn btn-primary">조회</button>
   </form>
 
-  <!-- 그래프 캔버스 (2x2 배열) -->
-  <div class="row">
-    <div class="col-md-6">
-      <canvas id="chartEI"></canvas>
-    </div>
-    <div class="col-md-6">
-      <canvas id="chartSN"></canvas>
-    </div>
-    <div class="col-md-6">
-      <canvas id="chartTF"></canvas>
-    </div>
-    <div class="col-md-6">
-      <canvas id="chartJP"></canvas>
+  <div class="container white">
+    <!-- 그래프 캔버스 (2x2 배열) -->
+    <div class="row">
+      <div class="col-md-6">
+        <canvas id="chartEI"></canvas>
+      </div>
+      <div class="col-md-6">
+        <canvas id="chartSN"></canvas>
+      </div>
+      <div class="col-md-6">
+        <canvas id="chartTF"></canvas>
+      </div>
+      <div class="col-md-6">
+        <canvas id="chartJP"></canvas>
+      </div>
     </div>
   </div>
 </div>

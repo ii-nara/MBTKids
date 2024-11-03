@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>아이둘나라</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link th:href="@{/css/mbti/status.css}" rel="stylesheet"/>
@@ -13,29 +14,33 @@
 <!-- (상단 레이아웃) 네비게이션 바 -->
 <th:block th:replace="navbar :: navbar"></th:block>
 
-<div class="container mt-5 text-center">
-  <p id="title" th:text="${childEntity.childName} + '의 MBTI 성향'"></p>
-
-  <canvas id="mbtiRadarChart"></canvas>
-
-  <div class="mt-4 mbti-type" th:text="${mbtiStatusResponseDto.mbtiType}"></div>
-
-  <div class="col-md-6 text-center">
-    <h1 th:text="${mbtiInfoResponseDto.suffix}" class="suffix"></h1>
-    <p th:text="${mbtiInfoResponseDto.tag}" class="tag"></p>
-    <h1 th:text="${mbtiInfoResponseDto.emoji}" class="emoji"></h1>
-    <div class="info-box p-4 mt-3">
-      <p class="description" th:utext="${mbtiInfoResponseDto.content}"></p>
+<div class="container mt-5">
+  <p id="title" th:text="'♥ '+ ${childEntity.childName} + '의 성향'"></p>
+  <div class="container white">
+    <div class="row text-center">
+      <div class="col-md-6">
+        <canvas id="mbtiRadarChart"></canvas>
+        <div class="mt-4 mbti-type" th:text="${mbtiStatusResponseDto.mbtiType}"></div>
+        <p th:text="${mbtiInfoResponseDto.tag}" class="tag"></p>
+      </div>
+      <div class="col-md-6">
+        <div class="info-box p-4 mt-3">
+          <h1 th:text="${mbtiInfoResponseDto.suffix}" class="suffix"></h1>
+          <h1 th:text="${mbtiInfoResponseDto.emoji}" class="emoji"></h1>
+          <p class="description" th:utext="${mbtiInfoResponseDto.content}"></p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <form th:action="@{/mbtkids/mbti/history}" method="get" class="mt-4">
-    <button type="submit" class="btn btn-history btn-blue">MBTI 히스토리 보기</button>
-  </form>
-
-  <form th:action="@{/mbtkids/mbti/status}" method="post" class="mt-4">
-    <button type="submit" class="btn btn-danger">MBTI 삭제</button>
-  </form>
+  <div class="mt-4 text-center">
+    <form th:action="@{/mbtkids/mbti/history}" method="get">
+      <button type="submit" class="btn btn-history">MBTI 히스토리 보기</button>
+    </form>
+    <form th:action="@{/mbtkids/mbti/status}" method="post" class="mt-4">
+      <button type="submit" class="btn btn-delete">MBTI 삭제</button>
+    </form>
+  </div>
 </div>
 
 <script th:inline="javascript">
@@ -63,13 +68,13 @@
       labels: ['E', 'S', 'F', 'J', 'I', 'N', 'T', 'P'],
       datasets: [{
         label: 'MBTI 그래프',
-        data: dataValues,  // 배열로 전달된 데이터 사용
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+        data: dataValues,
+        backgroundColor: 'rgba(255, 229, 82, 0.2)', // 수정된 배경색
+        borderColor: 'rgba(255, 229, 82, 1)',
+        pointBackgroundColor: 'rgba(255, 229, 82, 1)',
         pointBorderColor: '#fff',
         pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+        pointHoverBorderColor: 'rgba(255, 229, 82, 1)'
       }]
     },
     options: {
@@ -82,11 +87,11 @@
           },
           pointLabels: {
             font: {
-              size: 16, // 폰트 크기
-              weight: 'bold', // 폰트 두께 ('normal', 'bold')
-              family: 'Arial', // 폰트 패밀리
+              size: 16,
+              weight: 'bold',
+              family: 'Pretendard-Bold',
             },
-            color: '#333' // 레이블 색상
+            color: '#332217'
           }
         }
       }

@@ -9,12 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookStatsScheduler {
 
-  @Autowired
-  private BookService bookService;
+  @Autowired private BookService bookService;
 
-  /**
-   * 매일 새벽 2시에 도서 통계 등록
-   */
+  /** 매일 새벽 2시에 도서 통계 등록 */
   @Scheduled(cron = "0 0 2 * * ?")
   public void scheduleBookStatistics() {
     // 모든 도서 ID를 조회

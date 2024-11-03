@@ -7,14 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface BookStatsRepository extends JpaRepository<BookStatsEntity, Long> {
 
   // 도서 통계 데이터 추가
   @Modifying
-  @Query(value = """
-        INSERT INTO book_stats (bookId, bookName, publisher, likeCnt, disLikeCnt, avgAge, avgMbti, statsAt) 
+  @Query(
+      value =
+          """
+        INSERT INTO book_stats (bookId, bookName, publisher, likeCnt, disLikeCnt, avgAge, avgMbti, statsAt)
         VALUES (
             :bookId,
             (SELECT bookName FROM book WHERE bookId = :bookId),
@@ -30,17 +31,18 @@ public interface BookStatsRepository extends JpaRepository<BookStatsEntity, Long
             ) FROM book b JOIN feedback_status f ON b.bookId = f.bookId JOIN child_user c ON c.childId = f.childId JOIN mbti_status m ON c.childId = m.childId WHERE b.bookId = :bookId),
             :statsAt
         )
-    """, nativeQuery = true)
+    """,
+      nativeQuery = true)
   void insertBookStats(@Param("bookId") Long bookId, @Param("statsAt") LocalDate statsAt);
 
   // 시작일자와 종료일자, 출판사명, 도서명으로 조회
-  @Query("SELECT b FROM BookStatsEntity b WHERE b.statsAt >= :startDate AND b.statsAt <= :endDate " +
-      "AND (:publisher IS NULL OR :publisher = '' OR b.publisher LIKE %:publisher%) " +
-      "AND (:bookName IS NULL OR :bookName = '' OR b.bookName LIKE %:bookName%)")
+  @Query(
+      "SELECT b FROM BookStatsEntity b WHERE b.statsAt >= :startDate AND b.statsAt <= :endDate "
+          + "AND (:publisher IS NULL OR :publisher = '' OR b.publisher LIKE %:publisher%) "
+          + "AND (:bookName IS NULL OR :bookName = '' OR b.bookName LIKE %:bookName%)")
   List<BookStatsEntity> findByStats(
       @Param("startDate") LocalDate startDate,
       @Param("endDate") LocalDate endDate,
       @Param("publisher") String publisher,
       @Param("bookName") String bookName);
-
 }

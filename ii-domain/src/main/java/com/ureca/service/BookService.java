@@ -28,9 +28,9 @@ public class BookService {
   private BookStatsRepository bookStatsRepository;
 
   public BookService(
-      BookRepository bookRepository
-      , FeedbackStatusRepository feedbackStatusRepository
-      , BookStatsRepository bookStatsRepository) {
+      BookRepository bookRepository,
+      FeedbackStatusRepository feedbackStatusRepository,
+      BookStatsRepository bookStatsRepository) {
     this.bookRepository = bookRepository;
     this.feedbackStatusRepository = feedbackStatusRepository;
     this.bookStatsRepository = bookStatsRepository;
@@ -303,8 +303,8 @@ public class BookService {
    * @param publisher 출판사명
    * @param bookName 도서명
    */
-  public List<BookStatsEntity> getBookStatsByStats(LocalDate startDate, LocalDate endDate, String publisher, String bookName) {
+  public List<BookStatsEntity> getBookStatsByStats(
+      LocalDate startDate, LocalDate endDate, String publisher, String bookName) {
     return bookStatsRepository.findByStats(startDate, endDate, publisher, bookName);
   } // getBookStatsByStats
-
 }

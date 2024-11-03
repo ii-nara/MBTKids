@@ -16,6 +16,9 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import org.apache.poi.ss.usermodel.Row; // Apache POI의 Row
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +35,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import org.apache.poi.ss.usermodel.Row; // Apache POI의 Row
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 @Controller
 @RequestMapping("/mbtkids")
@@ -228,13 +227,15 @@ public class AdminController {
    * @param bookName 도서명
    */
   @GetMapping("/admin/stats")
-  public String adminBookStats(Model model,
+  public String adminBookStats(
+      Model model,
       @RequestParam LocalDate startDate,
       @RequestParam LocalDate endDate,
       @RequestParam(required = false, defaultValue = "") String publisher,
       @RequestParam(required = false, defaultValue = "") String bookName) {
     // 도서 통계 조회
-    List<BookStatsEntity> statsList = bookService.getBookStatsByStats(startDate, endDate, publisher, bookName);
+    List<BookStatsEntity> statsList =
+        bookService.getBookStatsByStats(startDate, endDate, publisher, bookName);
 
     // 조회된 통계 리스트가 null이 아닐 경우 모델에 추가
     if (statsList != null) {
@@ -243,7 +244,6 @@ public class AdminController {
 
     return "admin/stats"; // 뷰 이름 반환
   } // adminBookStats
-
 
   /**
    * @title 도서 통계 엑셀 다운로드
@@ -278,8 +278,9 @@ public class AdminController {
 
     try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
       // 데이터 조회
-      List<BookStatsEntity> statsList = bookService.getBookStatsByStats(
-          LocalDate.parse(startDate), LocalDate.parse(endDate), publisher, bookName);
+      List<BookStatsEntity> statsList =
+          bookService.getBookStatsByStats(
+              LocalDate.parse(startDate), LocalDate.parse(endDate), publisher, bookName);
 
       for (BookStatsEntity stat : statsList) {
         Row row = sheet.createRow(rowNo++);
@@ -308,5 +309,4 @@ public class AdminController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   } // exportExcel
-
 }

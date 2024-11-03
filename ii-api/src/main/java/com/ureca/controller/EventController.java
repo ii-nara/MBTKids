@@ -26,6 +26,10 @@ public class EventController {
     if (principalDetails == null) {
       return "redirect:/mbtkids";
     }
+
+    boolean isEventTime = eventService.isEventTime();
+    model.addAttribute("isEventTime", isEventTime);
+
     Long parentId = principalDetails.getParent().getParentId();
     model.addAttribute("exists", eventService.exist(parentId));
     model.addAttribute("eventSaveRequestDto", new EventSaveRequestDto());
@@ -37,6 +41,12 @@ public class EventController {
       @AuthenticationPrincipal PrincipalDetails principalDetails,
       @ModelAttribute EventSaveRequestDto eventSaveRequestDto,
       RedirectAttributes redirectAttributes) {
+
+    if (!eventService.isEventTime()) {
+      redirectAttributes.addFlashAttribute("errorMessage", "이벤트 시간이 아닙니다.");
+      return "redirect:/mbtkids/events/form";
+    }
+
     Long parentId = principalDetails.getParent().getParentId();
     String message = eventService.eventApplication(parentId, eventSaveRequestDto);
     redirectAttributes.addFlashAttribute("successMessage", message);

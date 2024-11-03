@@ -24,6 +24,9 @@
   <div th:if="${successMessage}" class="alert alert-success" role="alert">
     <p th:text="${successMessage}"></p>
   </div>
+  <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+    <p th:text="${errorMessage}"></p>
+  </div>
 
   <!-- 이벤트 헤더 -->
   <div class="event-header">
@@ -70,12 +73,13 @@
       <div class="form-group">
         <label for="phone">전화번호</label>
         <input type="tel" id="phone" th:field="*{phone}"
-               placeholder="010-0000-0000" required>
+               placeholder="01012345678" required>
         <div class="error-message" id="phoneError" style="display: none;"></div>
       </div>
 
-      <button type="submit" class="submit-btn" th:disabled="${exists}"
-              th:text="${exists} ? '응모완료' : '응모하기'">
+      <button type="submit" class="submit-btn"
+              th:disabled="${exists} or ${!isEventTime}"
+              th:text="${exists} ? '응모완료' : (${!isEventTime} ? '준비중' : '응모하기')">
         <i class='bx bx-party'></i>
         이벤트 응모하기
       </button>
@@ -83,13 +87,20 @@
   </div>
 </div>
 
-<!-- 기존 스크립트 유지 -->
-<script>
+<script th:inline="javascript">
   function validateForm() {
     const name = document.getElementById("name");
     const phone = document.getElementById("phone");
     const nameError = document.getElementById("nameError");
     const phoneError = document.getElementById("phoneError");
+
+    const now = new Date();
+    const eventStartTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 3, 0);
+
+    if (now < eventStartTime) {
+      alert("이벤트는 오후 1시부터 시작됩니다.");
+      return false;
+    }
 
     let isValid = true;
 
@@ -101,10 +112,10 @@
       nameError.style.display = "none";
     }
 
-    const phonePattern = /^010-\d{4}-\d{4}$/;
+    const phonePattern = /^010\d{4}\d{4}$/;
     if (!phonePattern.test(phone.value)) {
       phoneError.style.display = "block";
-      phoneError.innerText = "전화번호 형식이 올바르지 않습니다. (예: 010-0000-0000)";
+      phoneError.innerText = "전화번호 형식이 올바르지 않습니다. (-를 제외한 번호만 입력해주세요.)";
       isValid = false;
     } else {
       phoneError.style.display = "none";
@@ -112,6 +123,20 @@
 
     return isValid;
   }
+
+  function updateButtonState() {
+    const now = new Date();
+    const eventStartTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 13, 0, 0);
+    const submitBtn = document.querySelector(".submit-btn");
+
+    if (now < eventStartTime) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = '준비중';
+    }
+  }
+
+  updateButtonState();
+  setInterval(updateButtonState, 60000);
 </script>
 </body>
 </html>

@@ -10,6 +10,7 @@ env:
   S3_BUCKET_NAME: mbtkids-s3-bucket
   ECS_SERVICE: mbtkids-service-2
   ECS_CLUSTER: mbtkids-cluster-ec2
+  CONTAINER_NAME: mbtkids-container
 
 jobs:
   build:

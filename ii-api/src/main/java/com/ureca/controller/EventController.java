@@ -52,6 +52,4 @@ public class EventController {
     redirectAttributes.addFlashAttribute("successMessage", message);
     return "redirect:/mbtkids/events/form";
   }
-
-
 }

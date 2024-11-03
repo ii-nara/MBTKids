@@ -122,7 +122,7 @@
         </thead>
         <tbody>
         <tr th:each="stat : ${StatsList}">
-          <td th:text="${stat.statsId}"></td>
+          <td th:text="${stat.bookId}"></td>
           <td>
             <a th:href="@{/mbtkids/admin/detail(bookId=${stat.bookId})}"
                class="book-link"

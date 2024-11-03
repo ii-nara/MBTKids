@@ -7,8 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface BookStatsRepository extends JpaRepository<BookStatsEntity, Long> {
+
+  // 도서 삭제
+  @Modifying
+  @Transactional
+  @Query("DELETE FROM BookStatsEntity b WHERE b.bookId = :bookId")
+  void deleteByBookId(Long bookId);
 
   // 도서 통계 데이터 추가
   @Modifying

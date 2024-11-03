@@ -87,8 +87,10 @@ public class AiService {
         .typeSN(MbtiType.TYPE_SN.getValueForType(mbti.charAt(1) + ""))
         .typeTF(MbtiType.TYPE_TF.getValueForType(mbti.charAt(2) + ""))
         .typePJ(MbtiType.TYPE_PJ.getValueForType(mbti.charAt(3) + ""))
-        .createdAt(new Date())
-        .createId(userId)
+        .createdAt(originBook.getCreatedAt())
+        .createId(originBook.getCreateId())
+        .updateAt(new Date())
+        .updateId(userId)
         .displayYn(originBook.getDisplayYn())
         .build();
   }

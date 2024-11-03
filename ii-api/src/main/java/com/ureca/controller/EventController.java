@@ -1,8 +1,10 @@
 package com.ureca.controller;
 
+import com.ureca.config.auth.PrincipalDetails;
 import com.ureca.dto.EventSaveRequestDto;
 import com.ureca.service.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,20 +21,35 @@ public class EventController {
   private final EventService eventService;
 
   @GetMapping("/form")
-  public String showEventForm(Model model) {
-    // todo 이미 응모한 사람 버튼 비활성화
+  public String showEventForm(
+      Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    if (principalDetails == null) {
+      return "redirect:/mbtkids";
+    }
+
+    boolean isEventTime = eventService.isEventTime();
+    model.addAttribute("isEventTime", isEventTime);
+
+    Long parentId = principalDetails.getParent().getParentId();
+    model.addAttribute("exists", eventService.exist(parentId));
     model.addAttribute("eventSaveRequestDto", new EventSaveRequestDto());
     return "event/form";
   }
 
   @PostMapping
   public String submitApplication(
+      @AuthenticationPrincipal PrincipalDetails principalDetails,
       @ModelAttribute EventSaveRequestDto eventSaveRequestDto,
       RedirectAttributes redirectAttributes) {
-    // todo session (부모 아이디? 자녀 아이디?)
-    eventService.save(eventSaveRequestDto);
 
-    redirectAttributes.addFlashAttribute("successMessage", "응모가 완료되었습니다!");
+    if (!eventService.isEventTime()) {
+      redirectAttributes.addFlashAttribute("errorMessage", "이벤트 시간이 아닙니다.");
+      return "redirect:/mbtkids/events/form";
+    }
+
+    Long parentId = principalDetails.getParent().getParentId();
+    String message = eventService.eventApplication(parentId, eventSaveRequestDto);
+    redirectAttributes.addFlashAttribute("successMessage", message);
     return "redirect:/mbtkids/events/form";
   }
 }

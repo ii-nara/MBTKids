@@ -5,8 +5,11 @@ import com.ureca.dto.ReqBookInfo;
 import com.ureca.dto.ResBookDetail;
 import com.ureca.dto.ResBookInfo;
 import com.ureca.entity.BookEntity;
+import com.ureca.entity.BookStatsEntity;
 import com.ureca.repository.BookRepository;
+import com.ureca.repository.BookStatsRepository;
 import com.ureca.repository.FeedbackStatusRepository;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,12 +25,26 @@ public class BookService {
 
   private BookRepository bookRepository;
   private FeedbackStatusRepository feedbackStatusRepository;
+  private BookStatsRepository bookStatsRepository;
 
   public BookService(
-      BookRepository bookRepository, FeedbackStatusRepository feedbackStatusRepository) {
+      BookRepository bookRepository,
+      FeedbackStatusRepository feedbackStatusRepository,
+      BookStatsRepository bookStatsRepository) {
     this.bookRepository = bookRepository;
     this.feedbackStatusRepository = feedbackStatusRepository;
+    this.bookStatsRepository = bookStatsRepository;
   }
+
+  /**
+   * @title 도서 전체 조회
+   * @description 전체 도서 아이디를 조회한다.
+   * @return List<BookInfo> 도서 목록
+   */
+  public List<Long> getBookIdList() {
+    List<Long> bookIdList = bookRepository.findAllBookIds();
+    return bookIdList;
+  } // getBookIdList
 
   /**
    * @title 관리자웹 - 도서 목록 조회
@@ -265,4 +282,29 @@ public class BookService {
 
     return bookId;
   } // updateBookInfo
+
+  /**
+   * @title 도서 통계 등록
+   * @description 도서 통계 정보를 등록한다.
+   * @param bookId 도서 아이디
+   */
+  @Transactional
+  public void saveBookStatistics(Long bookId) {
+    LocalDate statsAt = LocalDate.now(); // 오늘 날짜 설정
+    // 통계 정보 추가
+    bookStatsRepository.insertBookStats(bookId, statsAt);
+  } // saveBookStatistics
+
+  /**
+   * @title 도서 통계 조회
+   * @description 도서 통계 정보 조회한다.
+   * @param startDate 시작일자
+   * @param endDate 종료일자
+   * @param publisher 출판사명
+   * @param bookName 도서명
+   */
+  public List<BookStatsEntity> getBookStatsByStats(
+      LocalDate startDate, LocalDate endDate, String publisher, String bookName) {
+    return bookStatsRepository.findByStats(startDate, endDate, publisher, bookName);
+  } // getBookStatsByStats
 }

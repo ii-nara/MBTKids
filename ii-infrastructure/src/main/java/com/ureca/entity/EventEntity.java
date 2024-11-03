@@ -1,6 +1,9 @@
 package com.ureca.entity;
 
+import com.ureca.entity.Enum.EventStatus;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,9 +24,13 @@ public class EventEntity {
 
   private String phoneNumber;
 
+  @Enumerated(EnumType.STRING)
+  private EventStatus status;
+
   @Builder
-  public EventEntity(String name, String phoneNumber) {
+  public EventEntity(String name, String phoneNumber, EventStatus status) {
     this.name = name;
     this.phoneNumber = phoneNumber;
+    this.status = status;
   }
 }

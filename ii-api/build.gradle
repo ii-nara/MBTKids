@@ -21,6 +21,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // rabbit MQ
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // redis
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     // spring-batch
     implementation 'org.springframework.boot:spring-boot-starter-batch'
@@ -28,6 +30,16 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.300'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+    // Spring Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // Prometheus
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    // Excel
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'org.apache.xmlbeans:xmlbeans:5.1.1'
+    implementation 'org.apache.commons:commons-compress:1.21'
 }
 
 jar {

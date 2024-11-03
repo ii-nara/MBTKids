@@ -2,19 +2,24 @@ package com.ureca.config.auth;
 
 import com.ureca.entity.ChildEntity;
 import com.ureca.entity.ParentEntity;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 @Getter
 @Data
-public class PrincipalDetails implements UserDetails, OAuth2User {
+public class PrincipalDetails implements UserDetails, OAuth2User, Serializable {
 
+  private static final long serialVersionUID = 1L;
   private final ParentEntity parent;
   private Map<String, Object> attributes;
   private ChildEntity child;
@@ -29,6 +34,18 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     }
     this.parent = parent;
     this.attributes = attributes;
+  }
+
+  public void setChild(ChildEntity child) {
+    this.child = child;
+
+    if (SecurityContextHolder.getContext().getAuthentication() != null) {
+      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      SecurityContextHolder.getContext()
+          .setAuthentication(
+              new UsernamePasswordAuthenticationToken(
+                  this, auth.getCredentials(), auth.getAuthorities()));
+    }
   }
 
   @Override

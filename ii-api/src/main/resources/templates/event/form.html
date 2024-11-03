@@ -95,7 +95,7 @@
     const phoneError = document.getElementById("phoneError");
 
     const now = new Date();
-    const eventStartTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 3, 0);
+    const eventStartTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 22, 59, 0);
 
     if (now < eventStartTime) {
       alert("이벤트는 오후 1시부터 시작됩니다.");
@@ -126,7 +126,7 @@
 
   function updateButtonState() {
     const now = new Date();
-    const eventStartTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 13, 0, 0);
+    const eventStartTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 22, 59, 0);
     const submitBtn = document.querySelector(".submit-btn");
 
     if (now < eventStartTime) {

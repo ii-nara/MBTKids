@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,7 +22,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "child_user")
-public class ChildEntity {
+public class ChildEntity implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

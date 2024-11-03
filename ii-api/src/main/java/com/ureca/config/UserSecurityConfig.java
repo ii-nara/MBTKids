@@ -67,8 +67,12 @@ public class UserSecurityConfig {
                     .clearAuthentication(true)
                     .permitAll())
         .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
-
+            session ->
+                session
+                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(true)
+                    .expiredUrl("/mbtkids"));
     http.userDetailsService(new PrincipalDetailsService(parentRepository));
 
     return http.build();

@@ -80,9 +80,13 @@ public class ParentController {
 
   @GetMapping("/child/select/{childId}")
   public String childProfile(
-      @PathVariable Long childId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+      @PathVariable Long childId,
+      @AuthenticationPrincipal PrincipalDetails principalDetails,
+      HttpSession session) {
     ChildEntity child = childAddService.findChildById(childId);
     principalDetails.setChild(child);
+
+    session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
     return "redirect:/mbtkids/child/profile";
   }
@@ -91,6 +95,9 @@ public class ParentController {
   public String childProfile(
       Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
     ChildEntity child = principalDetails.getChild();
+    if (child == null) {
+      return "redirect:/mbtkids/childSelectOrAdd";
+    }
     model.addAttribute("child", child);
 
     // null이면 성향검사, 아니면 홈화면 이동

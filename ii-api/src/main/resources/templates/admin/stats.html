@@ -7,7 +7,7 @@
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-  <link rel="stylesheet" th:href="@{/css/admin/AdminHome.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/AdminStats.css}">
 </head>
 <body>
 <!-- 네비게이션 바 -->
@@ -31,71 +31,93 @@
 </nav>
 
 <div class="container">
-  <a class="nav-link" href="/mbtkids/admin/home">
-    <i class='bx bx-arrow-back'></i> 목록으로 돌아가기
-  </a>
+  <!-- 뒤로가기 버튼 -->
+  <div class="header-actions">
+    <a class="back-link" href="/mbtkids/admin/home">
+      <i class='bx bx-arrow-back'></i> 목록으로 돌아가기
+    </a>
+  </div>
+
   <!-- 검색 폼 -->
   <div class="search-form">
     <form action="#" th:action="@{/mbtkids/admin/stats}" method="get">
-      <div class="input-group mb-3">
-        <input type="date"
-               name="startDate"
-               class="form-control"
-               required
-               th:value="${param.startDate}"/>
-        <input type="date"
-               name="endDate"
-               class="form-control"
-               required
-               th:value="${param.endDate}"/>
-        <input type="text"
-               name="publisher"
-               class="form-control"
-               placeholder="출판사명"
-               th:value="${param.publisher}"/>
-        <input type="text"
-               name="bookName"
-               class="form-control"
-               placeholder="도서명"
-               th:value="${param.bookName}"/>
-        <div class="input-group-append">
-          <button class="search-btn btn btn-primary" type="submit">
-            <i class='bx bx-search'></i> 검색
-          </button>
+      <div class="search-group">
+        <div class="date-range">
+          <div class="input-wrapper">
+            <label for="startDate">시작일</label>
+            <input type="date"
+                   id="startDate"
+                   name="startDate"
+                   class="form-control"
+                   required
+                   th:value="${param.startDate}"/>
+          </div>
+          <div class="input-wrapper">
+            <label for="endDate">종료일</label>
+            <input type="date"
+                   id="endDate"
+                   name="endDate"
+                   class="form-control"
+                   required
+                   th:value="${param.endDate}"/>
+          </div>
         </div>
+        <div class="search-fields">
+          <div class="input-wrapper">
+            <label for="publisher">출판사</label>
+            <input type="text"
+                   id="publisher"
+                   name="publisher"
+                   class="form-control"
+                   placeholder="출판사명을 입력하세요"
+                   th:value="${param.publisher}"/>
+          </div>
+          <div class="input-wrapper">
+            <label for="bookName">도서명</label>
+            <input type="text"
+                   id="bookName"
+                   name="bookName"
+                   class="form-control"
+                   placeholder="도서명을 입력하세요"
+                   th:value="${param.bookName}"/>
+          </div>
+        </div>
+        <button class="search-btn" type="submit">
+          <i class='bx bx-search'></i> 검색
+        </button>
       </div>
     </form>
   </div>
 
   <!-- 관리자 컨테이너 -->
   <div class="admin-container">
-
-    <!-- 엑셀로 내보내기 버튼 -->
-    <div class="mb-3">
-      <form action="#" th:action="@{/mbtkids/admin/excel}" method="get">
+    <!-- 엑셀 내보내기 버튼 -->
+    <div class="button-container">
+      <form action="#" th:action="@{/mbtkids/admin/excel}" method="get" style="margin: 0;">
         <input type="hidden" name="startDate" th:value="${param.startDate}"/>
         <input type="hidden" name="endDate" th:value="${param.endDate}"/>
         <input type="hidden" name="publisher" th:value="${param.publisher}"/>
         <input type="hidden" name="bookName" th:value="${param.bookName}"/>
-        <button class="btn btn-success" type="submit">
-          <i class='bx bx-file'></i> 엑셀로 내보내기
+        <button type="submit" class="excel-btn">
+          <i class='bx bxs-file-export'></i>
+          엑셀로 내보내기
         </button>
       </form>
     </div>
 
-    <!-- 도서 통계 목록 테이블 -->
-    <div class="table-responsive">
+    <!-- 통계 데이터 테이블 -->
+    <div class="table-container">
       <table class="admin-table">
         <thead>
         <tr>
           <th>ID</th>
           <th>도서명</th>
           <th>출판사</th>
-          <th>좋아요 개수</th>
-          <th>싫어요 개수</th>
+          <th>좋아요</th>
+          <th>싫어요</th>
           <th>평균 연령대</th>
           <th>평균 성향</th>
-          <th>통계 출력 일자</th>
+          <th>통계 일자</th>
         </tr>
         </thead>
         <tbody>
@@ -107,16 +129,15 @@
                th:text="${stat.bookName}"></a>
           </td>
           <td th:text="${stat.publisher}"></td>
-          <td th:text="${stat.likeCnt}"></td>
-          <td th:text="${stat.disLikeCnt}"></td>
-          <td th:text="${stat.avgAge}"></td>
-          <td th:text="${stat.avgMbti}"></td>
+          <td class="text-center" th:text="${stat.likeCnt}"></td>
+          <td class="text-center" th:text="${stat.disLikeCnt}"></td>
+          <td class="text-center" th:text="${stat.avgAge}"></td>
+          <td class="text-center" th:text="${stat.avgMbti}"></td>
           <td th:text="${stat.statsAt}"></td>
         </tr>
         </tbody>
       </table>
     </div>
-
   </div>
 </div>
 

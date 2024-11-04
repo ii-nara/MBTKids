@@ -46,7 +46,7 @@ public class EventService {
   public boolean isEventTime() {
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime eventStartTime =
-        LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 22, 59);
+        LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 13, 0);
     return now.isAfter(eventStartTime) || now.isEqual(eventStartTime);
   }
 }

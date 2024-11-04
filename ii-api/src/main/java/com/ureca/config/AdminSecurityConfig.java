@@ -48,7 +48,7 @@ public class AdminSecurityConfig {
                     .clearAuthentication(true)
                     .permitAll())
         .sessionManagement(
-            //session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+            // session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
             session ->
                 session
                     .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)

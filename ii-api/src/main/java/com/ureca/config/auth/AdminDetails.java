@@ -1,6 +1,7 @@
 package com.ureca.config.auth;
 
 import com.ureca.entity.AdminUserEntity;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import lombok.Data;
@@ -10,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 @Data
-public class AdminDetails implements UserDetails {
+public class AdminDetails implements UserDetails, Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   private final AdminUserEntity admin;
 

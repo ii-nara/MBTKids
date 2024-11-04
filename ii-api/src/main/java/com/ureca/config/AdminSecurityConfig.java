@@ -48,7 +48,13 @@ public class AdminSecurityConfig {
                     .clearAuthentication(true)
                     .permitAll())
         .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+            // session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+            session ->
+                session
+                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(true)
+                    .expiredUrl("/mbtkids/admin"));
 
     http.userDetailsService(new AdminDetailsService(adminUserRepository));
 

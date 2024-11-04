@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import java.io.Serializable;
 import java.util.Date;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,7 +20,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "admin_user")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AdminUserEntity {
+public class AdminUserEntity implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   // 관리자 아이디
   @Id
